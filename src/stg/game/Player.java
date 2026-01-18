@@ -25,6 +25,24 @@ public class Player {
 	private int shootInterval = 8; // 射击间隔(帧数)
 
 	/**
+	 * 空参构造函数 - 默认初始位置为底部中心(需要先设置gameCanvas)
+	 * 注意:空参构造后需要调用setGameCanvas,然后设置正确的初始位置
+	 */
+	public Player() {
+		this.x = 0;
+		this.y = 0;
+		this.vx = 0;
+		this.vy = 0;
+		this.speed = 5.0f;
+		this.speedSlow = 2.0f;
+		this.size = 20;
+		this.slowMode = false;
+		this.shooting = false;
+		this.bombing = false;
+		this.shootCooldown = 0;
+	}
+
+	/**
 	 * 构造函数
 	 * @param spawnX 初始X坐标
 	 * @param spawnY 初始Y坐标
@@ -37,6 +55,30 @@ public class Player {
 		this.speed = 5.0f;
 		this.speedSlow = 2.0f;
 		this.size = 20;
+		this.slowMode = false;
+		this.shooting = false;
+		this.bombing = false;
+		this.shootCooldown = 0;
+	}
+
+	/**
+	 * 全参构造函数
+	 * @param x X坐标
+	 * @param y Y坐标
+	 * @param speed 普通移动速度
+	 * @param speedSlow 低速移动速度
+	 * @param size 角色大小
+	 * @param gameCanvas 游戏画布引用
+	 */
+	public Player(float x, float y, float speed, float speedSlow, float size, GameCanvas gameCanvas) {
+		this.x = x;
+		this.y = y;
+		this.vx = 0;
+		this.vy = 0;
+		this.speed = speed;
+		this.speedSlow = speedSlow;
+		this.size = size;
+		this.gameCanvas = gameCanvas;
 		this.slowMode = false;
 		this.shooting = false;
 		this.bombing = false;

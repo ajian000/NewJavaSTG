@@ -15,6 +15,12 @@ public class GameCanvas extends JPanel {
 	private Player player; // 玩家对象
 	private List<Bullet> bullets; // 子弹列表
 
+	// @Time 2026-01-19 按键状态跟踪 - 用于优化按键扫描逻辑
+	private boolean upPressed = false; // 上键状态
+	private boolean downPressed = false; // 下键状态
+	private boolean leftPressed = false; // 左键状态
+	private boolean rightPressed = false; // 右键状态
+
 	/**
 	 * 构造函数
 	 */
@@ -30,58 +36,104 @@ public class GameCanvas extends JPanel {
 	}
 
 	/**
-	 * 设置键盘输入监听
+	 * 设置键盘输入监听 - @Time 2026-01-19 优化按键扫描,支持同时按键检测
 	 */
 	private void setupInput() {
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (player == null) return;
-
+				// @Time 2026-01-19 更新按键状态
 				switch (e.getKeyCode()) {
-					case KeyEvent.VK_UP: // 上方向键
-						player.moveUp();
+					case KeyEvent.VK_UP:
+						upPressed = true;
 						break;
-					case KeyEvent.VK_DOWN: // 下方向键
-						player.moveDown();
+					case KeyEvent.VK_DOWN:
+						downPressed = true;
 						break;
-					case KeyEvent.VK_LEFT: // 左方向键
-						player.moveLeft();
+					case KeyEvent.VK_LEFT:
+						leftPressed = true;
 						break;
-					case KeyEvent.VK_RIGHT: // 右方向键
-						player.moveRight();
+					case KeyEvent.VK_RIGHT:
+						rightPressed = true;
 						break;
 					case KeyEvent.VK_Z: // Z键 - 射击
-						player.setShooting(true);
+						if (player != null) {
+							player.setShooting(true);
+						}
 						break;
 					case KeyEvent.VK_SHIFT: // Shift键 - 低速模式
-						player.setSlowMode(true);
+						if (player != null) {
+							player.setSlowMode(true);
+						}
 						break;
 				}
+
+				// @Time 2026-01-19 根据按键状态更新玩家移动方向
+				updatePlayerMovement();
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (player == null) return;
-
+				// @Time 2026-01-19 更新按键状态
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP:
+						upPressed = false;
+						break;
 					case KeyEvent.VK_DOWN:
-						player.stopVertical();
+						downPressed = false;
 						break;
 					case KeyEvent.VK_LEFT:
+						leftPressed = false;
+						break;
 					case KeyEvent.VK_RIGHT:
-						player.stopHorizontal();
+						rightPressed = false;
 						break;
-					case KeyEvent.VK_Z:
-						player.setShooting(false);
+					case KeyEvent.VK_Z: // Z键 - 射击
+						if (player != null) {
+							player.setShooting(false);
+						}
 						break;
-					case KeyEvent.VK_SHIFT:
-						player.setSlowMode(false);
+					case KeyEvent.VK_SHIFT: // Shift键 - 低速模式
+						if (player != null) {
+							player.setSlowMode(false);
+						}
 						break;
 				}
+
+				// @Time 2026-01-19 根据按键状态更新玩家移动方向
+				updatePlayerMovement();
 			}
 		});
+	}
+
+	/**
+	 * @Time 2026-01-19 根据当前按键状态更新玩家移动方向
+	 * 同时按下相反方向键时保持静止
+	 */
+	private void updatePlayerMovement() {
+		if (player == null) return;
+
+		// @Time 2026-01-19 水平方向:同时按下左右键时保持静止
+		if (leftPressed && rightPressed) {
+			player.stopHorizontal();
+		} else if (leftPressed) {
+			player.moveLeft();
+		} else if (rightPressed) {
+			player.moveRight();
+		} else {
+			player.stopHorizontal();
+		}
+
+		// @Time 2026-01-19 垂直方向:同时按下上下键时保持静止
+		if (upPressed && downPressed) {
+			player.stopVertical();
+		} else if (upPressed) {
+			player.moveUp();
+		} else if (downPressed) {
+			player.moveDown();
+		} else {
+			player.stopVertical();
+		}
 	}
 
 	/**

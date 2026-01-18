@@ -3,6 +3,7 @@ package stg.base;
 import stg.game.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 /**
  * 窗口类 - STG游戏主窗口
@@ -58,9 +59,29 @@ public class Window extends JFrame {
 		gameCanvas = new GameCanvas();
 		centerPanel.add(gameCanvas, BorderLayout.CENTER);
 
+		// 计算玩家初始位置:中间面板的中心,底部
+		float playerX = centerWidth / 2.0f;
+		float playerY = totalHeight;
+
 		// 创建玩家并设置到画布
-		Player player = new Player(centerWidth / 2, totalHeight);
+		Player player = new Player(playerX, playerY);
 		gameCanvas.setPlayer(player);
+
+		// 添加窗口监听器,在窗口显示后设置正确的玩家位置
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				SwingUtilities.invokeLater(() -> {
+					int canvasWidth = gameCanvas.getWidth();
+					int canvasHeight = gameCanvas.getHeight();
+					float actualPlayerX = canvasWidth / 2.0f;
+					float actualPlayerY = canvasHeight;
+					player.setPosition(actualPlayerX, actualPlayerY);
+					System.out.println("Canvas size: " + canvasWidth + "x" + canvasHeight);
+					System.out.println("Player position set to: " + actualPlayerX + ", " + actualPlayerY);
+				});
+			}
+		});
 
 		// 启动游戏循环
 		new GameLoop(gameCanvas).start();
