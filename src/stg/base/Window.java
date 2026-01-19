@@ -16,6 +16,7 @@ public class Window extends JFrame {
 	private GameCanvas gameCanvas; // 游戏画布
 	private int totalWidth = 1280; // 窗口总宽度
 	private int totalHeight = 960; // 窗口总高度
+	private JLabel coordInfoLabel; // 坐标信息标签
 
 	/**
 	 * 构造函数
@@ -46,6 +47,18 @@ public class Window extends JFrame {
 		leftPanel.setMinimumSize(new Dimension(leftWidth, totalHeight));
 		leftPanel.setMaximumSize(new Dimension(leftWidth, totalHeight));
 		leftPanel.setBackground(new Color(30, 30, 40));
+		leftPanel.setLayout(new BorderLayout());
+
+		// 创建坐标信息标签
+		coordInfoLabel = new JLabel("<html><div style='font-family: Monospace; font-size: 12px; color: white;'>" +
+			"Coordinate System Info:<br><br>" +
+			"Center: (0, 0) = Screen Center<br>" +
+			"Top-Right: (+,+)<br>" +
+			"Bottom-Left: (-,-)<br><br>" +
+			"X Axis: Left(-) to Right(+)<br>" +
+			"Y Axis: Bottom(-) to Top(+)</div></html>");
+		coordInfoLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		leftPanel.add(coordInfoLabel, BorderLayout.NORTH);
 
 		// 创建中间面板
 		centerPanel = new JPanel();
@@ -59,12 +72,11 @@ public class Window extends JFrame {
 		gameCanvas = new GameCanvas();
 		centerPanel.add(gameCanvas, BorderLayout.CENTER);
 
-		// 计算玩家初始位置:中间面板的中心,底部
-		float playerX = centerWidth / 2.0f;
-		float playerY = totalHeight;
-
-		// 创建玩家并设置到画布
-		Player player = new Player(playerX, playerY);
+		// @Time 2026-01-19 创建玩家 - 使用中心原点坐标系
+		// 坐标范围: X∈[-画布宽/2, 画布宽/2], Y∈[-画布高/2, 画布高/2]
+		// 坐标系: 右上角为(+,+),左下角为(-,-)
+		// 底部中心坐标: (0, -画布高/2)
+		Player player = new Player(0, 0); // 初始在画布中心
 		gameCanvas.setPlayer(player);
 
 		// 添加窗口监听器,在窗口显示后设置正确的玩家位置
@@ -74,11 +86,15 @@ public class Window extends JFrame {
 				SwingUtilities.invokeLater(() -> {
 					int canvasWidth = gameCanvas.getWidth();
 					int canvasHeight = gameCanvas.getHeight();
-					float actualPlayerX = canvasWidth / 2.0f;
-					float actualPlayerY = canvasHeight;
+					// @Time 2026-01-19 设置玩家到画布底部中心(中心原点坐标系)
+					// 坐标系: 右上角(+,+),左下角(-,-)
+					// X=0表示水平居中,Y=-画布高/2+玩家大小表示贴底
+					float actualPlayerX = 0;
+					float actualPlayerY = -canvasHeight / 2.0f + 40; // 距离底部40像素(Y为负值)
 					player.setPosition(actualPlayerX, actualPlayerY);
 					System.out.println("Canvas size: " + canvasWidth + "x" + canvasHeight);
-					System.out.println("Player position set to: " + actualPlayerX + ", " + actualPlayerY);
+					System.out.println("Coordinate system: Top-Right(+,+), Bottom-Left(-,-)");
+					System.out.println("Player position: (" + actualPlayerX + ", " + actualPlayerY + ")");
 				});
 			}
 		});

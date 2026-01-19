@@ -3,15 +3,16 @@ package stg.game;
 import java.awt.*;
 
 /**
- * 子弹类
+ * 子弹类 - @Time 2026-01-19 使用中心原点坐标系
  */
 public class Bullet {
-	private float x; // X坐标
-	private float y; // Y坐标
-	private float vx; // X方向速度
-	private float vy; // Y方向速度
-	private float size; // 子弹大小
-	private Color color; // 子弹颜色
+	protected float x; // X坐标
+	protected float y; // Y坐标
+	protected float vx; // X方向速度
+	protected float vy; // Y方向速度
+	protected float size; // 子弹大小
+	protected Color color; // 子弹颜色
+	protected GameCanvas gameCanvas; // @Time 2026-01-19 画布引用,用于坐标转换
 
 	/**
 	 * 构造函数
@@ -40,12 +41,25 @@ public class Bullet {
 	}
 
 	/**
-	 * 渲染子弹
+	 * 渲染子弹 - @Time 2026-01-19 使用中心原点坐标系
 	 * @param g 图形上下文
 	 */
 	public void render(Graphics2D g) {
+		// @Time 2026-01-19 转换为屏幕坐标(右上角为(+,+))
+		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
+		int canvasHeight = gameCanvas != null ? gameCanvas.getHeight() : 921;
+		float screenX = x + canvasWidth / 2.0f;
+		float screenY = canvasHeight / 2.0f - y;
+
 		g.setColor(color);
-		g.fillOval((int)(x - size/2), (int)(y - size/2), (int)size, (int)size);
+		g.fillOval((int)(screenX - size/2), (int)(screenY - size/2), (int)size, (int)size);
+	}
+
+	/**
+	 * @Time 2026-01-19 设置画布引用
+	 */
+	public void setGameCanvas(GameCanvas gameCanvas) {
+		this.gameCanvas = gameCanvas;
 	}
 
 	/**
@@ -70,12 +84,36 @@ public class Bullet {
 	}
 
 	/**
-	 * 检查子弹是否超出边界
+	 * @Time 2026-01-19 移动到指定坐标
+	 * @param x 目标X坐标
+	 * @param y 目标Y坐标
+	 */
+	public void moveTo(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	/**
+	 * @Time 2026-01-19 在现有坐标基础上增加对应值
+	 * @param dx X方向增量
+	 * @param dy Y方向增量
+	 */
+	public void moveOn(float dx, float dy) {
+		this.x += dx;
+		this.y += dy;
+	}
+
+	/**
+	 * 检查子弹是否超出边界 - @Time 2026-01-19 使用中心原点坐标系
 	 * @param width 画布宽度
 	 * @param height 画布高度
 	 * @return 是否超出边界
 	 */
 	public boolean isOutOfBounds(int width, int height) {
-		return x < -size || x > width + size || y < -size || y > height + size;
+		float leftBound = -width / 2.0f - size;
+		float rightBound = width / 2.0f + size;
+		float topBound = -height / 2.0f - size;
+		float bottomBound = height / 2.0f + size;
+		return x < leftBound || x > rightBound || y < topBound || y > bottomBound;
 	}
 }

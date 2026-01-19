@@ -1,9 +1,6 @@
 package stg.game;
 
 import java.awt.*;
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * 玩家类 - 自机角色
@@ -20,9 +17,14 @@ public class Player {
 
 	private boolean slowMode; // 低速模式标志
 	private boolean shooting; // 射击标志
-	private boolean bombing; // Bomb标志
 	private int shootCooldown; // 射击冷却时间
 	private int shootInterval = 8; // 射击间隔(帧数)
+	private int respawnTimer; // @Time 2026-01-19 重生计时器
+	private int respawnTime = 60; // @Time 2026-01-19 重生等待时间(帧数)
+	private float spawnX; // @Time 2026-01-19 重生X坐标
+	private float spawnY; // @Time 2026-01-19 重生Y坐标
+	private boolean respawning; // @Time 2026-01-19 重生动画标志
+	private float respawnSpeed; // @Time 2026-01-19 重生移动速度
 
 	/**
 	 * 空参构造函数 - 默认初始位置为底部中心(需要先设置gameCanvas)
@@ -38,8 +40,12 @@ public class Player {
 		this.size = 20;
 		this.slowMode = false;
 		this.shooting = false;
-		this.bombing = false;
 		this.shootCooldown = 0;
+		this.respawnTimer = 0;
+		this.spawnX = 0;
+		this.spawnY = 0;
+		this.respawning = false;
+		this.respawnSpeed = 8.0f;
 	}
 
 	/**
@@ -57,8 +63,12 @@ public class Player {
 		this.size = 20;
 		this.slowMode = false;
 		this.shooting = false;
-		this.bombing = false;
 		this.shootCooldown = 0;
+		this.respawnTimer = 0;
+		this.spawnX = spawnX;
+		this.spawnY = spawnY;
+		this.respawning = false;
+		this.respawnSpeed = 8.0f;
 	}
 
 	/**
@@ -81,27 +91,67 @@ public class Player {
 		this.gameCanvas = gameCanvas;
 		this.slowMode = false;
 		this.shooting = false;
-		this.bombing = false;
 		this.shootCooldown = 0;
+		this.spawnX = x;
+		this.spawnY = y;
+		this.respawning = false;
+		this.respawnSpeed = 8.0f;
 	}
 
 	/**
-	 * 更新玩家状态
+	 * 更新玩家状态 - @Time 2026-01-19 使用中心原点坐标系
+	 * 坐标系: 右上角(+,+),左下角(-,-)
 	 */
 	public void update() {
+		// @Time 2026-01-19 处理重生等待计时
+		if (respawnTimer > 0) {
+			respawnTimer--;
+			if (respawnTimer == 0) {
+				// 等待结束,开始重生动画
+				respawning = true;
+				x = spawnX; // X位置设置为重生点
+				// Y位置保持在屏幕下方,开始向上移动
+				int canvasHeight = gameCanvas.getHeight();
+				y = -canvasHeight / 2.0f - size;
+				vx = 0;
+				vy = respawnSpeed; // 向上移动(Y正方向)
+				System.out.println("Player respawn animation started from off-screen");
+			}
+			return;
+		}
+
+		// @Time 2026-01-19 处理重生动画
+		if (respawning) {
+			// 更新位置
+			y += vy;
+
+			// 检查是否到达重生位置
+			if (y >= spawnY) {
+				y = spawnY;
+				respawning = false;
+				vy = 0;
+				System.out.println("Player respawned at: (" + x + ", " + y + ")");
+			}
+			return; // 重生动画期间不接受玩家输入
+		}
+
 		// 更新位置
 		x += vx;
 		y += vy;
 
-		// 获取画布尺寸
+		// 获取画布尺寸和坐标系统
 		int canvasWidth = gameCanvas.getWidth();
 		int canvasHeight = gameCanvas.getHeight();
+		float leftBound = -canvasWidth / 2.0f;
+		float rightBound = canvasWidth / 2.0f;
+		float bottomBound = -canvasHeight / 2.0f;
+		float topBound = canvasHeight / 2.0f;
 
-		// 边界限制
-		if (x < size) x = size;
-		if (x > canvasWidth - size) x = canvasWidth - size;
-		if (y < size) y = size;
-		if (y > canvasHeight - size) y = canvasHeight - size;
+		// @Time 2026-01-19 边界限制(中心原点坐标系,右上角(+,+),左下角(-,-))
+		if (x < leftBound + size) x = leftBound + size;
+		if (x > rightBound - size) x = rightBound - size;
+		if (y < bottomBound + size) y = bottomBound + size;
+		if (y > topBound - size) y = topBound - size;
 
 		// 更新射击冷却
 		if (shootCooldown > 0) {
@@ -116,16 +166,20 @@ public class Player {
 	}
 
 	/**
-	 * 发射子弹
+	 * 发射子弹 - @Time 2026-01-19 向上发射(Y正方向)
 	 */
 	private void shoot() {
-		float bulletSpeed = 10.0f; // 子弹速度
+		float bulletSpeed = 10.0f; // 子弹速度(向上为正)
 		Color bulletColor = Color.WHITE; // 子弹颜色
 		float bulletSize = slowMode ? 6.0f : 4.0f; // 子弹大小(低速模式更大)
 
-		// 发射两发子弹,从玩家中心位置
-		Bullet bullet1 = new Bullet(x - 5, y, 0, -bulletSpeed, bulletSize, bulletColor);
-		Bullet bullet2 = new Bullet(x + 5, y, 0, -bulletSpeed, bulletSize, bulletColor);
+		// 发射两发子弹,从玩家中心位置,向上发射(Y为正)
+		Bullet bullet1 = new Bullet(x - 5, y, 0, bulletSpeed, bulletSize, bulletColor);
+		Bullet bullet2 = new Bullet(x + 5, y, 0, bulletSpeed, bulletSize, bulletColor);
+
+		// @Time 2026-01-19 设置画布引用
+		bullet1.setGameCanvas(gameCanvas);
+		bullet2.setGameCanvas(gameCanvas);
 
 		// 添加到画布
 		gameCanvas.addBullet(bullet1);
@@ -133,37 +187,42 @@ public class Player {
 	}
 
 	/**
-	 * 渲染玩家
+	 * 渲染玩家 - @Time 2026-01-19 使用中心原点坐标系
 	 * @param g 图形上下文
 	 */
 	public void render(Graphics2D g) {
+		// @Time 2026-01-19 将中心原点坐标转换为屏幕坐标
+		// 坐标系: 右上角为(+,+),左下角为(-,-)
+		float screenX = x + gameCanvas.getWidth() / 2.0f;
+		float screenY = gameCanvas.getHeight() / 2.0f - y;
+
 		// 绘制角色主体(红色圆形)
 		g.setColor(Color.RED);
-		g.fillOval((int)(x - size), (int)(y - size), (int)(size * 2), (int)(size * 2));
+		g.fillOval((int)(screenX - size), (int)(screenY - size), (int)(size * 2), (int)(size * 2));
 
 		// 绘制头带(白色矩形)
 		g.setColor(Color.WHITE);
-		g.fillRect((int)(x - size), (int)(y - size), (int)(size * 2), 4);
+		g.fillRect((int)(screenX - size), (int)(screenY - size), (int)(size * 2), 4);
 
 		// 低速模式指示器(黄色圆点)
 		if (slowMode) {
 			g.setColor(Color.YELLOW);
-			g.fillOval((int)(x - 3), (int)(y - 3), 6, 6);
+			g.fillOval((int)(screenX - 3), (int)(screenY - 3), 6, 6);
 		}
 	}
 
 	/**
-	 * 向上移动
+	 * 向上移动 - @Time 2026-01-19 Y正方向
 	 */
 	public void moveUp() {
-		vy = slowMode ? -speedSlow : -speed;
+		vy = slowMode ? speedSlow : speed;
 	}
 
 	/**
-	 * 向下移动
+	 * 向下移动 - @Time 2026-01-19 Y负方向
 	 */
 	public void moveDown() {
-		vy = slowMode ? speedSlow : speed;
+		vy = slowMode ? -speedSlow : -speed;
 	}
 
 	/**
@@ -250,6 +309,9 @@ public class Player {
 	public void setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
+		// @Time 2026-01-19 保存初始位置用于重生
+		this.spawnX = x;
+		this.spawnY = y;
 	}
 
 	/**
@@ -274,5 +336,23 @@ public class Player {
 	 */
 	public boolean isSlowMode() {
 		return slowMode;
+	}
+
+	/**
+	 * @Time 2026-01-19 受击处理
+	 * 玩家中弹后立即移到屏幕下方,然后等待重生
+	 */
+	public void onHit() {
+		// 立即移动到屏幕下方
+		int canvasHeight = gameCanvas.getHeight();
+		y = -canvasHeight / 2.0f - size;
+		vx = 0;
+		vy = 0;
+		respawning = false;
+
+		// 启动重生等待计时器
+		respawnTimer = respawnTime;
+
+		System.out.println("Player hit! Moved off-screen. Respawn animation in " + respawnTime + " frames");
 	}
 }
