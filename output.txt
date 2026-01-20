@@ -1,0 +1,178 @@
+启动 STG 游戏引擎
+Reading JSON file: src/user/level.json
+JSON content length: 2594
+Level name: Demo Stage - Multi-Phase Attack
+Extracted 26 enemy objects from JSON
+Skipping invalid enemy data: {
+			"type": "BasicEnemy",
+			"x": -100,
+			"y": 220,
+			"speed": 2.5,
+			"frame": 140
+		}
+Skipping invalid enemy data: {
+			"type": "BasicEnemy",
+			"x": -200,
+			"y": 240,
+			"speed": 3.0,
+			"frame": 160
+		}
+Skipping invalid enemy data: {
+			"type": "BasicEnemy",
+			"x": -150,
+			"y": 150,
+			"speed": 4.0,
+			"frame": 420
+		}
+Skipping invalid enemy data: {
+			"type": "BasicEnemy",
+			"x": -120,
+			"y": 100,
+			"speed": 3.5,
+			"frame": 600
+		}
+Skipping invalid enemy data: {
+			"type": "BasicEnemy",
+			"x": -60,
+			"y": 100,
+			"speed": 3.5,
+			"frame": 620
+		}
+Skipping invalid enemy data: {
+			"type": "BasicEnemy",
+			"x": -150,
+			"y": 200,
+			"speed": 3.5,
+			"frame": 720
+		}
+Skipping invalid enemy data: {
+			"type": "BasicEnemy",
+			"x": -100,
+			"y": 180,
+			"speed": 3.0,
+			"frame": 750
+		}
+Skipping invalid enemy data: {
+			"type": "BasicEnemy",
+			"x": -50,
+			"y": 200,
+			"speed": 3.5,
+			"frame": 780
+		}
+Skipping invalid enemy data: {
+			"type": "message",
+			"frame": 60,
+			"content": "Stage Start!"
+		}
+Skipping invalid enemy data: {
+			"type": "message",
+			"frame": 420,
+			"content": "Phase 2: Speed Up!"
+		}
+Skipping invalid enemy data: {
+			"type": "message",
+			"frame": 600,
+			"content": "Phase 3: Formation!"
+		}
+Skipping invalid enemy data: {
+			"type": "message",
+			"frame": 720,
+			"content": "Phase 4: Scatter!"
+		}
+Skipping invalid enemy data: {
+			"type": "message",
+			"frame": 900,
+			"content": "Warning: Boss Approaching!"
+		}
+Successfully parsed 13 enemies in JSON
+Found 5 events in JSON
+Loaded level: main
+Level loaded: Demo Stage - Multi-Phase Attack
+GameCanvas created, initial size: 0x0
+GameCanvas center origin: (0, 0) = screen center
+Canvas size set to: 548x921
+Coordinate system ready, level execution started
+Created window with size: 1280x960
+Left panel: 365px
+Center panel: 548px
+Right panel: 367px
+System initialized - 窗口已创建
+Canvas size: 548x921
+Coordinate system: Top-Right(+,+), Bottom-Left(-,-)
+Player position: (0.0, -420.5)
+Event: Stage Start!
+Spawned enemy at frame 120: BasicEnemy
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (2.0, 200.0), screen coords: (276.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (4.0, 200.0), screen coords: (278.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (6.0, 200.0), screen coords: (280.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (8.0, 200.0), screen coords: (282.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (10.0, 200.0), screen coords: (284.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (12.0, 200.0), screen coords: (286.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (14.0, 200.0), screen coords: (288.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (16.0, 200.0), screen coords: (290.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (18.0, 200.0), screen coords: (292.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (20.0, 200.0), screen coords: (294.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (22.0, 200.0), screen coords: (296.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (24.0, 200.0), screen coords: (298.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (26.0, 200.0), screen coords: (300.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (28.0, 200.0), screen coords: (302.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (30.0, 200.0), screen coords: (304.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (32.0, 200.0), screen coords: (306.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (34.0, 200.0), screen coords: (308.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (36.0, 200.0), screen coords: (310.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (38.0, 200.0), screen coords: (312.0, 260.5), canvas size: 548x921
+Rendering 1 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (40.0, 200.0), screen coords: (314.0, 260.5), canvas size: 548x921
+Spawned enemy at frame 140: BasicEnemy
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (42.0, 200.0), screen coords: (316.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (102.5, 220.0), screen coords: (376.5, 240.5), canvas size: 548x921
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (44.0, 200.0), screen coords: (318.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (105.0, 220.0), screen coords: (379.0, 240.5), canvas size: 548x921
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (46.0, 200.0), screen coords: (320.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (107.5, 220.0), screen coords: (381.5, 240.5), canvas size: 548x921
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (48.0, 200.0), screen coords: (322.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (110.0, 220.0), screen coords: (384.0, 240.5), canvas size: 548x921
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (50.0, 200.0), screen coords: (324.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (112.5, 220.0), screen coords: (386.5, 240.5), canvas size: 548x921
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (52.0, 200.0), screen coords: (326.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (115.0, 220.0), screen coords: (389.0, 240.5), canvas size: 548x921
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (54.0, 200.0), screen coords: (328.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (117.5, 220.0), screen coords: (391.5, 240.5), canvas size: 548x921
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (56.0, 200.0), screen coords: (330.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (120.0, 220.0), screen coords: (394.0, 240.5), canvas size: 548x921
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (58.0, 200.0), screen coords: (332.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (122.5, 220.0), screen coords: (396.5, 240.5), canvas size: 548x921
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (60.0, 200.0), screen coords: (334.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (125.0, 220.0), screen coords: (399.0, 240.5), canvas size: 548x921
+Rendering 2 enemy(ies), 0 enemy bullet(s)
+Rendering enemy at center coords: (62.0, 200.0), screen coords: (336.0, 260.5), canvas size: 548x921
+Rendering enemy at center coords: (127.5, 220.0), screen coords: (401.5, 240.5), canvas size: 548x921

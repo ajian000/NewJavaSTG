@@ -1,5 +1,7 @@
-package stg.game;
+package stg.game.enemy;
 
+import stg.game.GameCanvas;
+import stg.game.bullet.CircularBullet;
 import java.awt.*;
 
 /**

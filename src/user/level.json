@@ -1,0 +1,187 @@
+{
+	"name": "Demo Stage - Multi-Phase Attack",
+	"difficulty": "normal",
+	"background": "space",
+	"waves": 4,
+	"totalEnemies": 21,
+	"enemies": [
+		{
+			"type": "BasicEnemy",
+			"x": 0,
+			"y": 200,
+			"speed": 2.0,
+			"frame": 120
+		},
+		{
+			"type": "BasicEnemy",
+			"x": -100,
+			"y": 220,
+			"speed": 2.5,
+			"frame": 140
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 100,
+			"y": 220,
+			"speed": 2.5,
+			"frame": 140
+		},
+		{
+			"type": "BasicEnemy",
+			"x": -200,
+			"y": 240,
+			"speed": 3.0,
+			"frame": 160
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 200,
+			"y": 240,
+			"speed": 3.0,
+			"frame": 160
+		},
+		{
+			"type": "BasicEnemy",
+			"x": -150,
+			"y": 150,
+			"speed": 4.0,
+			"frame": 420
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 0,
+			"y": 180,
+			"speed": 4.5,
+			"frame": 440
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 150,
+			"y": 150,
+			"speed": 4.0,
+			"frame": 420
+		},
+		{
+			"type": "BasicEnemy",
+			"x": -120,
+			"y": 100,
+			"speed": 3.5,
+			"frame": 600
+		},
+		{
+			"type": "BasicEnemy",
+			"x": -60,
+			"y": 100,
+			"speed": 3.5,
+			"frame": 620
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 0,
+			"y": 100,
+			"speed": 3.5,
+			"frame": 640
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 60,
+			"y": 100,
+			"speed": 3.5,
+			"frame": 660
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 120,
+			"y": 100,
+			"speed": 3.5,
+			"frame": 680
+		},
+		{
+			"type": "BasicEnemy",
+			"x": -150,
+			"y": 200,
+			"speed": 3.5,
+			"frame": 720
+		},
+		{
+			"type": "BasicEnemy",
+			"x": -100,
+			"y": 180,
+			"speed": 3.0,
+			"frame": 750
+		},
+		{
+			"type": "BasicEnemy",
+			"x": -50,
+			"y": 200,
+			"speed": 3.5,
+			"frame": 780
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 0,
+			"y": 220,
+			"speed": 4.0,
+			"frame": 810
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 50,
+			"y": 200,
+			"speed": 3.5,
+			"frame": 840
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 100,
+			"y": 180,
+			"speed": 3.0,
+			"frame": 870
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 150,
+			"y": 200,
+			"speed": 3.5,
+			"frame": 900
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 200,
+			"y": 220,
+			"speed": 3.0,
+			"frame": 930
+		}
+	],
+	"events": [
+		{
+			"type": "message",
+			"frame": 60,
+			"content": "Stage Start!"
+		},
+		{
+			"type": "message",
+			"frame": 420,
+			"content": "Phase 2: Speed Up!"
+		},
+		{
+			"type": "message",
+			"frame": 600,
+			"content": "Phase 3: Formation!"
+		},
+		{
+			"type": "message",
+			"frame": 720,
+			"content": "Phase 4: Scatter!"
+		},
+		{
+			"type": "message",
+			"frame": 900,
+			"content": "Warning: Boss Approaching!"
+		}
+	],
+	"metadata": {
+		"createdBy": "JSON Demo",
+		"version": "1.0"
+	}
+}

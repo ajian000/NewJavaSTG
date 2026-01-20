@@ -2,33 +2,88 @@ package Main;
 
 import java.awt.EventQueue;
 import stg.base.Window;
+import stg.game.GameCanvas;
+import stg.game.TitleScreen;
+import stg.game.player.PlayerType;
+import stg.util.LevelManager;
 
-/**
- * STG游戏引擎主类
- */
 public class Main {
-	private static Window window; // 窗口对象
+	private static Window window;
+	private static LevelManager levelManager;
+	private static TitleScreen titleScreen;
+	private static stg.game.player.PlayerType selectedPlayerType = stg.game.player.PlayerType.DEFAULT;
 
-	/**
-	 * 程序入口
-	 * @param args 命令行参数
-	 */
 	public static void main(String[] args) {
 		System.out.println("启动 STG 游戏引擎");
 
-		// 在事件分发线程中创建窗口
-		EventQueue.invokeLater(() -> {
-			window = new Window();
+		levelManager = LevelManager.getInstance();
 
-			System.out.println("System initialized - 窗口已创建");
+		EventQueue.invokeLater(() -> {
+			window = new Window(false);
+			showTitleScreen();
 		});
 	}
 
-	/**
-	 * 获取窗口对象
-	 * @return 窗口对象
-	 */
+	private static void showTitleScreen() {
+		titleScreen = new TitleScreen(new TitleScreen.TitleCallback() {
+			@Override
+			public void onGameStart(stg.game.player.PlayerType playerType) {
+				System.out.println("开始游戏: " + playerType.getName());
+				startGame(playerType);
+			}
+
+			@Override
+			public void onExit() {
+				System.out.println("退出游戏");
+				System.exit(0);
+			}
+		});
+
+		window.getCenterPanel().removeAll();
+		window.getCenterPanel().add(titleScreen);
+		titleScreen.requestFocusInWindow();
+		window.revalidate();
+		window.repaint();
+	}
+
+	private static void startGame(stg.game.player.PlayerType playerType) {
+		window.initializePlayer(playerType);
+		window.getCenterPanel().remove(titleScreen);
+		GameCanvas gameCanvas = window.getGameCanvas();
+		window.getCenterPanel().add(gameCanvas);
+
+		// 设置玩家位置到屏幕底部中心
+		stg.game.player.Player player = gameCanvas.getPlayer();
+		if (player != null) {
+			int canvasHeight = gameCanvas.getHeight();
+			float actualPlayerX = 0; // 水平居中
+			float actualPlayerY = -canvasHeight / 2.0f + 40; // 距离底部40像素(Y为负值)
+			player.setPosition(actualPlayerX, actualPlayerY);
+			System.out.println("玩家出生位置: (" + actualPlayerX + ", " + actualPlayerY + ")");
+		}
+
+		gameCanvas.requestFocusInWindow();
+		new stg.game.GameLoop(gameCanvas).start();
+		System.out.println("游戏开始，自机: " + playerType.getName());
+	}
+
 	public static Window getWindow() {
 		return window;
+	}
+
+	public static LevelManager getLevelManager() {
+		return levelManager;
+	}
+
+	public static stg.game.player.PlayerType getSelectedPlayerType() {
+		return selectedPlayerType;
+	}
+
+	public static void returnToTitle() {
+		// 停止游戏循环
+		stg.game.GameLoop.stopAll();
+		
+		// 返回标题界面
+		showTitleScreen();
 	}
 }

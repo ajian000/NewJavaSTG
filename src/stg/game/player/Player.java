@@ -1,6 +1,7 @@
-package stg.game;
+package stg.game.player;
 
 import stg.game.bullet.Bullet;
+import stg.game.GameCanvas;
 import java.awt.*;
 
 /**
@@ -408,5 +409,19 @@ public class Player {
 		respawnTimer = respawnTime;
 
 		System.out.println("Player hit! Moved off-screen. Respawn animation in " + respawnTime + " frames");
+	}
+
+	/**
+	 * 重置玩家状态（用于重新开始游戏）
+	 */
+	public void reset() {
+		vx = 0;
+		vy = 0;
+		slowMode = false;
+		shooting = false;
+		shootCooldown = 0;
+		respawnTimer = 0;
+		respawning = false;
+		// x 和 y 由 GameCanvas.resetGame() 设置
 	}
 }

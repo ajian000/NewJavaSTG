@@ -1,5 +1,6 @@
-package stg.game;
+package stg.game.enemy;
 
+import stg.game.bullet.Bullet;
 import java.awt.*;
 
 /**

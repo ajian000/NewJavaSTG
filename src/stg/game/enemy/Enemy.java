@@ -1,5 +1,6 @@
-package stg.game;
+package stg.game.enemy;
 
+import stg.game.GameCanvas;
 import java.awt.*;
 
 /**
@@ -20,7 +21,7 @@ public class Enemy {
 
 	/**
 	 * 空参构造函数
-	 * @Time 2026-01-19 默认速度为0,大小为20,颜色为蓝色,生命值为100
+	 * @Time 2026-01-19 默认速度为0,大小为20,颜色为蓝色,生命值为10
 	 */
 	public Enemy(int x,int y) {
 		this.x = x;
@@ -29,8 +30,8 @@ public class Enemy {
 		this.vy = 0;
 		this.size = 20;
 		this.color = Color.BLUE;
-		this.hp = 100;
-		this.maxHp = 100;
+		this.hp = 10;
+		this.maxHp = 10;
 		this.alive = true;
 	}
 
