@@ -1,7 +1,7 @@
 package stg.game.player;
 
 import stg.game.bullet.Bullet;
-import stg.game.GameCanvas;
+import stg.game.ui.GameCanvas;
 import java.awt.*;
 
 /**

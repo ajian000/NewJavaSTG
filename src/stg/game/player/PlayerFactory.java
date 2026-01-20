@@ -1,7 +1,5 @@
 package stg.game.player;
 
-import stg.game.GameCanvas;
-
 /**
  * 自机工厂类
  * 负责根据类型创建不同的自机实例

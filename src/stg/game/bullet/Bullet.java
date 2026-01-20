@@ -1,6 +1,6 @@
 package stg.game.bullet;
 
-import stg.game.GameCanvas;
+import stg.game.ui.GameCanvas;
 import java.awt.*;
 
 /**

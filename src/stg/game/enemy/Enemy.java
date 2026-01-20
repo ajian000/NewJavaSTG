@@ -1,6 +1,6 @@
 package stg.game.enemy;
 
-import stg.game.GameCanvas;
+import stg.game.ui.GameCanvas;
 import java.awt.*;
 
 /**

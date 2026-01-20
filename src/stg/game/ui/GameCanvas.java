@@ -1,4 +1,4 @@
-package stg.game;
+package stg.game.ui;
 
 import stg.util.CoordinateSystem;
 import stg.util.LevelData;
@@ -8,6 +8,7 @@ import stg.game.bullet.Bullet;
 import stg.game.enemy.Enemy;
 import stg.game.enemy.EnemyBullet;
 import stg.game.enemy.BasicEnemy;
+import stg.game.player.Player;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -275,7 +276,7 @@ public class GameCanvas extends JPanel {
 	/**
 	 * 重置游戏
 	 */
-	private void resetGame() {
+	public void resetGame() {
 		currentFrame = 0;
 		waveCooldown = 0;
 		activeWaveNumber = 0;
@@ -286,6 +287,8 @@ public class GameCanvas extends JPanel {
 		enemies.clear();
 		bullets.clear();
 		enemyBullets.clear();
+		paused = false;
+		pauseMenuIndex = 0;
 
 		if (player != null) {
 			int canvasHeight = getHeight();

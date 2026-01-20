@@ -1,5 +1,7 @@
 package stg.game;
 
+import stg.game.ui.GameCanvas;
+
 /**
  * 游戏循环类 - 控制游戏主循环
  */

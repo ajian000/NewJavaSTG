@@ -1,4 +1,4 @@
-package stg.game;
+package stg.game.ui;
 
 import stg.game.player.PlayerType;
 import javax.swing.*;

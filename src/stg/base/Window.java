@@ -1,6 +1,7 @@
 package stg.base;
 
-import stg.game.*;
+import stg.game.ui.GameCanvas;
+import stg.game.GameLoop;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

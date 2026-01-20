@@ -2,9 +2,8 @@ package Main;
 
 import java.awt.EventQueue;
 import stg.base.Window;
-import stg.game.GameCanvas;
-import stg.game.TitleScreen;
-import stg.game.player.PlayerType;
+import stg.game.ui.GameCanvas;
+import stg.game.ui.TitleScreen;
 import stg.util.LevelManager;
 
 public class Main {
@@ -52,6 +51,9 @@ public class Main {
 		GameCanvas gameCanvas = window.getGameCanvas();
 		window.getCenterPanel().add(gameCanvas);
 
+		// 重置游戏状态为新对局
+		gameCanvas.resetGame();
+
 		// 设置玩家位置到屏幕底部中心
 		stg.game.player.Player player = gameCanvas.getPlayer();
 		if (player != null) {
@@ -82,7 +84,7 @@ public class Main {
 	public static void returnToTitle() {
 		// 停止游戏循环
 		stg.game.GameLoop.stopAll();
-		
+
 		// 返回标题界面
 		showTitleScreen();
 	}
