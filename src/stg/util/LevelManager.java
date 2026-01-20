@@ -2,10 +2,15 @@ package stg.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import stg.util.script.JsonLevelLoader;
+import stg.util.script.JavaScriptLevelLoader;
+import stg.util.script.PythonLevelLoader;
+import stg.util.script.SimpleJsonLoader;
 
 /**
  * 关卡管理器 - 管理关卡加载和执行
  * 从user目录读取index.js或index.py
+ * @Time 2026-01-20 将关卡加载器引用更新为stg.util.script包
  */
 public class LevelManager {
 	private static LevelManager instance;

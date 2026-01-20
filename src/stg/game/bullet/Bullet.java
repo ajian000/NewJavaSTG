@@ -46,11 +46,16 @@ public class Bullet {
 	 * @param g 图形上下文
 	 */
 	public void render(Graphics2D g) {
-		// @Time 2026-01-19 转换为屏幕坐标(右上角为(+,+))
-		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
-		int canvasHeight = gameCanvas != null ? gameCanvas.getHeight() : 921;
-		float screenX = x + canvasWidth / 2.0f;
-		float screenY = canvasHeight / 2.0f - y;
+		float screenX = x;
+		float screenY = y;
+		if (gameCanvas != null) {
+			float[] coords = gameCanvas.getCoordinateSystem().toScreenCoords(x, y);
+			screenX = coords[0];
+			screenY = coords[1];
+		} else {
+			screenX = x + 548 / 2.0f;
+			screenY = 921 / 2.0f - y;
+		}
 
 		g.setColor(color);
 		g.fillOval((int)(screenX - size/2), (int)(screenY - size/2), (int)size, (int)size);

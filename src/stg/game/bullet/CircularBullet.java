@@ -43,18 +43,12 @@ public class CircularBullet extends EnemyBullet {
 	 */
 	@Override
 	public void render(Graphics2D g) {
-		// @Time 2026-01-19 将中心原点坐标转换为屏幕坐标
-		// 坐标系: 右上角为(+,+),左下角为(-,-)
-		int canvasWidth = 548;
-		int canvasHeight = 921;
-		float screenX = x + canvasWidth / 2.0f;
-		float screenY = canvasHeight / 2.0f - y;
+		float screenX = x + 548 / 2.0f;
+		float screenY = 921 / 2.0f - y;
 
-		// 绘制外圈
 		g.setColor(color);
 		g.fillOval((int)(screenX - size), (int)(screenY - size), (int)(size * 2), (int)(size * 2));
 
-		// 绘制内圈(渐变效果)
 		g.setColor(innerColor);
 		float innerSize = size * 0.6f;
 		g.fillOval((int)(screenX - innerSize), (int)(screenY - innerSize), (int)(innerSize * 2), (int)(innerSize * 2));

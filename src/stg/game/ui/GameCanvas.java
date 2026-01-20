@@ -1,5 +1,7 @@
 package stg.game.ui;
 
+import stg.base.KeyStateProvider;
+
 import stg.util.CoordinateSystem;
 import stg.util.LevelData;
 import stg.util.EnemySpawnData;
@@ -20,15 +22,27 @@ import java.util.Map;
 /**
  * 游戏画布类 - 处理游戏渲染和输入
  * @Time 2026-01-19 使用画布中心原点坐标系
+ * @Time 2026-01-20 将类移动到stg.game.ui包
  */
-public class GameCanvas extends JPanel {
+public class GameCanvas extends JPanel implements KeyStateProvider {
 	private static final long serialVersionUID = 1L;
-	private stg.game.player.Player player; // 玩家对象
-	private List<stg.game.player.Player> players; // 玩家列表（支持多玩家）
-	private List<Bullet> bullets; // 玩家子弹列表
-	private List<Bullet> enemyBullets; // 敌方子弹列表
-	private List<Enemy> enemies; // 敌人列表
-	private CoordinateSystem coordinateSystem; // @Time 2026-01-19 坐标系统
+
+	// 游戏配置常量
+	private static final float PLAYER_START_Y_OFFSET = 40f;
+	private static final int BULLET_DAMAGE = 10;
+	private static final int WAVE_DELAY = 30;
+	private static final int WAVE_1_END_FRAME = 200;
+	private static final int WAVE_2_END_FRAME = 500;
+	private static final int WAVE_3_END_FRAME = 700;
+	private static final int WAVE_4_END_FRAME = 1000;
+	private static final int WAVE_COUNT = 5;
+
+	private stg.game.player.Player player;
+	private List<stg.game.player.Player> players;
+	private List<Bullet> bullets;
+	private List<Bullet> enemyBullets;
+	private List<Enemy> enemies;
+	private CoordinateSystem coordinateSystem;
 
 	// @Time 2026-01-19 按键状态跟踪 - 用于优化按键扫描逻辑
 	private boolean upPressed = false; // 上键状态
@@ -40,13 +54,12 @@ public class GameCanvas extends JPanel {
 	private boolean shiftPressed = false; // Shift键状态
 
 	// 关卡执行相关
-	private LevelData currentLevel; // 当前关卡数据
-	private int currentFrame = 0; // 当前帧数
-	private int waveCooldown = 0; // 波次冷却帧数
-	private int waveDelay = 30; // 波次延迟帧数
-	private List<EnemySpawnData> spawnedEnemies; // 已生成的敌人列表
-	private int activeWaveNumber = 0; // 当前活跃的波次号
-	private boolean waveStarted[] = new boolean[5]; // 波次是否已开始(1-4)
+	private LevelData currentLevel;
+	private int currentFrame = 0;
+	private int waveCooldown = 0;
+	private List<EnemySpawnData> spawnedEnemies;
+	private int activeWaveNumber = 0;
+	private boolean waveStarted[] = new boolean[WAVE_COUNT];
 
 	// 暂停菜单相关
 	private boolean paused = false;
@@ -73,9 +86,6 @@ public class GameCanvas extends JPanel {
 
 		setupInput(); // 设置键盘输入
 		loadLevel(); // 加载关卡
-
-		System.out.println("GameCanvas created, initial size: " + getWidth() + "x" + getHeight());
-		System.out.println("GameCanvas center origin: (0, 0) = screen center");
 	}
 
 	/**
@@ -83,16 +93,9 @@ public class GameCanvas extends JPanel {
 	 */
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
-		int oldWidth = getWidth();
-		int oldHeight = getHeight();
 		super.setBounds(x, y, width, height);
 		if (coordinateSystem != null) {
 			coordinateSystem.updateCanvasSize(width, height);
-		}
-		if (oldWidth == 0 && oldHeight == 0 && width > 0 && height > 0) {
-			// @Time 2026-01-19 画布尺寸首次确定
-			System.out.println("Canvas size set to: " + width + "x" + height);
-			System.out.println("Coordinate system ready, level execution started");
 		}
 	}
 
@@ -293,12 +296,10 @@ public class GameCanvas extends JPanel {
 		if (player != null) {
 			int canvasHeight = getHeight();
 			float actualPlayerX = 0;
-			float actualPlayerY = -canvasHeight / 2.0f + 40;
+			float actualPlayerY = -canvasHeight / 2.0f + PLAYER_START_Y_OFFSET;
 			player.setPosition(actualPlayerX, actualPlayerY);
 			player.reset();
 		}
-
-		System.out.println("游戏已重置");
 	}
 
 	/**
@@ -411,11 +412,10 @@ public class GameCanvas extends JPanel {
 			Enemy enemy = enemyIterator.next();
 			enemy.update();
 
-			// 只在画布准备好后检查越界
-			if (canvasReady && (!enemy.isAlive() || enemy.isOutOfBounds(canvasWidth, canvasHeight))) {
-				System.out.println("Enemy removed: " + enemy);
-				enemyIterator.remove();
-			}
+		// 只在画布准备好后检查越界
+		if (canvasReady && (!enemy.isAlive() || enemy.isOutOfBounds(canvasWidth, canvasHeight))) {
+			enemyIterator.remove();
+		}
 		}
 
 		// 更新玩家子弹位置,移除越界子弹
@@ -599,11 +599,9 @@ public class GameCanvas extends JPanel {
 				Enemy enemy = enemyIterator.next();
 
 				if (checkCollision(bullet, enemy)) {
-					// 子弹击中敌人
-					enemy.takeDamage(10); // 每发子弹造成10点伤害
+					enemy.takeDamage(BULLET_DAMAGE);
 					bulletIterator.remove();
-					System.out.println("Player bullet hit enemy! Enemy HP: " + enemy.getHp() + "/" + enemy.getMaxHp());
-					break; // 子弹移除,跳出循环
+					break;
 				}
 			}
 		}
@@ -617,7 +615,6 @@ public class GameCanvas extends JPanel {
 				// 敌方子弹击中玩家
 				player.onHit();
 				enemyBulletIterator.remove();
-				System.out.println("Player hit by enemy bullet!");
 			}
 		}
 	}
@@ -677,11 +674,6 @@ public class GameCanvas extends JPanel {
 	private void loadLevel() {
 		LevelManager manager = LevelManager.getInstance();
 		currentLevel = manager.loadLevelFromUser();
-		if (currentLevel != null) {
-			System.out.println("Level loaded: " + currentLevel.getName());
-		} else {
-			System.err.println("Failed to load level!");
-		}
 	}
 
 	/**
@@ -697,12 +689,10 @@ public class GameCanvas extends JPanel {
 		if (waveCooldown > 0) {
 			waveCooldown--;
 			if (waveCooldown == 0) {
-				System.out.println("Wave cooldown finished, can now spawn next wave enemies");
 				// 冷却结束后,切换到下一波
 				if (activeWaveNumber < 4) {
 					activeWaveNumber++;
 					waveStarted[activeWaveNumber] = true;
-					System.out.println("Switching to Wave " + activeWaveNumber);
 				}
 			}
 			return;
@@ -712,19 +702,14 @@ public class GameCanvas extends JPanel {
 		if (activeWaveNumber == 0) {
 			activeWaveNumber = 1;
 			waveStarted[1] = true;
-			System.out.println("Starting Wave 1");
 			return;
 		}
 
 		// 尝试生成当前波次的敌人
 		boolean spawned = trySpawnWaveEnemies(activeWaveNumber);
 
-		// 检查当前波次是否完成
-		// 条件: 场上无敌人 + 该波次所有敌人都已生成 + 当前帧没有生成新敌人
 		if (enemies.isEmpty() && isWaveComplete(activeWaveNumber) && !spawned) {
-			// 波次完成,进入冷却期
-			waveCooldown = waveDelay;
-			System.out.println("Wave " + activeWaveNumber + " completed! All enemies defeated. Waiting " + waveDelay + " ticks for next wave...");
+			waveCooldown = WAVE_DELAY;
 			return;
 		}
 
@@ -784,7 +769,6 @@ public class GameCanvas extends JPanel {
 				spawnEnemy(enemyData);
 				spawnedEnemies.add(enemyData);
 				spawned = true;
-				System.out.println("Spawned Wave " + wave + " enemy at frame " + currentFrame + ": " + enemyData.getType());
 			}
 		}
 		return spawned;
@@ -792,16 +776,12 @@ public class GameCanvas extends JPanel {
 
 	/**
 	 * 根据帧数判断波次
-	 * Wave 1: frame 0-200
-	 * Wave 2: frame 200-500
-	 * Wave 3: frame 500-700
-	 * Wave 4: frame 700+
 	 */
 	private int getWaveByFrame(int frame) {
-		if (frame < 200) return 1;
-		if (frame < 500) return 2;
-		if (frame < 700) return 3;
-		if (frame < 1000) return 4;
+		if (frame < WAVE_1_END_FRAME) return 1;
+		if (frame < WAVE_2_END_FRAME) return 2;
+		if (frame < WAVE_3_END_FRAME) return 3;
+		if (frame < WAVE_4_END_FRAME) return 4;
 		return 0;
 	}
 

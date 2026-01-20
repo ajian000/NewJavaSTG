@@ -19,43 +19,14 @@ public class Enemy {
 	protected GameCanvas gameCanvas; // 游戏画布引用
 	protected boolean alive; // 存活状态
 
-	/**
-	 * 空参构造函数
-	 * @Time 2026-01-19 默认速度为0,大小为20,颜色为蓝色,生命值为10
-	 */
-	public Enemy(int x,int y) {
-		this.x = x;
-		this.y = y;
-		this.vx = 0;
-		this.vy = 0;
-		this.size = 20;
-		this.color = Color.BLUE;
-		this.hp = 10;
-		this.maxHp = 10;
-		this.alive = true;
+	public Enemy(int x, int y) {
+		this(x, y, 0, 0, 20, Color.BLUE, 10, null);
 	}
 
-	/**
-	 * 坐标构造函数
-	 * @param x X坐标
-	 * @param y Y坐标
-	 */
 	public Enemy(float x, float y) {
-		this.x = x;
-		this.y = y;
+		this(x, y, 0, 0, 20, Color.BLUE, 10, null);
 	}
 
-	/**
-	 * 全参构造函数
-	 * @param x X坐标
-	 * @param y Y坐标
-	 * @param vx X方向速度
-	 * @param vy Y方向速度
-	 * @param size 大小
-	 * @param color 颜色
-	 * @param hp 生命值
-	 * @param gameCanvas 游戏画布引用
-	 */
 	public Enemy(float x, float y, float vx, float vy, float size, Color color, int hp, GameCanvas gameCanvas) {
 		this.x = x;
 		this.y = y;
@@ -92,18 +63,14 @@ public class Enemy {
 	 * @Time 2026-01-19 基类提供基本渲染,子类可自定义渲染
 	 */
 	public void render(Graphics2D g) {
-		// @Time 2026-01-19 将中心原点坐标转换为屏幕坐标
-		// 坐标系: 右上角为(+,+),左下角为(-,-)
-		int canvasWidth = 548; // @TODO 从gameCanvas获取
-		int canvasHeight = 921;
+		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
+		int canvasHeight = gameCanvas != null ? gameCanvas.getHeight() : 921;
 		float screenX = x + canvasWidth / 2.0f;
 		float screenY = canvasHeight / 2.0f - y;
 
-		// 绘制敌人主体
 		g.setColor(color);
 		g.fillOval((int)(screenX - size), (int)(screenY - size), (int)(size * 2), (int)(size * 2));
 
-		// 绘制生命值条
 		renderHealthBar(g, screenX, screenY);
 	}
 
@@ -159,7 +126,6 @@ public class Enemy {
 	 * @return 是否越界
 	 */
 	public boolean isOutOfBounds(int canvasWidth, int canvasHeight) {
-		// @Time 2026-01-19 如果画布尺寸为0,认为未越界
 		if (canvasWidth <= 0 || canvasHeight <= 0) {
 			return false;
 		}
@@ -168,17 +134,9 @@ public class Enemy {
 		float rightBound = canvasWidth / 2.0f + size * 2;
 		float topBound = -canvasHeight / 2.0f - size * 2;
 		float bottomBound = canvasHeight / 2.0f + size * 2;
-		boolean outOfBounds = x < leftBound || x > rightBound ||
-		                       y < topBound || y > bottomBound;
 
-		// @Time 2026-01-19 调试输出
-		if (outOfBounds) {
-			System.out.println("Enemy out of bounds: pos=(" + x + ", " + y +
-			                   "), bounds: [" + leftBound + ", " + rightBound + "] x [" +
-			                   topBound + ", " + bottomBound + "]");
-		}
-
-		return outOfBounds;
+		return x < leftBound || x > rightBound ||
+		       y < topBound || y > bottomBound;
 	}
 
 	/**

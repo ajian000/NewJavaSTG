@@ -40,6 +40,10 @@ public class Main {
 
 		window.getCenterPanel().removeAll();
 		window.getCenterPanel().add(titleScreen);
+
+		// 更新虚拟键盘以显示标题界面的按键状态
+		window.getVirtualKeyboardPanel().setKeyStateProvider(titleScreen);
+
 		titleScreen.requestFocusInWindow();
 		window.revalidate();
 		window.repaint();
@@ -48,7 +52,11 @@ public class Main {
 	private static void startGame(stg.game.player.PlayerType playerType) {
 		window.initializePlayer(playerType);
 		window.getCenterPanel().remove(titleScreen);
+
+		// 获取游戏画布并更新虚拟键盘按键状态提供者
 		GameCanvas gameCanvas = window.getGameCanvas();
+		window.getVirtualKeyboardPanel().setKeyStateProvider(gameCanvas);
+
 		window.getCenterPanel().add(gameCanvas);
 
 		// 重置游戏状态为新对局

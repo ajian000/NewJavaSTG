@@ -15,6 +15,7 @@ public class Window extends JFrame {
 	private JPanel centerPanel; // 中间面板(游戏区域)
 	private JPanel rightPanel; // 右侧面板
 	private GameCanvas gameCanvas; // 游戏画布
+	private VirtualKeyboardPanel virtualKeyboardPanel; // 虚拟键盘面板
 	private int totalWidth = 1280; // 窗口总宽度
 	private int totalHeight = 960; // 窗口总高度
 	private stg.game.player.Player player; // 玩家对象
@@ -92,8 +93,8 @@ public class Window extends JFrame {
 		centerPanel.add(gameCanvas, BorderLayout.CENTER);
 
 		// 创建虚拟键盘面板（需要先创建gameCanvas）
-		VirtualKeyboardPanel virtualKeyboard = new VirtualKeyboardPanel(gameCanvas);
-		leftPanel.add(virtualKeyboard, BorderLayout.CENTER);
+		virtualKeyboardPanel = new VirtualKeyboardPanel(gameCanvas);
+		leftPanel.add(virtualKeyboardPanel, BorderLayout.CENTER);
 
 		// 根据参数决定是否立即初始化玩家
 		if (initPlayer) {
@@ -118,11 +119,6 @@ public class Window extends JFrame {
 
 		add(mainPanel, BorderLayout.CENTER);
 		setVisible(true);
-
-		System.out.println("Created window with size: " + totalWidth + "x" + totalHeight);
-		System.out.println("Left panel: " + leftWidth + "px");
-		System.out.println("Center panel: " + centerWidth + "px");
-		System.out.println("Right panel: " + rightWidth + "px");
 	}
 
 	/**
@@ -151,6 +147,14 @@ public class Window extends JFrame {
 	 */
 	public GameCanvas getGameCanvas() {
 		return gameCanvas;
+	}
+
+	/**
+	 * 获取虚拟键盘面板
+	 * @Time 2026-01-20 添加getter以支持按键状态切换
+	 */
+	public VirtualKeyboardPanel getVirtualKeyboardPanel() {
+		return virtualKeyboardPanel;
 	}
 
 	/**
@@ -183,16 +187,9 @@ public class Window extends JFrame {
 				SwingUtilities.invokeLater(() -> {
 					int canvasWidth = gameCanvas.getWidth();
 					int canvasHeight = gameCanvas.getHeight();
-					// @Time 2026-01-19 设置玩家到画布底部中心(中心原点坐标系)
-					// 坐标系: 右上角(+,+),左下角为(-,-)
-					// X=0表示水平居中,Y=-画布高/2+玩家大小表示贴底
 					float actualPlayerX = 0;
-					float actualPlayerY = -canvasHeight / 2.0f + 40; // 距离底部40像素(Y为负值)
+					float actualPlayerY = -canvasHeight / 2.0f + 40;
 					player.setPosition(actualPlayerX, actualPlayerY);
-					System.out.println("Canvas size: " + canvasWidth + "x" + canvasHeight);
-					System.out.println("Coordinate system: Top-Right(+,+), Bottom-Left(-,-)");
-					System.out.println("Player position: (" + actualPlayerX + ", " + actualPlayerY + ")");
-					System.out.println("Player type: " + type.getName());
 				});
 			}
 		});

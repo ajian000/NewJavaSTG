@@ -1,5 +1,8 @@
-package stg.util;
+package stg.util.script;
 
+import stg.util.LevelData;
+import stg.util.LevelLoader;
+import stg.util.EnemySpawnData;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -8,6 +11,7 @@ import java.util.*;
 
 /**
  * JavaScript关卡加载器 - 使用Nashorn引擎执行JS脚本
+ * @Time 2026-01-20 将关卡加载器移动到stg.util.script包
  */
 public class JavaScriptLevelLoader implements LevelLoader {
 	private ScriptEngine engine;

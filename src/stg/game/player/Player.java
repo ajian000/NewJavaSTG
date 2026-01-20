@@ -29,62 +29,14 @@ public class Player {
 	private float respawnSpeed; // @Time 2026-01-19 重生移动速度
 	private float hitboxRadius; // 受击判定半径
 
-	/**
-	 * 空参构造函数 - 默认初始位置为底部中心(需要先设置gameCanvas)
-	 * 注意:空参构造后需要调用setGameCanvas,然后设置正确的初始位置
-	 */
 	public Player() {
-		this.x = 0;
-		this.y = 0;
-		this.vx = 0;
-		this.vy = 0;
-		this.speed = 5.0f;
-		this.speedSlow = 2.0f;
-		this.size = 20;
-		this.slowMode = false;
-		this.shooting = false;
-		this.shootCooldown = 0;
-		this.respawnTimer = 0;
-		this.spawnX = 0;
-		this.spawnY = 0;
-		this.respawning = false;
-		this.respawnSpeed = 8.0f;
-		this.hitboxRadius = 2.0f; // 受击判定半径2像素
+		this(0, 0, 5.0f, 2.0f, 20, null);
 	}
 
-	/**
-	 * 构造函数
-	 * @param spawnX 初始X坐标
-	 * @param spawnY 初始Y坐标
-	 */
 	public Player(float spawnX, float spawnY) {
-		this.x = spawnX;
-		this.y = spawnY;
-		this.vx = 0;
-		this.vy = 0;
-		this.speed = 5.0f;
-		this.speedSlow = 2.0f;
-		this.size = 20;
-		this.slowMode = false;
-		this.shooting = false;
-		this.shootCooldown = 0;
-		this.respawnTimer = 0;
-		this.spawnX = spawnX;
-		this.spawnY = spawnY;
-		this.respawning = false;
-		this.respawnSpeed = 8.0f;
-		this.hitboxRadius = 2.0f; // 受击判定半径2像素
+		this(spawnX, spawnY, 5.0f, 2.0f, 20, null);
 	}
 
-	/**
-	 * 全参构造函数
-	 * @param x X坐标
-	 * @param y Y坐标
-	 * @param speed 普通移动速度
-	 * @param speedSlow 低速移动速度
-	 * @param size 角色大小
-	 * @param gameCanvas 游戏画布引用
-	 */
 	public Player(float x, float y, float speed, float speedSlow, float size, GameCanvas gameCanvas) {
 		this.x = x;
 		this.y = y;
@@ -97,11 +49,12 @@ public class Player {
 		this.slowMode = false;
 		this.shooting = false;
 		this.shootCooldown = 0;
+		this.respawnTimer = 0;
 		this.spawnX = x;
 		this.spawnY = y;
 		this.respawning = false;
 		this.respawnSpeed = 8.0f;
-		this.hitboxRadius = 2.0f; // 受击判定半径2像素
+		this.hitboxRadius = 2.0f;
 	}
 
 	/**
@@ -113,15 +66,12 @@ public class Player {
 		if (respawnTimer > 0) {
 			respawnTimer--;
 			if (respawnTimer == 0) {
-				// 等待结束,开始重生动画
 				respawning = true;
-				x = spawnX; // X位置设置为重生点
-				// Y位置保持在屏幕下方,开始向上移动
+				x = spawnX;
 				int canvasHeight = gameCanvas.getHeight();
 				y = -canvasHeight / 2.0f - size;
 				vx = 0;
-				vy = respawnSpeed; // 向上移动(Y正方向)
-				System.out.println("Player respawn animation started from off-screen");
+				vy = respawnSpeed;
 			}
 			return;
 		}

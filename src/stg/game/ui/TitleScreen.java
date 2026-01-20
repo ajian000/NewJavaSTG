@@ -1,11 +1,17 @@
 package stg.game.ui;
 
 import stg.game.player.PlayerType;
+import stg.base.KeyStateProvider;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class TitleScreen extends JPanel {
+/**
+ * 标题界面类 - 游戏主菜单和角色选择
+ * @Time 2026-01-20 将类移动到stg.game.ui包
+ * @Time 2026-01-20 实现KeyStateProvider以支持虚拟键盘
+ */
+public class TitleScreen extends JPanel implements KeyStateProvider {
 	private static final long serialVersionUID = 1L;
 	private static final Color BG_COLOR = new Color(10, 10, 20);
 	private static final Color SELECTED_COLOR = new Color(255, 200, 100);
@@ -26,6 +32,13 @@ public class TitleScreen extends JPanel {
 	private MenuState currentState = MenuState.MAIN_MENU;
 	private Timer animationTimer;
 	private int animationFrame = 0;
+
+	// 按键状态跟踪 - 供虚拟键盘使用
+	private boolean upPressed = false;
+	private boolean downPressed = false;
+	private boolean leftPressed = false;
+	private boolean rightPressed = false;
+	private boolean zPressed = false;
 
 	public interface TitleCallback {
 		void onGameStart(stg.game.player.PlayerType playerType);
@@ -49,6 +62,7 @@ public class TitleScreen extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP:
+						upPressed = true;
 						if (currentState == MenuState.MAIN_MENU) {
 							selectedIndex = (selectedIndex - 1 + MAIN_MENU_ITEMS.length) % MAIN_MENU_ITEMS.length;
 						} else {
@@ -58,6 +72,7 @@ public class TitleScreen extends JPanel {
 						repaint();
 						break;
 					case KeyEvent.VK_DOWN:
+						downPressed = true;
 						if (currentState == MenuState.MAIN_MENU) {
 							selectedIndex = (selectedIndex + 1) % MAIN_MENU_ITEMS.length;
 						} else {
@@ -67,6 +82,7 @@ public class TitleScreen extends JPanel {
 						repaint();
 						break;
 					case KeyEvent.VK_Z:
+						zPressed = true;
 					case KeyEvent.VK_ENTER:
 						executeMenuAction();
 						break;
@@ -80,12 +96,35 @@ public class TitleScreen extends JPanel {
 						}
 						break;
 					case KeyEvent.VK_LEFT:
+						leftPressed = true;
 					case KeyEvent.VK_RIGHT:
+						rightPressed = true;
 						if (currentState == MenuState.PLAYER_SELECT) {
 							PlayerType[] types = PlayerType.values();
 							selectedIndex = (selectedIndex + 1) % types.length;
 							repaint();
 						}
+						break;
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_UP:
+						upPressed = false;
+						break;
+					case KeyEvent.VK_DOWN:
+						downPressed = false;
+						break;
+					case KeyEvent.VK_LEFT:
+						leftPressed = false;
+						break;
+					case KeyEvent.VK_RIGHT:
+						rightPressed = false;
+						break;
+					case KeyEvent.VK_Z:
+						zPressed = false;
 						break;
 				}
 			}
@@ -98,6 +137,26 @@ public class TitleScreen extends JPanel {
 		animationTimer.start();
 
 		requestFocusInWindow();
+	}
+
+	public boolean isUpPressed() {
+		return upPressed;
+	}
+
+	public boolean isDownPressed() {
+		return downPressed;
+	}
+
+	public boolean isLeftPressed() {
+		return leftPressed;
+	}
+
+	public boolean isRightPressed() {
+		return rightPressed;
+	}
+
+	public boolean isZPressed() {
+		return zPressed;
 	}
 
 	private void executeMenuAction() {

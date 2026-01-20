@@ -39,15 +39,10 @@ public class BasicEnemy extends Enemy {
 		float leftBound = -canvasWidth / 2.0f + size;
 		float rightBound = canvasWidth / 2.0f - size;
 
-		// 碰到左边界,向右移动
 		if (x <= leftBound) {
 			vx = Math.abs(moveSpeed);
-			System.out.println("Enemy hit left boundary, moving right");
-		}
-		// 碰到右边界,向左移动
-		else if (x >= rightBound) {
+		} else if (x >= rightBound) {
 			vx = -Math.abs(moveSpeed);
-			System.out.println("Enemy hit right boundary, moving left");
 		}
 
 		// 更新射击计时器
@@ -67,12 +62,9 @@ public class BasicEnemy extends Enemy {
 	private void shoot() {
 		if (!alive || gameCanvas == null) return;
 
-		float bulletSpeed = -10.0f; // 向下发射(Y负方向)
-
-		// 创建圆形弹幕,初始位置为敌人位置
+		float bulletSpeed = -10.0f;
 		CircularBullet bullet = new CircularBullet(x, y, 0, bulletSpeed);
 		gameCanvas.addEnemyBullet(bullet);
-		System.out.println("Enemy fired bullet at position: (" + x + ", " + y + "), speed: (0, " + bulletSpeed + ")");
 	}
 
 	/**
@@ -80,21 +72,11 @@ public class BasicEnemy extends Enemy {
 	 */
 	@Override
 	public void render(Graphics2D g) {
-		// @Time 2026-01-19 将中心原点坐标转换为屏幕坐标
-		// @Time 2026-01-19 从gameCanvas获取实际画布尺寸
-		// 坐标系: 右上角为(+,+),左下角为(-,-)
 		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
 		int canvasHeight = gameCanvas != null ? gameCanvas.getHeight() : 921;
 		float screenX = x + canvasWidth / 2.0f;
 		float screenY = canvasHeight / 2.0f - y;
 
-		// @Time 2026-01-19 调试输出(首次渲染)
-		if (gameCanvas != null && gameCanvas.getEnemies().contains(this)) {
-			System.out.println("Rendering enemy at center coords: (" + x + ", " + y + "), screen coords: (" +
-			                   screenX + ", " + screenY + "), canvas size: " + canvasWidth + "x" + canvasHeight);
-		}
-
-		// 绘制敌人主体(三角形)
 		int[] xPoints = {
 			(int)screenX,
 			(int)(screenX - size),
@@ -109,11 +91,9 @@ public class BasicEnemy extends Enemy {
 		g.setColor(color);
 		g.fillPolygon(xPoints, yPoints, 3);
 
-		// 绘制边框
 		g.setColor(Color.WHITE);
 		g.drawPolygon(xPoints, yPoints, 3);
 
-		// 绘制生命值条
 		renderHealthBar(g, screenX, screenY);
 	}
 
@@ -122,8 +102,6 @@ public class BasicEnemy extends Enemy {
 	 */
 	@Override
 	protected void onDeath() {
-		// 可以在这里添加爆炸特效等
-		System.out.println("BasicEnemy destroyed at (" + x + ", " + y + ")");
 	}
 
 	/**

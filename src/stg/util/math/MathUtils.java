@@ -2,6 +2,7 @@ package stg.util.math;
 
 /**
  * 数学工具类
+ * @Time 2026-01-20 创建stg.util.math包,添加数学工具函数
  */
 public class MathUtils {
 
