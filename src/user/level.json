@@ -2,8 +2,8 @@
 	"name": "Demo Stage - Multi-Phase Attack",
 	"difficulty": "normal",
 	"background": "space",
-	"waves": 4,
-	"totalEnemies": 21,
+	"waves": 5,
+	"totalEnemies": 27,
 	"enemies": [
 		{
 			"type": "BasicEnemy",
@@ -151,6 +151,66 @@
 			"y": 220,
 			"speed": 3.0,
 			"frame": 930
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": 0,
+			"y": 150,
+			"speed": 0,
+			"frame": 1050,
+			"params": {
+				"pattern": 0
+			}
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": -150,
+			"y": 120,
+			"speed": 1.5,
+			"frame": 1080,
+			"params": {
+				"pattern": 1
+			}
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": 150,
+			"y": 120,
+			"speed": 1.5,
+			"frame": 1080,
+			"params": {
+				"pattern": 1
+			}
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": 0,
+			"y": 200,
+			"speed": 0,
+			"frame": 1140,
+			"params": {
+				"pattern": 2
+			}
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": -100,
+			"y": 180,
+			"speed": 2.0,
+			"frame": 1170,
+			"params": {
+				"pattern": 0
+			}
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": 100,
+			"y": 180,
+			"speed": 2.0,
+			"frame": 1170,
+			"params": {
+				"pattern": 1
+			}
 		}
 	],
 	"events": [
@@ -178,6 +238,11 @@
 			"type": "message",
 			"frame": 900,
 			"content": "Warning: Boss Approaching!"
+		},
+		{
+			"type": "message",
+			"frame": 1000,
+			"content": "Phase 5: Laser Attack!"
 		}
 	],
 	"metadata": {

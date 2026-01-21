@@ -10,6 +10,8 @@ import stg.game.bullet.Bullet;
 import stg.game.enemy.Enemy;
 import stg.game.enemy.EnemyBullet;
 import stg.game.enemy.BasicEnemy;
+import stg.game.enemy.LaserShootingEnemy;
+import stg.game.laser.*;
 import stg.game.player.Player;
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +37,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	private static final int WAVE_2_END_FRAME = 500;
 	private static final int WAVE_3_END_FRAME = 700;
 	private static final int WAVE_4_END_FRAME = 1000;
+	private static final int WAVE_5_END_FRAME = 1300;
 	private static final int WAVE_COUNT = 5;
 
 	private stg.game.player.Player player;
@@ -42,6 +45,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	private List<Bullet> bullets;
 	private List<Bullet> enemyBullets;
 	private List<Enemy> enemies;
+	private List<EnemyLaser> enemyLasers;
 	private CoordinateSystem coordinateSystem;
 
 	// @Time 2026-01-19 按键状态跟踪 - 用于优化按键扫描逻辑
@@ -81,6 +85,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		bullets = new ArrayList<>(); // 初始化玩家子弹列表
 		enemyBullets = new ArrayList<>(); // @Time 2026-01-19 初始化敌方子弹列表
 		enemies = new ArrayList<>(); // @Time 2026-01-19 初始化敌人列表
+		enemyLasers = new ArrayList<>(); // @Time 2026-01-20 初始化敌方激光列表
 		coordinateSystem = new CoordinateSystem(0, 0); // @Time 2026-01-19 初始化坐标系统
 		spawnedEnemies = new ArrayList<>(); // 初始化已生成敌人列表
 
@@ -290,6 +295,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		enemies.clear();
 		bullets.clear();
 		enemyBullets.clear();
+		enemyLasers.clear();
 		paused = false;
 		pauseMenuIndex = 0;
 
@@ -438,6 +444,16 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			}
 		}
 
+		// @Time 2026-01-20 更新敌方激光位置,移除越界激光
+		Iterator<EnemyLaser> laserIterator = enemyLasers.iterator();
+		while (laserIterator.hasNext()) {
+			EnemyLaser laser = laserIterator.next();
+			laser.update();
+			if (laser.isOutOfBounds(getWidth(), getHeight())) {
+				laserIterator.remove();
+			}
+		}
+
 		// @Time 2026-01-19 碰撞检测
 		if (canvasReady) {
 			checkCollisions();
@@ -465,6 +481,11 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		// 绘制敌方子弹
 		for (Bullet bullet : enemyBullets) {
 			bullet.render(g2d);
+		}
+
+		// @Time 2026-01-20 绘制敌方激光
+		for (EnemyLaser laser : enemyLasers) {
+			laser.render(g);
 		}
 
 		// 绘制玩家子弹
@@ -617,6 +638,19 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 				enemyBulletIterator.remove();
 			}
 		}
+
+		// @Time 2026-01-20 检测敌方激光与玩家的碰撞
+		Iterator<EnemyLaser> laserIterator = enemyLasers.iterator();
+		while (laserIterator.hasNext()) {
+			EnemyLaser laser = laserIterator.next();
+
+			// 检查碰撞（考虑冷却时间）
+			if (player != null && laser.canHit() && laser.checkCollision(player.getX(), player.getY())) {
+				// 敌方激光击中玩家
+				player.onHit();
+				laser.onHitPlayer(); // 启动冷却
+			}
+		}
 	}
 
 	/**
@@ -690,7 +724,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			waveCooldown--;
 			if (waveCooldown == 0) {
 				// 冷却结束后,切换到下一波
-				if (activeWaveNumber < 4) {
+				if (activeWaveNumber < 5) {
 					activeWaveNumber++;
 					waveStarted[activeWaveNumber] = true;
 				}
@@ -782,6 +816,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		if (frame < WAVE_2_END_FRAME) return 2;
 		if (frame < WAVE_3_END_FRAME) return 3;
 		if (frame < WAVE_4_END_FRAME) return 4;
+		if (frame < WAVE_5_END_FRAME) return 5;
 		return 0;
 	}
 
@@ -793,7 +828,36 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			return; // 画布未准备好
 		}
 
-		Enemy enemy = new BasicEnemy(data.getX(), data.getY(), data.getSpeed(), this);
+		Enemy enemy = null;
+		String type = data.getType();
+
+		switch (type) {
+			case "BasicEnemy":
+				enemy = new BasicEnemy(data.getX(), data.getY(), data.getSpeed(), this);
+				break;
+			case "LaserShootingEnemy":
+				// 从params中获取pattern参数，默认为2（混合模式）
+				int pattern = 2;
+				if (data.getParams().containsKey("pattern")) {
+					pattern = (Integer)data.getParams().get("pattern");
+				}
+				enemy = new LaserShootingEnemy(data.getX(), data.getY(), data.getSpeed(), this, pattern);
+				break;
+			default:
+				// 默认使用BasicEnemy
+				enemy = new BasicEnemy(data.getX(), data.getY(), data.getSpeed(), this);
+		}
+
 		enemies.add(enemy);
+	}
+
+	/**
+	 * 添加敌方激光
+	 */
+	public void addEnemyLaser(EnemyLaser laser) {
+		if (laser != null) {
+			laser.setGameCanvas(this);
+			enemyLasers.add(laser);
+		}
 	}
 }
