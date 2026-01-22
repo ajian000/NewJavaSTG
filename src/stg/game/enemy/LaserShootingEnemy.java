@@ -58,12 +58,17 @@ public class LaserShootingEnemy extends Enemy {
 	public void update() {
 		super.update();
 
-		// 移动逻辑
-		x += (float)Math.cos(moveAngle) * moveSpeed;
-		y += (float)Math.sin(moveAngle) * moveSpeed;
+		// 安全检查
+		if (gameCanvas == null || !alive) {
+			return;
+		}
 
-		// 边界检查 - 简单的左右反弹
-		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
+		// 移动逻辑
+		int canvasWidth = gameCanvas.getWidth();
+		if (canvasWidth <= 0) {
+			return; // 画布未准备好
+		}
+
 		float leftBound = -canvasWidth / 2.0f + size;
 		float rightBound = canvasWidth / 2.0f - size;
 

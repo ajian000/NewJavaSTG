@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 曲线激光类 - 继承自Laser，具有可调节长度的拖尾系统
- * @Time 2026-01-20
+ * @Time 2026-01-21
  */
 public class CurvedLaser extends Laser {
 	private float vx; // X方向速度

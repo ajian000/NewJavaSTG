@@ -25,27 +25,33 @@ public class SimpleJsonLoader implements LevelLoader {
 			}
 
 			if (json.containsKey("enemies")) {
-				@SuppressWarnings("unchecked")
-				List<Object> enemiesList = (List<Object>)json.get("enemies");
-				for (Object enemyObj : enemiesList) {
-					if (enemyObj instanceof Map) {
-						@SuppressWarnings("unchecked")
-						Map<String, Object> enemy = (Map<String, Object>)enemyObj;
-						String type = enemy.get("type").toString();
-						float x = Float.parseFloat(enemy.get("x").toString());
-						float y = Float.parseFloat(enemy.get("y").toString());
-						float speed = Float.parseFloat(enemy.get("speed").toString());
-						int frame = Integer.parseInt(enemy.get("frame").toString());
+				Object enemiesObj = json.get("enemies");
 
-						EnemySpawnData spawn = new EnemySpawnData(type, x, y, speed, frame);
+				if (enemiesObj instanceof List) {
+					@SuppressWarnings("unchecked")
+					List<Object> enemiesList = (List<Object>)enemiesObj;
 
-						for (Map.Entry<String, Object> entry : enemy.entrySet()) {
-							if (!Arrays.asList("type", "x", "y", "speed", "frame").contains(entry.getKey())) {
-								spawn.addParam(entry.getKey(), entry.getValue());
+					for (Object enemyObj : enemiesList) {
+						if (enemyObj instanceof Map) {
+							@SuppressWarnings("unchecked")
+							Map<String, Object> enemy = (Map<String, Object>)enemyObj;
+
+							String type = enemy.get("type").toString();
+							float x = Float.parseFloat(enemy.get("x").toString());
+							float y = Float.parseFloat(enemy.get("y").toString());
+							float speed = Float.parseFloat(enemy.get("speed").toString());
+							int frame = Integer.parseInt(enemy.get("frame").toString());
+
+							EnemySpawnData spawn = new EnemySpawnData(type, x, y, speed, frame);
+
+							for (Map.Entry<String, Object> entry : enemy.entrySet()) {
+								if (!Arrays.asList("type", "x", "y", "speed", "frame").contains(entry.getKey())) {
+									spawn.addParam(entry.getKey(), entry.getValue());
+								}
 							}
-						}
 
-						levelData.addEnemy(spawn);
+							levelData.addEnemy(spawn);
+						}
 					}
 				}
 			}
@@ -65,6 +71,7 @@ public class SimpleJsonLoader implements LevelLoader {
 		} catch (Exception e) {
 			System.err.println("Error loading JSON level: " + e.getMessage());
 			e.printStackTrace();
+			return levelData;
 		}
 
 		return levelData;
@@ -113,7 +120,7 @@ public class SimpleJsonLoader implements LevelLoader {
 
 		for (int i = 0; i < json.length(); i++) {
 			char c = json.charAt(i);
-			if (i > 0 && c == '"' && json.charAt(i - 1) != '\\') {
+			if (c == '"' && (i == 0 || json.charAt(i - 1) != '\\')) {
 				inString = !inString;
 			} else if (!inString) {
 				if (c == '{' || c == '[') {
@@ -133,17 +140,22 @@ public class SimpleJsonLoader implements LevelLoader {
 					int j = valueStart;
 					for (; j < json.length(); j++) {
 						char vc = json.charAt(j);
-						if (j > valueStart && vc == '"' && json.charAt(j - 1) != '\\') {
+						if (vc == '"' && (j == valueStart || json.charAt(j - 1) != '\\')) {
 							valueInString = !valueInString;
 						} else if (!valueInString) {
 							if (vc == '{' || vc == '[') {
 								valueDepth++;
 							} else if (vc == '}' || vc == ']') {
 								valueDepth--;
-							} else if ((vc == ',' || j == json.length() - 1) && valueDepth == 0) {
+							} else if (vc == ',' && valueDepth == 0) {
 								break;
 							}
 						}
+					}
+
+					// 处理最后一个值（没有逗号）
+					if (j == json.length()) {
+						j = json.length() - 1;
 					}
 
 					int valueEnd = (j < json.length()) ? j + 1 : json.length();
@@ -164,6 +176,7 @@ public class SimpleJsonLoader implements LevelLoader {
 	
 	private List<Object> parseArray(String json) {
 		List<Object> list = new ArrayList<>();
+		String original = json;
 		json = json.substring(1, json.length() - 1).trim();
 
 		if (json.isEmpty()) {
@@ -176,17 +189,23 @@ public class SimpleJsonLoader implements LevelLoader {
 
 		for (int i = 0; i < json.length(); i++) {
 			char c = json.charAt(i);
-			if (i > 0 && c == '"' && json.charAt(i - 1) != '\\') {
+			if (c == '"' && (i == 0 || json.charAt(i - 1) != '\\')) {
 				inString = !inString;
 			} else if (!inString) {
 				if (c == '{' || c == '[') {
 					depth++;
 				} else if (c == '}' || c == ']') {
 					depth--;
-				} else if ((c == ',' || i == json.length() - 1) && depth == 0) {
-					String valueStr = json.substring(start, i + 1).trim();
-					Object value = parseValue(valueStr);
-					list.add(value);
+				}
+
+				// 当depth为0且遇到逗号或到达末尾时，提取元素
+				if (depth == 0 && (c == ',' || i == json.length() - 1)) {
+					int end = (c == ',') ? i : i + 1;
+					String valueStr = json.substring(start, end).trim();
+					if (!valueStr.isEmpty()) {
+						Object value = parseValue(valueStr);
+						list.add(value);
+					}
 					start = i + 1;
 				}
 			}

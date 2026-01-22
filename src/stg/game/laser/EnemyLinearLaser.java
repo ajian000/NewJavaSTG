@@ -4,7 +4,7 @@ import java.awt.*;
 
 /**
  * 敌人直线激光类 - 继承自EnemyLaser和LinearLaser
- * @Time 2026-01-20
+ * @Time 2026-01-21
  */
 public class EnemyLinearLaser extends EnemyLaser {
 	private LinearLaser linearLaser; // 实际的直线激光

@@ -4,7 +4,7 @@ import java.awt.*;
 
 /**
  * 敌方激光基类 - 所有敌方激光的父类
- * @Time 2026-01-20
+ * @Time 2026-01-21
  */
 public abstract class EnemyLaser extends Laser {
 	private int hitCooldown; // 击中冷却计时器

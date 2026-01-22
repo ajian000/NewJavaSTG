@@ -63,7 +63,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	private int waveCooldown = 0;
 	private List<EnemySpawnData> spawnedEnemies;
 	private int activeWaveNumber = 0;
-	private boolean waveStarted[] = new boolean[WAVE_COUNT];
+	private boolean waveStarted[] = new boolean[WAVE_COUNT + 1];
 
 	// 暂停菜单相关
 	private boolean paused = false;
@@ -399,6 +399,11 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		// 暂停时不更新游戏逻辑
 		if (paused) return;
 
+		currentFrame++;
+		if (currentFrame % 60 == 0) {
+			System.out.println("【游戏帧】帧: " + currentFrame + ", 活跃波次: " + activeWaveNumber + ", 场上敌人: " + enemies.size() + ", 冷却: " + waveCooldown);
+		}
+
 		// 更新玩家
 		if (player != null) {
 			player.update();
@@ -420,6 +425,11 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 
 		// 只在画布准备好后检查越界
 		if (canvasReady && (!enemy.isAlive() || enemy.isOutOfBounds(canvasWidth, canvasHeight))) {
+			System.out.println("【敌人移除】" + enemy.getClass().getSimpleName() +
+				", 存活: " + enemy.isAlive() +
+				", 越界: " + enemy.isOutOfBounds(canvasWidth, canvasHeight) +
+				", 位置: (" + enemy.getX() + ", " + enemy.getY() + ")" +
+				", 剩余敌人: " + (enemies.size() - 1));
 			enemyIterator.remove();
 		}
 		}
@@ -708,6 +718,13 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	private void loadLevel() {
 		LevelManager manager = LevelManager.getInstance();
 		currentLevel = manager.loadLevelFromUser();
+		if (currentLevel != null) {
+			System.out.println("Loaded level: " + currentLevel.getName());
+			System.out.println("Enemy count: " + currentLevel.getEnemies().size());
+			for (EnemySpawnData data : currentLevel.getEnemies()) {
+				System.out.println("  Enemy: " + data.getType() + " at frame " + data.getFrame());
+			}
+		}
 	}
 
 	/**
@@ -716,6 +733,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	 */
 	private void updateLevel() {
 		if (currentLevel == null) {
+			System.out.println("【关卡更新】当前关卡为null");
 			return;
 		}
 
@@ -724,9 +742,13 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			waveCooldown--;
 			if (waveCooldown == 0) {
 				// 冷却结束后,切换到下一波
-				if (activeWaveNumber < 5) {
+				if (activeWaveNumber < WAVE_COUNT) {
+					int oldWave = activeWaveNumber;
 					activeWaveNumber++;
 					waveStarted[activeWaveNumber] = true;
+					System.out.println("【波次切换】第" + oldWave + "波结束 -> 第" + activeWaveNumber + "波开始");
+				} else {
+					System.out.println("【波次切换】所有波次已完成");
 				}
 			}
 			return;
@@ -736,6 +758,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		if (activeWaveNumber == 0) {
 			activeWaveNumber = 1;
 			waveStarted[1] = true;
+			System.out.println("【波次开始】第1波开始");
 			return;
 		}
 
@@ -743,6 +766,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		boolean spawned = trySpawnWaveEnemies(activeWaveNumber);
 
 		if (enemies.isEmpty() && isWaveComplete(activeWaveNumber) && !spawned) {
+			System.out.println("【波次完成】第" + activeWaveNumber + "波完成, 开始冷却(" + WAVE_DELAY + "帧)");
 			waveCooldown = WAVE_DELAY;
 			return;
 		}
@@ -783,6 +807,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	 */
 	private boolean trySpawnWaveEnemies(int wave) {
 		boolean spawned = false;
+		System.out.println("【波次生成】波次: " + wave + ", 当前帧: " + currentFrame + ", 关卡敌人总数: " + currentLevel.getEnemies().size());
 
 		// 生成当前波次的敌人
 		for (EnemySpawnData enemyData : currentLevel.getEnemies()) {
@@ -793,18 +818,26 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 				continue;
 			}
 
+			System.out.println("【波次" + wave + "】发现敌人: " + enemyData.getType() + ", 目标帧: " + enemyData.getFrame() + ", 当前帧: " + currentFrame);
+
 			// 检查是否已生成过
 			if (spawnedEnemies.contains(enemyData)) {
+				System.out.println("【波次" + wave + "】敌人已生成过, 跳过");
 				continue;
 			}
 
 			// 检查是否到达生成帧
 			if (currentFrame >= enemyData.getFrame()) {
+				System.out.println("【波次" + wave + "】到达生成帧, 生成敌人");
 				spawnEnemy(enemyData);
 				spawnedEnemies.add(enemyData);
 				spawned = true;
+			} else {
+				System.out.println("【波次" + wave + "】未到达生成帧, 等待 (差: " + (enemyData.getFrame() - currentFrame) + "帧)");
 			}
 		}
+
+		System.out.println("【波次生成结束】波次: " + wave + ", 本次生成: " + spawned);
 		return spawned;
 	}
 
@@ -812,12 +845,12 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	 * 根据帧数判断波次
 	 */
 	private int getWaveByFrame(int frame) {
-		if (frame < WAVE_1_END_FRAME) return 1;
-		if (frame < WAVE_2_END_FRAME) return 2;
-		if (frame < WAVE_3_END_FRAME) return 3;
-		if (frame < WAVE_4_END_FRAME) return 4;
-		if (frame < WAVE_5_END_FRAME) return 5;
-		return 0;
+		if (frame < WAVE_1_END_FRAME) return 1;    // 0-199
+		if (frame < WAVE_2_END_FRAME) return 2;    // 200-499
+		if (frame < WAVE_3_END_FRAME) return 3;    // 500-699
+		if (frame < WAVE_4_END_FRAME) return 4;    // 700-999
+		if (frame < WAVE_5_END_FRAME) return 5;    // 1000-1299
+		return 0; // 超出所有波次
 	}
 
 	/**
@@ -825,11 +858,14 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	 */
 	private void spawnEnemy(EnemySpawnData data) {
 		if (getWidth() <= 0 || getHeight() <= 0) {
+			System.out.println("【敌人生成失败】画布未准备好");
 			return; // 画布未准备好
 		}
 
 		Enemy enemy = null;
 		String type = data.getType();
+
+		System.out.println("【敌人生成】类型: " + type + ", 位置: (" + data.getX() + ", " + data.getY() + "), 速度: " + data.getSpeed() + ", 帧: " + data.getFrame());
 
 		switch (type) {
 			case "BasicEnemy":
@@ -841,14 +877,17 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 				if (data.getParams().containsKey("pattern")) {
 					pattern = (Integer)data.getParams().get("pattern");
 				}
+				System.out.println("【LaserShootingEnemy】攻击模式: " + pattern);
 				enemy = new LaserShootingEnemy(data.getX(), data.getY(), data.getSpeed(), this, pattern);
 				break;
 			default:
 				// 默认使用BasicEnemy
+				System.out.println("【警告】未知敌人类型: " + type + ", 使用BasicEnemy");
 				enemy = new BasicEnemy(data.getX(), data.getY(), data.getSpeed(), this);
 		}
 
 		enemies.add(enemy);
+		System.out.println("【敌人生成成功】当前敌人总数: " + enemies.size() + ", 敌人HP: " + enemy.getHp() + "/" + enemy.getMaxHp() + ", 存活: " + enemy.isAlive());
 	}
 
 	/**

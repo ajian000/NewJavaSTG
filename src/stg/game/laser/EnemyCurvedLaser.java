@@ -4,7 +4,7 @@ import java.awt.*;
 
 /**
  * 敌人曲线激光类 - 继承自EnemyLaser和CurvedLaser
- * @Time 2026-01-20
+ * @Time 2026-01-21
  */
 public class EnemyCurvedLaser extends EnemyLaser {
 	private CurvedLaser curvedLaser; // 实际的曲线激光

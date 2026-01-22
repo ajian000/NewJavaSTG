@@ -4,7 +4,7 @@ import java.awt.*;
 
 /**
  * 直线激光类 - 继承自Laser
- * @Time 2026-01-20
+ * @Time 2026-01-21
  */
 public class LinearLaser extends Laser {
 	private float rotationSpeed; // 旋转速度(弧度/帧)

@@ -5,7 +5,7 @@ import java.awt.*;
 
 /**
  * 激光基类 - 所有激光的父类
- * @Time 2026-01-20
+ * @Time 2026-01-21
  */
 public class Laser {
 	protected float x; // 激光起点X坐标

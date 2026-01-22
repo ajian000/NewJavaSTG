@@ -1,0 +1,30 @@
+启动 STG 游戏引擎
+Reading JSON file: src/user/level.json
+JSON content length: 378
+Parsed JSON, size: 1
+JSON keys: ["name": "Debug Test Stage",
+	"difficulty": "easy",
+	"background": "space",
+	"waves": 1,
+	"totalEnemies": 1,
+	"enemies": [
+		{
+			"type": "BasicEnemy",
+			"x": 0,
+			"y": 200,
+			"speed": 2.0,
+			"frame": 60
+		}
+	],
+	"events": [
+		{
+			"type": "message",
+			"frame": 0,
+			"content": "Test]
+Name: null
+Loaded level: main
+Loaded level: 
+Enemy count: 0
+开始游戏: 默认自机
+玩家出生位置: (0.0, -382.5)
+游戏开始，自机: 默认自机

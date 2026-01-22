@@ -19,8 +19,8 @@ public class LevelManager {
 	
 	private LevelManager() {
 		this.loadedLevels = new HashMap<>();
-		// 默认使用简单JSON加载器(兼容所有Java版本)
-		this.currentLoader = new SimpleJsonLoader();
+		// 默认使用JSON加载器
+		this.currentLoader = new JsonLevelLoader();
 	}
 	
 	/**
