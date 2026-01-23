@@ -3,14 +3,12 @@ package stg.util;
 import java.util.HashMap;
 import java.util.Map;
 import stg.util.script.JsonLevelLoader;
-import stg.util.script.JavaScriptLevelLoader;
-import stg.util.script.PythonLevelLoader;
 import stg.util.script.SimpleJsonLoader;
 
 /**
  * 关卡管理器 - 管理关卡加载和执行
- * 从user目录读取index.js或index.py
- * @Time 2026-01-20 将关卡加载器引用更新为stg.util.script包
+ * 从user目录读取level.json
+ * @Time 2026-01-23 移除JS/Py脚本支持，仅保留JSON加载器
  */
 public class LevelManager {
 	private static LevelManager instance;
@@ -35,22 +33,13 @@ public class LevelManager {
 	
 	/**
 	 * 设置脚本语言
-	 * @param language "json", "javascript" 或 "python"
+	 * @param language 目前仅支持 "json"
 	 */
 	public void setScriptLanguage(String language) {
 		switch (language.toLowerCase()) {
-			case "python":
-				currentLoader = new PythonLevelLoader();
-				System.out.println("Using Python level loader (src/user/index.py)");
-				break;
-			case "javascript":
-			case "js":
-				currentLoader = new JavaScriptLevelLoader();
-				System.out.println("Using JavaScript level loader (src/user/index.js)");
-				break;
 			case "json":
 				currentLoader = new SimpleJsonLoader();
-				System.out.println("Using Simple JSON loader (src/user/level.json)");
+				System.out.println("Using JSON level loader (src/user/level.json)");
 				break;
 			default:
 				System.err.println("Unknown script language: " + language + ", using JSON");
@@ -87,16 +76,7 @@ public class LevelManager {
 	 * @return 脚本文件路径
 	 */
 	private String determineScriptFile() {
-		if (currentLoader instanceof JsonLevelLoader) {
-			return "src/user/level.json";
-		} else if (currentLoader instanceof JavaScriptLevelLoader) {
-			return "src/user/index.js";
-		} else if (currentLoader instanceof PythonLevelLoader) {
-			return "src/user/index.py";
-		} else {
-			// 默认使用JSON
-			return "src/user/level.json";
-		}
+		return "src/user/level.json";
 	}
 	
 	/**

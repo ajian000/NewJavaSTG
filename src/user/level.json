@@ -1,75 +1,300 @@
 {
-	"name": "Multi-Wave Test Stage",
-	"difficulty": "easy",
+	"name": "Full Stage - 2 Minutes",
+	"difficulty": "normal",
 	"background": "space",
-	"waves": 5,
-	"totalEnemies": 5,
+	"waves": 6,
+	"totalEnemies": 35,
 	"enemies": [
 		{
 			"type": "BasicEnemy",
-			"x": 0,
+			"x": -100,
 			"y": 200,
 			"speed": 2.0,
 			"frame": 60
 		},
 		{
 			"type": "BasicEnemy",
+			"x": 100,
+			"y": 200,
+			"speed": 2.0,
+			"frame": 90
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 0,
+			"y": 250,
+			"speed": 2.5,
+			"frame": 120
+		},
+		{
+			"type": "SpreadEnemy",
+			"x": -150,
+			"y": 180,
+			"speed": 2.0,
+			"frame": 600
+		},
+		{
+			"type": "SpreadEnemy",
+			"x": 150,
+			"y": 180,
+			"speed": 2.0,
+			"frame": 630
+		},
+		{
+			"type": "SpreadEnemy",
+			"x": 0,
+			"y": 220,
+			"speed": 2.5,
+			"frame": 660
+		},
+		{
+			"type": "SpreadEnemy",
+			"x": -80,
+			"y": 150,
+			"speed": 3.0,
+			"frame": 900
+		},
+		{
+			"type": "SpreadEnemy",
+			"x": 80,
+			"y": 150,
+			"speed": 3.0,
+			"frame": 930
+		},
+		{
+			"type": "SpreadEnemy",
 			"x": 0,
 			"y": 200,
 			"speed": 2.5,
-			"frame": 250
+			"frame": 960
 		},
 		{
-			"type": "BasicEnemy",
+			"type": "SpreadEnemy",
+			"x": -120,
+			"y": 170,
+			"speed": 2.0,
+			"frame": 1200
+		},
+		{
+			"type": "SpreadEnemy",
+			"x": 120,
+			"y": 170,
+			"speed": 2.0,
+			"frame": 1230
+		},
+		{
+			"type": "SpreadEnemy",
 			"x": 0,
+			"y": 230,
+			"speed": 3.0,
+			"frame": 1260
+		},
+		{
+			"type": "SpreadEnemy",
+			"x": -60,
+			"y": 160,
+			"speed": 2.5,
+			"frame": 1500
+		},
+		{
+			"type": "SpreadEnemy",
+			"x": 60,
+			"y": 160,
+			"speed": 2.5,
+			"frame": 1530
+		},
+		{
+			"type": "SpiralEnemy",
+			"x": -180,
+			"y": 180,
+			"speed": 2.0,
+			"frame": 1800
+		},
+		{
+			"type": "SpiralEnemy",
+			"x": 180,
+			"y": 180,
+			"speed": 2.0,
+			"frame": 1830
+		},
+		{
+			"type": "SpiralEnemy",
+			"x": 0,
+			"y": 220,
+			"speed": 2.5,
+			"frame": 1860
+		},
+		{
+			"type": "SpiralEnemy",
+			"x": -100,
 			"y": 150,
 			"speed": 3.0,
-			"frame": 550
+			"frame": 2100
 		},
 		{
-			"type": "BasicEnemy",
+			"type": "SpiralEnemy",
+			"x": 100,
+			"y": 150,
+			"speed": 3.0,
+			"frame": 2130
+		},
+		{
+			"type": "SpiralEnemy",
 			"x": 0,
 			"y": 200,
-			"speed": 3.5,
-			"frame": 800
+			"speed": 2.5,
+			"frame": 2160
 		},
 		{
-			"type": "BasicEnemy",
+			"type": "TrackingEnemy",
+			"x": -150,
+			"y": 200,
+			"speed": 2.0,
+			"frame": 3000
+		},
+		{
+			"type": "TrackingEnemy",
+			"x": 150,
+			"y": 200,
+			"speed": 2.0,
+			"frame": 3030
+		},
+		{
+			"type": "TrackingEnemy",
 			"x": 0,
+			"y": 250,
+			"speed": 2.5,
+			"frame": 3060
+		},
+		{
+			"type": "TrackingEnemy",
+			"x": -80,
+			"y": 170,
+			"speed": 3.0,
+			"frame": 3300
+		},
+		{
+			"type": "TrackingEnemy",
+			"x": 80,
+			"y": 170,
+			"speed": 3.0,
+			"frame": 3330
+		},
+		{
+			"type": "RapidFireEnemy",
+			"x": -120,
 			"y": 180,
-			"speed": 4.0,
-			"frame": 1100
+			"speed": 2.5,
+			"frame": 4200
+		},
+		{
+			"type": "RapidFireEnemy",
+			"x": 120,
+			"y": 180,
+			"speed": 2.5,
+			"frame": 4230
+		},
+		{
+			"type": "RapidFireEnemy",
+			"x": 0,
+			"y": 220,
+			"speed": 3.0,
+			"frame": 4260
+		},
+		{
+			"type": "RapidFireEnemy",
+			"x": -60,
+			"y": 150,
+			"speed": 2.5,
+			"frame": 4500
+		},
+		{
+			"type": "RapidFireEnemy",
+			"x": 60,
+			"y": 150,
+			"speed": 2.5,
+			"frame": 4530
+		},
+		{
+			"type": "OrbitEnemy",
+			"x": 0,
+			"y": 200,
+			"speed": 0.02,
+			"orbitRadius": 100,
+			"frame": 5400
+		},
+		{
+			"type": "OrbitEnemy",
+			"x": 0,
+			"y": 200,
+			"speed": -0.02,
+			"orbitRadius": 100,
+			"frame": 5430
+		},
+		{
+			"type": "OrbitEnemy",
+			"x": 0,
+			"y": 200,
+			"speed": 0.03,
+			"orbitRadius": 150,
+			"frame": 5700
+		},
+		{
+			"type": "OrbitEnemy",
+			"x": 0,
+			"y": 200,
+			"speed": -0.03,
+			"orbitRadius": 150,
+			"frame": 5730
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": 0,
+			"y": 150,
+			"speed": 0,
+			"frame": 6600
 		}
 	],
 	"events": [
 		{
 			"type": "message",
 			"frame": 0,
-			"content": "Wave 1: Basic Attack"
+			"content": "Stage Start!"
 		},
 		{
 			"type": "message",
-			"frame": 200,
-			"content": "Wave 2: Faster Enemy"
+			"frame": 60,
+			"content": "Wave 1: Warm Up"
 		},
 		{
 			"type": "message",
-			"frame": 500,
-			"content": "Wave 3: High Position"
+			"frame": 600,
+			"content": "Wave 2: Spread Attack"
 		},
 		{
 			"type": "message",
-			"frame": 700,
-			"content": "Wave 4: Fast Attack"
+			"frame": 1800,
+			"content": "Wave 3: Spiral Barrage"
 		},
 		{
 			"type": "message",
-			"frame": 1000,
-			"content": "Wave 5: Final Wave"
+			"frame": 3000,
+			"content": "Wave 4: Tracking Bullets"
+		},
+		{
+			"type": "message",
+			"frame": 4200,
+			"content": "Wave 5: Rapid Fire"
+		},
+		{
+			"type": "message",
+			"frame": 5400,
+			"content": "Wave 6: Orbit & Final"
 		}
 	],
 	"metadata": {
-		"createdBy": "Test",
-		"version": "1.0"
+		"createdBy": "Full Stage",
+		"version": "1.0",
+		"duration": "2 minutes"
 	}
 }

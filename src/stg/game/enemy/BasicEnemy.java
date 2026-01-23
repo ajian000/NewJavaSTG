@@ -1,8 +1,8 @@
-package stg.game.enemy;
+ package stg.game.enemy;
 
-import stg.game.ui.GameCanvas;
-import stg.game.bullet.CircularBullet;
 import java.awt.*;
+import stg.game.bullet.CircularBullet;
+import stg.game.ui.GameCanvas;
 
 /**
  * 基础敌人类 - Enemy的子类
@@ -21,7 +21,7 @@ public class BasicEnemy extends Enemy {
 	 * @param gameCanvas 游戏画布引用
 	 */
 	public BasicEnemy(float x, float y, float moveSpeed, GameCanvas gameCanvas) {
-		super(x, y, moveSpeed, 0, 20, Color.BLUE, 100, gameCanvas);
+		super(x, y, moveSpeed, 0, 20, Color.BLUE, 120, gameCanvas);
 		this.shootTimer = 0;
 		this.shootInterval = 60; // 60帧(约1秒)发射一次
 		this.moveSpeed = moveSpeed;

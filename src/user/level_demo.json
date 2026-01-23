@@ -1,0 +1,134 @@
+{
+	"name": "Demo Stage",
+	"difficulty": "normal",
+	"background": "space",
+	"waves": 6,
+	"totalEnemies": 12,
+	"enemies": [
+		{
+			"type": "BasicEnemy",
+			"x": -150,
+			"y": 200,
+			"speed": 2.0,
+			"frame": 60
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 150,
+			"y": 200,
+			"speed": 2.0,
+			"frame": 90
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 0,
+			"y": 250,
+			"speed": 2.5,
+			"frame": 120
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": 0,
+			"y": 180,
+			"speed": 0,
+			"frame": 300
+		},
+		{
+			"type": "BasicEnemy",
+			"x": -100,
+			"y": 150,
+			"speed": 3.0,
+			"frame": 500
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 100,
+			"y": 150,
+			"speed": 3.0,
+			"frame": 520
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": -120,
+			"y": 200,
+			"speed": 1.5,
+			"frame": 700
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": 120,
+			"y": 200,
+			"speed": 1.5,
+			"frame": 730
+		},
+		{
+			"type": "BasicEnemy",
+			"x": -80,
+			"y": 180,
+			"speed": 3.5,
+			"frame": 900
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 0,
+			"y": 220,
+			"speed": 3.5,
+			"frame": 920
+		},
+		{
+			"type": "BasicEnemy",
+			"x": 80,
+			"y": 180,
+			"speed": 3.5,
+			"frame": 940
+		},
+		{
+			"type": "LaserShootingEnemy",
+			"x": 0,
+			"y": 150,
+			"speed": 0,
+			"frame": 1200
+		}
+	],
+	"events": [
+		{
+			"type": "message",
+			"frame": 0,
+			"content": "Demo Stage Start"
+		},
+		{
+			"type": "message",
+			"frame": 60,
+			"content": "Wave 1: Basic Enemies"
+		},
+		{
+			"type": "message",
+			"frame": 300,
+			"content": "Wave 2: Laser Attack"
+		},
+		{
+			"type": "message",
+			"frame": 500,
+			"content": "Wave 3: Twin Enemies"
+		},
+		{
+			"type": "message",
+			"frame": 700,
+			"content": "Wave 4: Dual Lasers"
+		},
+		{
+			"type": "message",
+			"frame": 900,
+			"content": "Wave 5: Triple Attack"
+		},
+		{
+			"type": "message",
+			"frame": 1200,
+			"content": "Wave 6: Final Boss"
+		}
+	],
+	"metadata": {
+		"createdBy": "Demo",
+		"version": "1.0"
+	}
+}

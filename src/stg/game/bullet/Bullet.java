@@ -14,6 +14,8 @@ public class Bullet {
 	protected float size; // 子弹大小
 	protected Color color; // 子弹颜色
 	protected GameCanvas gameCanvas; // @Time 2026-01-19 画布引用,用于坐标转换
+	protected int damage = 0; // @Time 2026-01-23 子弹伤害，默认0（由玩家统一控制）
+	protected float hitboxRadius = 0; // @Time 2026-01-23 碰撞判定半径，默认为0表示使用size
 
 	/**
 	 * 构造函数
@@ -31,6 +33,8 @@ public class Bullet {
 		this.vy = vy;
 		this.size = size;
 		this.color = color;
+		// @Time 2026-01-23 设置碰撞判定半径为size的5倍，确保高速子弹不会穿透敌人
+		this.hitboxRadius = size * 5.0f;
 	}
 
 	/**
@@ -192,6 +196,44 @@ public class Bullet {
 	 */
 	public float getVelocitySpeed() {
 		return (float)Math.sqrt(vx * vx + vy * vy);
+	}
+
+	// ========== 伤害相关 ==========
+
+	/**
+	 * 获取子弹伤害
+	 * @return 子弹伤害值
+	 * @Time 2026-01-23 添加伤害获取方法
+	 */
+	public int getDamage() {
+		return damage;
+	}
+
+	/**
+	 * 设置子弹伤害
+	 * @param damage 伤害值
+	 * @Time 2026-01-23 添加伤害设置方法
+	 */
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+
+	/**
+	 * 获取碰撞判定半径
+	 * @return 碰撞判定半径，如果未设置则返回渲染大小
+	 * @Time 2026-01-23 添加碰撞判定半径获取方法
+	 */
+	public float getHitboxRadius() {
+		return hitboxRadius > 0 ? hitboxRadius : size;
+	}
+
+	/**
+	 * 设置碰撞判定半径
+	 * @param hitboxRadius 碰撞判定半径
+	 * @Time 2026-01-23 添加碰撞判定半径设置方法
+	 */
+	public void setHitboxRadius(float hitboxRadius) {
+		this.hitboxRadius = hitboxRadius;
 	}
 
 	// ========== 速度设置 ==========

@@ -1,21 +1,24 @@
 package stg.game.enemy;
 
-import stg.game.ui.GameCanvas;
-import stg.game.laser.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import stg.game.laser.*;
+import stg.game.ui.GameCanvas;
 
 /**
  * 激光射击敌人 - 能够发射直线激光和曲线激光
  * @Time 2026-01-20
  */
 public class LaserShootingEnemy extends Enemy {
-	private float shootTimer; // 射击计时器
-	private float shootInterval; // 射击间隔
-	private float moveSpeed; // 移动速度
-	private float moveAngle; // 移动方向
-	private int pattern; // 攻击模式: 0=直线激光, 1=曲线激光, 2=混合
-	private int patternTimer; // 模式切换计时器
-	private float patternInterval; // 模式切换间隔
+	private float shootTimer;
+	private float shootInterval;
+	private float moveSpeed;
+	private float moveAngle;
+	private int pattern;
+	private int patternTimer;
+	private float patternInterval;
+	private List<EnemyLaser> firedLasers;
 
 	/**
 	 * 构造函数
@@ -41,14 +44,15 @@ public class LaserShootingEnemy extends Enemy {
 	 */
 	public LaserShootingEnemy(float x, float y, float moveSpeed, GameCanvas gameCanvas,
 							int pattern, float shootInterval, float patternInterval) {
-		super(x, y, moveSpeed, 0, 30, Color.MAGENTA, 200, gameCanvas);
+		super(x, y, moveSpeed, 0, 30, Color.MAGENTA, 480, gameCanvas);
 		this.moveSpeed = moveSpeed;
-		this.moveAngle = (float)Math.PI / 2; // 向下移动
+		this.moveAngle = (float)Math.PI / 2;
 		this.pattern = pattern;
 		this.shootInterval = shootInterval;
 		this.patternInterval = patternInterval;
 		this.shootTimer = 0;
 		this.patternTimer = 0;
+		this.firedLasers = new ArrayList<>();
 	}
 
 	/**
@@ -125,31 +129,28 @@ public class LaserShootingEnemy extends Enemy {
 	 * 发射直线激光
 	 */
 	private void shootLinearLaser() {
-		// 创建旋转直线激光
 		float angle = (float)(Math.random() * Math.PI * 2);
 		EnemyLinearLaser laser = new EnemyLinearLaser(
 			x, y, angle, 300, 6, Color.RED,
-			60, 15,  // 预警60帧, 伤害15
-			0.01f    // 旋转速度
+			60, 15,
+			0.01f
 		);
 		gameCanvas.addEnemyLaser(laser);
+		firedLasers.add(laser);
 	}
 
-	/**
-	 * 发射曲线激光
-	 */
 	private void shootCurvedLaser() {
-		// 创建曲线激光
 		float baseAngle = (float)(Math.PI / 2 + (Math.random() - 0.5) * Math.PI / 2);
 		float speed = 1.5f + (float)Math.random();
 		EnemyCurvedLaser laser = new EnemyCurvedLaser(
 			x, y, baseAngle, 250, 5, Color.ORANGE,
-			60, 10,      // 预警60帧, 伤害10
+			60, 10,
 			(float)Math.cos(baseAngle) * speed,
 			(float)Math.sin(baseAngle) * speed,
-			60           // 拖尾60帧
+			60
 		);
 		gameCanvas.addEnemyLaser(laser);
+		firedLasers.add(laser);
 	}
 
 	/**
@@ -191,5 +192,16 @@ public class LaserShootingEnemy extends Enemy {
 	public String toString() {
 		return "LaserShootingEnemy[pos=(" + x + ", " + y + "), hp=" + hp + "/" + maxHp +
 			   ", pattern=" + pattern + ", alive=" + alive + "]";
+	}
+
+	/**
+	 * 重写死亡回调，清除所有激光
+	 */
+	@Override
+	protected void onDeath() {
+		if (gameCanvas != null && firedLasers != null) {
+			gameCanvas.removeEnemyLasers(firedLasers);
+			firedLasers.clear();
+		}
 	}
 }

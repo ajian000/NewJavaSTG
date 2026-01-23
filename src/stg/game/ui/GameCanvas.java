@@ -1,25 +1,29 @@
 package stg.game.ui;
 
-import stg.base.KeyStateProvider;
-
-import stg.util.CoordinateSystem;
-import stg.util.LevelData;
-import stg.util.EnemySpawnData;
-import stg.util.LevelManager;
-import stg.game.bullet.Bullet;
-import stg.game.enemy.Enemy;
-import stg.game.enemy.EnemyBullet;
-import stg.game.enemy.BasicEnemy;
-import stg.game.enemy.LaserShootingEnemy;
-import stg.game.laser.*;
-import stg.game.player.Player;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.swing.*;
+import stg.base.KeyStateProvider;
+import stg.game.bullet.Bullet;
+import stg.game.enemy.BasicEnemy;
+import stg.game.enemy.Enemy;
+import stg.game.enemy.EnemyBullet;
+import stg.game.enemy.LaserShootingEnemy;
+import stg.game.enemy.OrbitEnemy;
+import stg.game.enemy.RapidFireEnemy;
+import stg.game.enemy.SpiralEnemy;
+import stg.game.enemy.SpreadEnemy;
+import stg.game.enemy.TrackingEnemy;
+import stg.game.laser.*;
+import stg.game.player.Player;
+import stg.util.CoordinateSystem;
+import stg.util.EnemySpawnData;
+import stg.util.LevelData;
+import stg.util.LevelManager;
 
 /**
  * 游戏画布类 - 处理游戏渲染和输入
@@ -31,14 +35,15 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 
 	// 游戏配置常量
 	private static final float PLAYER_START_Y_OFFSET = 40f;
-	private static final int BULLET_DAMAGE = 10;
+	private static final int BULLET_DAMAGE = 8; // @Time 2026-01-23 调整基础子弹伤害(目标DPS≈100)
 	private static final int WAVE_DELAY = 30;
-	private static final int WAVE_1_END_FRAME = 200;
-	private static final int WAVE_2_END_FRAME = 500;
-	private static final int WAVE_3_END_FRAME = 700;
-	private static final int WAVE_4_END_FRAME = 1000;
-	private static final int WAVE_5_END_FRAME = 1300;
-	private static final int WAVE_COUNT = 5;
+	private static final int WAVE_1_END_FRAME = 1800;
+	private static final int WAVE_2_END_FRAME = 3000;
+	private static final int WAVE_3_END_FRAME = 4200;
+	private static final int WAVE_4_END_FRAME = 5400;
+	private static final int WAVE_5_END_FRAME = 6600;
+	private static final int WAVE_6_END_FRAME = 7200;
+	private static final int WAVE_COUNT = 6;
 
 	private stg.game.player.Player player;
 	private List<stg.game.player.Player> players;
@@ -630,7 +635,9 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 				Enemy enemy = enemyIterator.next();
 
 				if (checkCollision(bullet, enemy)) {
-					enemy.takeDamage(BULLET_DAMAGE);
+					// @Time 2026-01-23 使用子弹的伤害值，如果为0则使用默认伤害
+					int damage = bullet.getDamage() > 0 ? bullet.getDamage() : BULLET_DAMAGE;
+					enemy.takeDamage(damage);
 					bulletIterator.remove();
 					break;
 				}
@@ -644,7 +651,10 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 
 			if (player != null && checkCollision(bullet, player)) {
 				// 敌方子弹击中玩家
-				player.onHit();
+				// @Time 2026-01-23 无敌状态下不受伤害
+				if (!player.isInvincible()) {
+					player.onHit();
+				}
 				enemyBulletIterator.remove();
 			}
 		}
@@ -657,7 +667,10 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			// 检查碰撞（考虑冷却时间）
 			if (player != null && laser.canHit() && laser.checkCollision(player.getX(), player.getY())) {
 				// 敌方激光击中玩家
-				player.onHit();
+				// @Time 2026-01-23 无敌状态下不受伤害
+				if (!player.isInvincible()) {
+					player.onHit();
+				}
 				laser.onHitPlayer(); // 启动冷却
 			}
 		}
@@ -678,12 +691,13 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			Bullet bullet = (Bullet)obj1;
 			x1 = bullet.getX();
 			y1 = bullet.getY();
-			size1 = bullet.getSize();
+			// @Time 2026-01-23 使用碰撞判定半径而非渲染大小，避免高速子弹穿透
+			size1 = bullet.getHitboxRadius() > 0 ? bullet.getHitboxRadius() : bullet.getSize();
 		} else if (obj1 instanceof EnemyBullet) {
 			EnemyBullet bullet = (EnemyBullet)obj1;
 			x1 = bullet.getX();
 			y1 = bullet.getY();
-			size1 = bullet.getSize();
+			size1 = bullet.getHitboxRadius() > 0 ? bullet.getHitboxRadius() : bullet.getSize();
 		} else {
 			return false;
 		}
@@ -845,12 +859,13 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	 * 根据帧数判断波次
 	 */
 	private int getWaveByFrame(int frame) {
-		if (frame < WAVE_1_END_FRAME) return 1;    // 0-199
-		if (frame < WAVE_2_END_FRAME) return 2;    // 200-499
-		if (frame < WAVE_3_END_FRAME) return 3;    // 500-699
-		if (frame < WAVE_4_END_FRAME) return 4;    // 700-999
-		if (frame < WAVE_5_END_FRAME) return 5;    // 1000-1299
-		return 0; // 超出所有波次
+		if (frame < WAVE_1_END_FRAME) return 1;
+		if (frame < WAVE_2_END_FRAME) return 2;
+		if (frame < WAVE_3_END_FRAME) return 3;
+		if (frame < WAVE_4_END_FRAME) return 4;
+		if (frame < WAVE_5_END_FRAME) return 5;
+		if (frame < WAVE_6_END_FRAME) return 6;
+		return 0;
 	}
 
 	/**
@@ -872,7 +887,6 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 				enemy = new BasicEnemy(data.getX(), data.getY(), data.getSpeed(), this);
 				break;
 			case "LaserShootingEnemy":
-				// 从params中获取pattern参数，默认为2（混合模式）
 				int pattern = 2;
 				if (data.getParams().containsKey("pattern")) {
 					pattern = (Integer)data.getParams().get("pattern");
@@ -880,8 +894,26 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 				System.out.println("【LaserShootingEnemy】攻击模式: " + pattern);
 				enemy = new LaserShootingEnemy(data.getX(), data.getY(), data.getSpeed(), this, pattern);
 				break;
+			case "SpiralEnemy":
+				enemy = new SpiralEnemy(data.getX(), data.getY(), data.getSpeed(), this);
+				break;
+			case "SpreadEnemy":
+				enemy = new SpreadEnemy(data.getX(), data.getY(), data.getSpeed(), this);
+				break;
+			case "TrackingEnemy":
+				enemy = new TrackingEnemy(data.getX(), data.getY(), data.getSpeed(), this);
+				break;
+			case "RapidFireEnemy":
+				enemy = new RapidFireEnemy(data.getX(), data.getY(), data.getSpeed(), this);
+				break;
+			case "OrbitEnemy":
+				float orbitRadius = 100.0f;
+				if (data.getParams().containsKey("orbitRadius")) {
+					orbitRadius = ((Number)data.getParams().get("orbitRadius")).floatValue();
+				}
+				enemy = new OrbitEnemy(data.getX(), data.getY(), orbitRadius, data.getSpeed(), this);
+				break;
 			default:
-				// 默认使用BasicEnemy
 				System.out.println("【警告】未知敌人类型: " + type + ", 使用BasicEnemy");
 				enemy = new BasicEnemy(data.getX(), data.getY(), data.getSpeed(), this);
 		}
@@ -898,5 +930,20 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			laser.setGameCanvas(this);
 			enemyLasers.add(laser);
 		}
+	}
+
+	/**
+	 * 清除所有敌方激光
+	 */
+	public void clearEnemyLasers() {
+		enemyLasers.clear();
+	}
+
+	/**
+	 * 移除指定的敌方激光列表
+	 * @param lasersToRemove 要移除的激光列表
+	 */
+	public void removeEnemyLasers(List<stg.game.laser.EnemyLaser> lasersToRemove) {
+		enemyLasers.removeAll(lasersToRemove);
 	}
 }

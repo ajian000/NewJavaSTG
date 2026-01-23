@@ -1,8 +1,8 @@
 package stg.game.player;
 
-import stg.game.bullet.Bullet;
-import stg.game.ui.GameCanvas;
 import java.awt.*;
+import stg.game.bullet.SimpleBullet;
+import stg.game.ui.GameCanvas;
 
 /**
  * 玩家类 - 自机角色
@@ -20,7 +20,7 @@ public class Player {
 	private boolean slowMode; // 低速模式标志
 	private boolean shooting; // 射击标志
 	private int shootCooldown; // 射击冷却时间
-	private int shootInterval = 8; // 射击间隔(帧数)
+	private int shootInterval = 1;
 	private int respawnTimer; // @Time 2026-01-19 重生计时器
 	private int respawnTime = 60; // @Time 2026-01-19 重生等待时间(帧数)
 	private float spawnX; // @Time 2026-01-19 重生X坐标
@@ -28,6 +28,9 @@ public class Player {
 	private boolean respawning; // @Time 2026-01-19 重生动画标志
 	private float respawnSpeed; // @Time 2026-01-19 重生移动速度
 	private float hitboxRadius; // 受击判定半径
+	private int invincibleTimer; // 无敌时间计时器(帧数)
+	private int invincibleTime = 120; // 无敌时间(120帧=2秒)
+	protected int bulletDamage = 2; // @Time 2026-01-23 子弹伤害，DPS = (2 × 2 × 60) / 2 = 120
 
 	public Player() {
 		this(0, 0, 5.0f, 2.0f, 20, null);
@@ -55,6 +58,7 @@ public class Player {
 		this.respawning = false;
 		this.respawnSpeed = 8.0f;
 		this.hitboxRadius = 2.0f;
+		this.invincibleTimer = invincibleTime; // @Time 2026-01-23 初始无敌时间
 	}
 
 	/**
@@ -86,7 +90,8 @@ public class Player {
 				y = spawnY;
 				respawning = false;
 				vy = 0;
-				System.out.println("Player respawned at: (" + x + ", " + y + ")");
+				invincibleTimer = invincibleTime; // @Time 2026-01-23 重生后获得无敌时间
+				System.out.println("Player respawned at: (" + x + ", " + y + ") with " + invincibleTime + " frames invincible");
 			}
 			return; // 重生动画期间不接受玩家输入
 		}
@@ -114,6 +119,11 @@ public class Player {
 			shootCooldown--;
 		}
 
+		// @Time 2026-01-23 更新无敌时间计时器
+		if (invincibleTimer > 0) {
+			invincibleTimer--;
+		}
+
 		// 射击逻辑
 		if (shooting && shootCooldown == 0) {
 			shoot();
@@ -126,13 +136,13 @@ public class Player {
 	 * 子类可重写此方法实现不同的射击模式
 	 */
 	protected void shoot() {
-		float bulletSpeed = 10.0f; // 子弹速度(向上为正)
+		float bulletSpeed = 46.0f;
 		Color bulletColor = Color.WHITE; // 子弹颜色
 		float bulletSize = slowMode ? 6.0f : 4.0f; // 子弹大小(低速模式更大)
 
 		// 发射两发子弹,从玩家中心位置,向上发射(Y为正)
-		Bullet bullet1 = new Bullet(x - 5, y, 0, bulletSpeed, bulletSize, bulletColor);
-		Bullet bullet2 = new Bullet(x + 5, y, 0, bulletSpeed, bulletSize, bulletColor);
+		SimpleBullet bullet1 = new SimpleBullet(x - 5, y, 0, bulletSpeed, bulletSize, bulletColor);
+		SimpleBullet bullet2 = new SimpleBullet(x + 5, y, 0, bulletSpeed, bulletSize, bulletColor);
 
 		// @Time 2026-01-19 设置画布引用
 		bullet1.setGameCanvas(gameCanvas);
@@ -155,13 +165,24 @@ public class Player {
 		// 开启抗锯齿
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+		// @Time 2026-01-23 无敌闪烁效果：每5帧闪烁一次
+		boolean shouldRender = true;
+		if (invincibleTimer > 0) {
+			int flashPhase = invincibleTimer % 10; // 10帧为一个闪烁周期
+			if (flashPhase < 5) {
+				shouldRender = false;
+			}
+		}
+
 		// 绘制角色主体（仅为一个简单的红色球体）
-		g.setColor(new Color(255, 100, 100));
-		g.fillOval((int)(screenX - size), (int)(screenY - size),
-		          (int)(size * 2), (int)(size * 2));
+		if (shouldRender) {
+			g.setColor(new Color(255, 100, 100));
+			g.fillOval((int)(screenX - size), (int)(screenY - size),
+			          (int)(size * 2), (int)(size * 2));
+		}
 
 		// 低速模式时显示受击判定点（在球体上方）
-		if (slowMode) {
+		if (slowMode && shouldRender) {
 			g.setColor(Color.WHITE);
 			g.fillOval((int)(screenX - hitboxRadius), (int)(screenY - hitboxRadius),
 			          (int)(hitboxRadius * 2), (int)(hitboxRadius * 2));
@@ -372,6 +393,31 @@ public class Player {
 		shootCooldown = 0;
 		respawnTimer = 0;
 		respawning = false;
+		invincibleTimer = invincibleTime; // @Time 2026-01-23 重置时获得无敌时间
 		// x 和 y 由 GameCanvas.resetGame() 设置
+	}
+
+	/**
+	 * @Time 2026-01-23 检查玩家是否处于无敌状态
+	 * @return 是否无敌
+	 */
+	public boolean isInvincible() {
+		return invincibleTimer > 0;
+	}
+
+	/**
+	 * @Time 2026-01-23 获取无敌计时器剩余帧数
+	 * @return 无敌剩余帧数
+	 */
+	protected int getInvincibleTimer() {
+		return invincibleTimer;
+	}
+
+	/**
+	 * @Time 2026-01-23 设置无敌时间
+	 * @param frames 无敌帧数
+	 */
+	public void setInvincibleTime(int frames) {
+		this.invincibleTime = frames;
 	}
 }
