@@ -52,15 +52,16 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	private List<Enemy> enemies;
 	private List<EnemyLaser> enemyLasers;
 	private CoordinateSystem coordinateSystem;
+	private GameStatusPanel gameStatusPanel;
 
 	// @Time 2026-01-19 按键状态跟踪 - 用于优化按键扫描逻辑
-	private boolean upPressed = false; // 上键状态
-	private boolean downPressed = false; // 下键状态
-	private boolean leftPressed = false; // 左键状态
-	private boolean rightPressed = false; // 右键状态
-	private boolean zPressed = false; // Z键状态
-	private boolean xPressed = false; // X键状态
-	private boolean shiftPressed = false; // Shift键状态
+	private boolean upPressed = false;
+	private boolean downPressed = false;
+	private boolean leftPressed = false;
+	private boolean rightPressed = false;
+	private boolean zPressed = false;
+	private boolean xPressed = false;
+	private boolean shiftPressed = false;
 
 	// 关卡执行相关
 	private LevelData currentLevel;
@@ -114,6 +115,21 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	 */
 	public CoordinateSystem getCoordinateSystem() {
 		return coordinateSystem;
+	}
+
+	/**
+	 * @Time 2026-01-24 设置游戏状态面板
+	 */
+	public void setGameStatusPanel(GameStatusPanel gameStatusPanel) {
+		this.gameStatusPanel = gameStatusPanel;
+	}
+
+	/**
+	 * 获取游戏状态面板
+	 * @Time 2026-01-24
+	 */
+	public GameStatusPanel getGameStatusPanel() {
+		return gameStatusPanel;
 	}
 
 	/**
@@ -352,6 +368,14 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		this.players.clear();
 		this.players.add(player);
 		player.setGameCanvas(this);
+		
+		// 初始化游戏状态面板
+		if (gameStatusPanel != null) {
+			gameStatusPanel.setScore(0);
+			gameStatusPanel.setLives(-1);
+			gameStatusPanel.setSpellCards(0);
+			gameStatusPanel.setMaxScore(10000);
+		}
 	}
 
 	/**
@@ -366,6 +390,14 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		this.players.clear();
 		this.players.add(this.player);
 		this.player.setGameCanvas(this);
+		
+		// 初始化游戏状态面板
+		if (gameStatusPanel != null) {
+			gameStatusPanel.setScore(0);
+			gameStatusPanel.setLives(-1);
+			gameStatusPanel.setSpellCards(0);
+			gameStatusPanel.setMaxScore(10000);
+		}
 	}
 
 	/**

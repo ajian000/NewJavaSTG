@@ -1,8 +1,8 @@
 package stg.game.player;
 
+import java.awt.*;
 import stg.game.bullet.SimpleBullet;
 import stg.game.ui.GameCanvas;
-import java.awt.*;
 
 /**
  * 魔理沙自机类

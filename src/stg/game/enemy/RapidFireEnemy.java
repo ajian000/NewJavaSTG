@@ -1,8 +1,8 @@
 package stg.game.enemy;
 
-import stg.game.ui.GameCanvas;
-import stg.game.bullet.CircularBullet;
 import java.awt.*;
+import stg.game.bullet.CircularBullet;
+import stg.game.ui.GameCanvas;
 
 /**
  * 快速射击敌人 - 高频率发射子弹

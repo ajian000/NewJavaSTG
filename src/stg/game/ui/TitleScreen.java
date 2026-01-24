@@ -1,15 +1,18 @@
 package stg.game.ui;
 
-import stg.game.player.PlayerType;
-import stg.base.KeyStateProvider;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import javax.swing.*;
+import stg.base.KeyStateProvider;
+import stg.game.player.PlayerType;
+import stg.util.ResourceManager;
 
 /**
  * 标题界面类 - 游戏主菜单和角色选择
  * @Time 2026-01-20 将类移动到stg.game.ui包
  * @Time 2026-01-20 实现KeyStateProvider以支持虚拟键盘
+ * @Time 2026-01-24 添加背景图片支持
  */
 public class TitleScreen extends JPanel implements KeyStateProvider {
 	private static final long serialVersionUID = 1L;
@@ -32,6 +35,8 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 	private MenuState currentState = MenuState.MAIN_MENU;
 	private Timer animationTimer;
 	private int animationFrame = 0;
+	private BufferedImage backgroundImage;
+	private ResourceManager resourceManager;
 
 	// 按键状态跟踪 - 供虚拟键盘使用
 	private boolean upPressed = false;
@@ -49,257 +54,202 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 
 	public TitleScreen(TitleCallback callback) {
 		this.callback = callback;
-		initialize();
-	}
-
-	private void initialize() {
-		setBackground(BG_COLOR);
+		this.resourceManager = ResourceManager.getInstance();
+		loadBackgroundImage();
+		
 		setFocusable(true);
-		setLayout(null);
-
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				switch (e.getKeyCode()) {
-					case KeyEvent.VK_UP:
-						upPressed = true;
-						if (currentState == MenuState.MAIN_MENU) {
-							selectedIndex = (selectedIndex - 1 + MAIN_MENU_ITEMS.length) % MAIN_MENU_ITEMS.length;
-						} else {
-							PlayerType[] types = PlayerType.values();
-							selectedIndex = (selectedIndex - 1 + types.length) % types.length;
-						}
-						repaint();
-						break;
-					case KeyEvent.VK_DOWN:
-						downPressed = true;
-						if (currentState == MenuState.MAIN_MENU) {
-							selectedIndex = (selectedIndex + 1) % MAIN_MENU_ITEMS.length;
-						} else {
-							PlayerType[] types = PlayerType.values();
-							selectedIndex = (selectedIndex + 1) % types.length;
-						}
-						repaint();
-						break;
-					case KeyEvent.VK_Z:
-						zPressed = true;
-					case KeyEvent.VK_ENTER:
-						executeMenuAction();
-						break;
-					case KeyEvent.VK_ESCAPE:
-						if (currentState == MenuState.PLAYER_SELECT) {
-							currentState = MenuState.MAIN_MENU;
-							selectedIndex = 0;
-							repaint();
-						} else {
-							if (callback != null) callback.onExit();
-						}
-						break;
-					case KeyEvent.VK_LEFT:
-						leftPressed = true;
-					case KeyEvent.VK_RIGHT:
-						rightPressed = true;
-						if (currentState == MenuState.PLAYER_SELECT) {
-							PlayerType[] types = PlayerType.values();
-							selectedIndex = (selectedIndex + 1) % types.length;
-							repaint();
-						}
-						break;
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				switch (e.getKeyCode()) {
-					case KeyEvent.VK_UP:
-						upPressed = false;
-						break;
-					case KeyEvent.VK_DOWN:
-						downPressed = false;
-						break;
-					case KeyEvent.VK_LEFT:
-						leftPressed = false;
-						break;
-					case KeyEvent.VK_RIGHT:
-						rightPressed = false;
-						break;
-					case KeyEvent.VK_Z:
-						zPressed = false;
-						break;
-				}
+				handleKeyPress(e);
 			}
 		});
 
-		animationTimer = new Timer(50, e -> {
-			animationFrame = (animationFrame + 1) % 60;
+		animationTimer = new Timer(16, e -> {
+			animationFrame++;
 			repaint();
 		});
 		animationTimer.start();
-
-		requestFocusInWindow();
 	}
-
-	public boolean isUpPressed() {
-		return upPressed;
-	}
-
-	public boolean isDownPressed() {
-		return downPressed;
-	}
-
-	public boolean isLeftPressed() {
-		return leftPressed;
-	}
-
-	public boolean isRightPressed() {
-		return rightPressed;
-	}
-
-	public boolean isZPressed() {
-		return zPressed;
-	}
-
-	private void executeMenuAction() {
-		if (currentState == MenuState.MAIN_MENU) {
-			switch (selectedIndex) {
-				case 0: // 开始游戏 - 进入角色选择
-					currentState = MenuState.PLAYER_SELECT;
-					selectedIndex = 0;
-					repaint();
-					break;
-				case 1: // 退出游戏
-					if (callback != null) callback.onExit();
-					break;
-			}
-		} else if (currentState == MenuState.PLAYER_SELECT) {
-			PlayerType[] types = PlayerType.values();
-			selectedPlayerType = types[selectedIndex];
-			callback.onGameStart(selectedPlayerType);
+	
+	private void loadBackgroundImage() {
+		// 尝试从文件系统加载
+		backgroundImage = resourceManager.loadImage("ui_bg.png", "images");
+		if (backgroundImage == null) {
+			System.out.println("【警告】UI背景图片加载失败，使用默认背景色");
+		} else {
+			System.out.println("【资源】UI背景图片加载成功: " + 
+				backgroundImage.getWidth() + "x" + backgroundImage.getHeight());
 		}
 	}
 
-	public void setPlayerType(stg.game.player.PlayerType type) {
-		this.selectedPlayerType = type;
+	private void handleKeyPress(KeyEvent e) {
+		switch (currentState) {
+			case MAIN_MENU:
+				handleMainMenuKey(e);
+				break;
+			case PLAYER_SELECT:
+				handlePlayerSelectKey(e);
+				break;
+		}
+	}
+
+	private void handleMainMenuKey(KeyEvent e) {
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_UP:
+				selectedIndex = (selectedIndex - 1 + MAIN_MENU_ITEMS.length) % MAIN_MENU_ITEMS.length;
+				repaint();
+				break;
+			case KeyEvent.VK_DOWN:
+				selectedIndex = (selectedIndex + 1) % MAIN_MENU_ITEMS.length;
+				repaint();
+				break;
+			case KeyEvent.VK_Z:
+			case KeyEvent.VK_ENTER:
+				handleMainMenuSelection();
+				break;
+			case KeyEvent.VK_ESCAPE:
+				callback.onExit();
+				break;
+		}
+	}
+
+	private void handlePlayerSelectKey(KeyEvent e) {
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_RIGHT:
+				selectedPlayerType = PlayerType.values()[(selectedPlayerType.ordinal() + 1) % PlayerType.values().length];
+				repaint();
+				break;
+			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_LEFT:
+				int prevIndex = selectedPlayerType.ordinal() - 1;
+				if (prevIndex < 0) {
+					prevIndex = PlayerType.values().length - 1;
+				}
+				selectedPlayerType = PlayerType.values()[prevIndex];
+				repaint();
+				break;
+			case KeyEvent.VK_Z:
+			case KeyEvent.VK_ENTER:
+				callback.onGameStart(selectedPlayerType);
+				break;
+			case KeyEvent.VK_ESCAPE:
+				currentState = MenuState.MAIN_MENU;
+				repaint();
+				break;
+		}
+	}
+
+	private void handleMainMenuSelection() {
+		switch (selectedIndex) {
+			case 0:
+				currentState = MenuState.PLAYER_SELECT;
+				break;
+			case 1:
+				callback.onExit();
+				break;
+		}
 		repaint();
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
 		int width = getWidth();
 		int height = getHeight();
 
-		drawBackground(g2d, width, height);
+		// 绘制背景图片
+		if (backgroundImage != null) {
+			// 缩放图片以适应窗口
+			g2d.drawImage(backgroundImage, 0, 0, width, height, null);
+		} else {
+			// 默认背景色
+			g2d.setColor(BG_COLOR);
+			g2d.fillRect(0, 0, width, height);
+		}
 
-		if (currentState == MenuState.MAIN_MENU) {
-			drawTitle(g2d, width);
-			drawMainMenu(g2d, width, height);
-		} else if (currentState == MenuState.PLAYER_SELECT) {
-			drawTitle(g2d, width);
-			drawPlayerSelectMenu(g2d, width, height);
+		// 绘制标题
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setFont(new Font("Microsoft YaHei", Font.BOLD, 48));
+		g2d.setColor(Color.WHITE);
+		String title = "东方STG引擎";
+		int titleWidth = g2d.getFontMetrics().stringWidth(title);
+		g2d.drawString(title, width / 2 - titleWidth / 2, 100);
+
+		// 绘制版本信息
+		g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
+		g2d.setColor(Color.GRAY);
+		g2d.drawString("Version 1.0", width - 80, height - 10);
+
+		// 绘制菜单
+		switch (currentState) {
+			case MAIN_MENU:
+				drawMainMenu(g2d, width, height);
+				break;
+			case PLAYER_SELECT:
+				drawPlayerSelect(g2d, width, height);
+				break;
 		}
 	}
 
-	private void drawBackground(Graphics2D g, int width, int height) {
-		g.setColor(BG_COLOR);
-		g.fillRect(0, 0, width, height);
-	}
-
-	private void drawTitle(Graphics2D g, int width) {
-		g.setFont(new Font("Microsoft YaHei", Font.BOLD, 72));
-		g.setColor(SELECTED_COLOR);
-
-		String title = "JAVA STG";
-		FontMetrics fm = g.getFontMetrics();
-		int titleWidth = fm.stringWidth(title);
-		int titleX = (width - titleWidth) / 2;
-		int titleY = 200;
-
-		g.drawString(title, titleX, titleY);
-	}
-
-	private void drawMainMenu(Graphics2D g, int width, int height) {
-		int menuStartX = width / 2 - 100;
-		int menuStartY = 300;
-		int menuItemHeight = 60;
-
-		g.setFont(new Font("Microsoft YaHei", Font.BOLD, 28));
+	private void drawMainMenu(Graphics2D g2d, int width, int height) {
+		g2d.setFont(new Font("Microsoft YaHei", Font.BOLD, 24));
 
 		for (int i = 0; i < MAIN_MENU_ITEMS.length; i++) {
-			int y = menuStartY + i * menuItemHeight;
+			String item = MAIN_MENU_ITEMS[i];
+			int itemWidth = g2d.getFontMetrics().stringWidth(item);
+			int x = width / 2 - itemWidth / 2;
+			int y = height / 2 + i * 40;
 
 			if (i == selectedIndex) {
-				g.setColor(SELECTED_COLOR);
+				g2d.setColor(SELECTED_COLOR);
+				// 绘制选中效果
+				g2d.drawString("▶", x - 30, y);
 			} else {
-				g.setColor(UNSELECTED_COLOR);
+				g2d.setColor(UNSELECTED_COLOR);
 			}
-
-			g.drawString(MAIN_MENU_ITEMS[i], menuStartX, y + 28);
+			g2d.drawString(item, x, y);
 		}
+
+		// 绘制操作提示
+		g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
+		g2d.setColor(Color.GRAY);
+		g2d.drawString("↑ ↓  选择菜单", width / 2 - 80, height - 40);
+		g2d.drawString("Z/Enter 确认", width / 2 - 80, height - 20);
 	}
 
-	private void drawPlayerSelectMenu(Graphics2D g, int width, int height) {
+	private void drawPlayerSelect(Graphics2D g2d, int width, int height) {
+		g2d.setFont(new Font("Microsoft YaHei", Font.BOLD, 24));
+		g2d.setColor(Color.WHITE);
+		String title = "选择自机";
+		int titleWidth = g2d.getFontMetrics().stringWidth(title);
+		g2d.drawString(title, width / 2 - titleWidth / 2, height / 2 - 80);
+
+		// 绘制玩家类型
 		PlayerType[] playerTypes = PlayerType.values();
-		int menuStartX = width / 2 - 150;
-		int menuStartY = 200;
-		int menuItemHeight = 100;
-
-		g.setFont(new Font("Microsoft YaHei", Font.BOLD, 28));
-
 		for (int i = 0; i < playerTypes.length; i++) {
-			int y = menuStartY + i * menuItemHeight;
 			PlayerType type = playerTypes[i];
+			String typeName = type.name();
+			int x = width / 2 + (i - playerTypes.length / 2) * 150;
+			int y = height / 2;
 
-			// 绘制背景框
-			Color bgColor;
-			if (i == selectedIndex) {
-				bgColor = new Color(60, 60, 80, 200);
-				g.setColor(new Color(255, 200, 100, 150));
-				g.fillRect(menuStartX - 10, y - 10, 320, menuItemHeight - 5);
+			if (type == selectedPlayerType) {
+				g2d.setColor(SELECTED_COLOR);
+				// 绘制选中框
+				g2d.drawRect(x - 60, y - 20, 120, 40);
 			} else {
-				bgColor = new Color(40, 40, 50, 200);
+				g2d.setColor(UNSELECTED_COLOR);
 			}
-			g.setColor(bgColor);
-			g.fillRect(menuStartX - 10, y - 10, 300, menuItemHeight - 5);
-			g.setColor(new Color(100, 100, 120));
-			g.drawRect(menuStartX - 10, y - 10, 300, menuItemHeight - 5);
-
-			// 绘制玩家颜色预览
-			Color playerColor = getPlayerColor(type);
-			g.setColor(playerColor);
-			g.fillOval(menuStartX + 10, y + 10, 50, 50);
-
-			// 绘制玩家名称
-			g.setColor(i == selectedIndex ? SELECTED_COLOR : Color.WHITE);
-			g.setFont(new Font("Microsoft YaHei", Font.BOLD, 24));
-			g.drawString(type.getName(), menuStartX + 80, y + 35);
-
-			// 绘制玩家描述
-			g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
-			g.setColor(new Color(180, 180, 200));
-			String[] lines = type.getDescription().split("，");
-			g.drawString(lines[0], menuStartX + 80, y + 60);
-			if (lines.length > 1) {
-				g.drawString(lines[1], menuStartX + 80, y + 80);
-			}
-
-			// 选中标记
-			if (i == selectedIndex) {
-				g.setFont(new Font("Microsoft YaHei", Font.BOLD, 32));
-				g.setColor(SELECTED_COLOR);
-				g.drawString("▶", menuStartX - 40, y + 40);
-			}
+			g2d.drawString(typeName, x - g2d.getFontMetrics().stringWidth(typeName) / 2, y);
 		}
 
-		// 操作提示
-		g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
-		g.setColor(new Color(150, 150, 150));
-		g.drawString("↑ ↓  切换自机", width / 2 - 100, height - 60);
-		g.drawString("Z/Enter 确认选择", width / 2 - 100, height - 40);
-		g.drawString("ESC  返回主菜单", width / 2 - 100, height - 20);
+		// 绘制操作提示
+		g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
+		g2d.setColor(Color.GRAY);
+		g2d.drawString("↑ ↓  切换自机", width / 2 - 100, height - 60);
+		g2d.drawString("Z/Enter 确认选择", width / 2 - 100, height - 40);
+		g2d.drawString("ESC  返回主菜单", width / 2 - 100, height - 20);
 	}
 
 	private Color getPlayerColor(PlayerType type) {
@@ -311,4 +261,22 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 			return new Color(255, 100, 100);
 		}
 	}
+
+	// 虚拟键盘接口实现
+	@Override
+	public boolean isUpPressed() { return upPressed; }
+	@Override
+	public boolean isDownPressed() { return downPressed; }
+	@Override
+	public boolean isLeftPressed() { return leftPressed; }
+	@Override
+	public boolean isRightPressed() { return rightPressed; }
+	@Override
+	public boolean isZPressed() { return zPressed; }
+
+	public void setUpPressed(boolean upPressed) { this.upPressed = upPressed; }
+	public void setDownPressed(boolean downPressed) { this.downPressed = downPressed; }
+	public void setLeftPressed(boolean leftPressed) { this.leftPressed = leftPressed; }
+	public void setRightPressed(boolean rightPressed) { this.rightPressed = rightPressed; }
+	public void setZPressed(boolean zPressed) { this.zPressed = zPressed; }
 }

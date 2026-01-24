@@ -1,8 +1,8 @@
 package stg.game.enemy;
 
-import stg.game.ui.GameCanvas;
-import stg.game.bullet.CircularBullet;
 import java.awt.*;
+import stg.game.bullet.CircularBullet;
+import stg.game.ui.GameCanvas;
 
 /**
  * 轨道敌人 - 围绕中心点旋转移动

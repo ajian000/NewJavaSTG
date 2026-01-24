@@ -1,24 +1,26 @@
 package stg.base;
 
-import stg.game.ui.GameCanvas;
-import stg.game.GameLoop;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import stg.game.GameLoop;
+import stg.game.ui.GameCanvas;
+import stg.game.ui.GameStatusPanel;
 
 /**
  * 窗口类 - STG游戏主窗口
  */
 public class Window extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private JPanel leftPanel; // 左侧面板
-	private JPanel centerPanel; // 中间面板(游戏区域)
-	private JPanel rightPanel; // 右侧面板
-	private GameCanvas gameCanvas; // 游戏画布
-	private VirtualKeyboardPanel virtualKeyboardPanel; // 虚拟键盘面板
-	private int totalWidth = 1280; // 窗口总宽度
-	private int totalHeight = 960; // 窗口总高度
-	private stg.game.player.Player player; // 玩家对象
+	private JPanel leftPanel;
+	private JPanel centerPanel;
+	private JPanel rightPanel;
+	private GameCanvas gameCanvas;
+	private VirtualKeyboardPanel virtualKeyboardPanel;
+	private GameStatusPanel gameStatusPanel;
+	private int totalWidth = 1280;
+	private int totalHeight = 960;
+	private stg.game.player.Player player;
 
 	/**
 	 * 构造函数
@@ -96,19 +98,27 @@ public class Window extends JFrame {
 		virtualKeyboardPanel = new VirtualKeyboardPanel(gameCanvas);
 		leftPanel.add(virtualKeyboardPanel, BorderLayout.CENTER);
 
-		// 根据参数决定是否立即初始化玩家
-		if (initPlayer) {
-			initializePlayer(stg.game.player.PlayerType.DEFAULT);
-			// 启动游戏循环（仅在初始化玩家时启动）
-			new GameLoop(gameCanvas).start();
-		}
-
 		// 创建右侧面板
 		rightPanel = new JPanel();
 		rightPanel.setPreferredSize(new Dimension(rightWidth, totalHeight));
 		rightPanel.setMinimumSize(new Dimension(rightWidth, totalHeight));
 		rightPanel.setMaximumSize(new Dimension(rightWidth, totalHeight));
 		rightPanel.setBackground(new Color(30, 30, 40));
+		rightPanel.setLayout(new BorderLayout());
+
+		// 创建游戏状态面板
+		gameStatusPanel = new GameStatusPanel();
+		rightPanel.add(gameStatusPanel, BorderLayout.CENTER);
+
+		// 将游戏状态面板传递给游戏画布
+		gameCanvas.setGameStatusPanel(gameStatusPanel);
+
+		// 根据参数决定是否立即初始化玩家
+		if (initPlayer) {
+			initializePlayer(stg.game.player.PlayerType.DEFAULT);
+			// 启动游戏循环（仅在初始化玩家时启动）
+			new GameLoop(gameCanvas).start();
+		}
 
 		// 创建容器面板
 		JPanel mainPanel = new JPanel();
@@ -155,6 +165,14 @@ public class Window extends JFrame {
 	 */
 	public VirtualKeyboardPanel getVirtualKeyboardPanel() {
 		return virtualKeyboardPanel;
+	}
+
+	/**
+	 * 获取游戏状态面板
+	 * @Time 2026-01-24 添加getter以支持游戏状态访问
+	 */
+	public GameStatusPanel getGameStatusPanel() {
+		return gameStatusPanel;
 	}
 
 	/**

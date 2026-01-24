@@ -1,8 +1,8 @@
 package stg.game.enemy;
 
-import stg.game.ui.GameCanvas;
-import stg.game.bullet.TrackingBullet;
 import java.awt.*;
+import stg.game.bullet.TrackingBullet;
+import stg.game.ui.GameCanvas;
 
 /**
  * 追踪弹幕敌人 - 发射追踪玩家的子弹
