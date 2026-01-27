@@ -1,7 +1,7 @@
 package stg.game.bullet;
 
-import stg.game.enemy.EnemyBullet;
 import java.awt.*;
+import stg.game.enemy.EnemyBullet;
 
 /**
  * 圆形弹幕类 - EnemyBullet的子类

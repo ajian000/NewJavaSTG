@@ -121,14 +121,54 @@ JavaSTG/
 
 ## 编译运行
 
-### 编译项目
+### 快速开始
+
+#### Windows 用户
 ```bash
+# 一键编译（包含 OGG 支持）
+compile.bat
+
+# 打包 JAR 文件
+package.bat
+
+# 运行游戏
+java -jar JavaSTG.jar
+```
+
+#### 手动编译（包含 OGG 支持）
+```bash
+# 编译 JOrbis 库
+javac -encoding UTF-8 -d bin/jorbis -sourcepath lib/jorbis-master lib/jorbis-master/com/jcraft/jogg/*.java lib/jorbis-master/com/jcraft/jorbis/*.java
+
+# 打包 JOrbis JAR
+cd bin/jorbis
+jar cvf ../../lib/jorbis.jar *
+cd ../..
+
+# 编译项目
 javac -encoding UTF-8 -d bin -sourcepath src src/Main/Main.java src/stg/**/*.java
 ```
 
 ### 运行游戏
+
+#### 使用 JAR 文件（推荐）
 ```bash
-java -cp bin Main.Main
+java -jar JavaSTG.jar
+```
+
+#### 使用 classpath
+```bash
+java -cp "bin;bin/jorbis" Main.Main
+```
+
+### 测试 OGG 支持
+
+```bash
+# 编译测试程序
+javac -encoding UTF-8 -d bin -sourcepath src src/stg/util/OGGAudioTest.java
+
+# 运行测试
+java -cp "bin;bin/jorbis" stg.util.OGGAudioTest
 ```
 
 ## 技术栈

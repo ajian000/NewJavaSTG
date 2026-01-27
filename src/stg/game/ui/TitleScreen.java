@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import stg.base.KeyStateProvider;
 import stg.game.player.PlayerType;
+import stg.util.AudioManager;
+import stg.util.OGGAudioSupport;
 import stg.util.ResourceManager;
 
 /**
@@ -13,6 +15,7 @@ import stg.util.ResourceManager;
  * @Time 2026-01-20 将类移动到stg.game.ui包
  * @Time 2026-01-20 实现KeyStateProvider以支持虚拟键盘
  * @Time 2026-01-24 添加背景图片支持
+ * @Time 2026-01-27 添加标题音乐播放功能
  */
 public class TitleScreen extends JPanel implements KeyStateProvider {
 	private static final long serialVersionUID = 1L;
@@ -37,6 +40,7 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 	private int animationFrame = 0;
 	private BufferedImage backgroundImage;
 	private ResourceManager resourceManager;
+	private AudioManager audioManager;
 
 	// 按键状态跟踪 - 供虚拟键盘使用
 	private boolean upPressed = false;
@@ -55,7 +59,9 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 	public TitleScreen(TitleCallback callback) {
 		this.callback = callback;
 		this.resourceManager = ResourceManager.getInstance();
+		this.audioManager = AudioManager.getInstance();
 		loadBackgroundImage();
+		playTitleMusic();
 		
 		setFocusable(true);
 		addKeyListener(new KeyAdapter() {
@@ -73,7 +79,6 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 	}
 	
 	private void loadBackgroundImage() {
-		// 尝试从文件系统加载
 		backgroundImage = resourceManager.loadImage("ui_bg.png", "images");
 		if (backgroundImage == null) {
 			System.out.println("【警告】UI背景图片加载失败，使用默认背景色");
@@ -81,6 +86,40 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 			System.out.println("【资源】UI背景图片加载成功: " + 
 				backgroundImage.getWidth() + "x" + backgroundImage.getHeight());
 		}
+	}
+	
+	private void playTitleMusic() {
+		try {
+			if (OGGAudioSupport.supportsOGG()) {
+				try {
+					OGGAudioSupport.playOGGMusic(
+						audioManager,
+						"resources/audio/",
+						"luastg.ogg",
+						true,
+						0.7f
+					);
+					System.out.println("【音频】标题音乐播放中（OGG）");
+					return;
+				} catch (Exception oggError) {
+					System.out.println("【警告】OGG 播放失败，尝试使用 WAV 格式: " + oggError.getMessage());
+				}
+			}
+			
+			try {
+				audioManager.playMusic("luastg.wav", true);
+				System.out.println("【音频】标题音乐播放中（WAV）");
+			} catch (Exception wavError) {
+				System.out.println("【警告】WAV 音乐播放失败，跳过背景音乐: " + wavError.getMessage());
+			}
+		} catch (Exception e) {
+			System.out.println("【警告】标题音乐播放失败: " + e.getMessage());
+		}
+	}
+	
+	public void stopTitleMusic() {
+		audioManager.stopMusic();
+		System.out.println("【音频】标题音乐已停止");
 	}
 
 	private void handleKeyPress(KeyEvent e) {

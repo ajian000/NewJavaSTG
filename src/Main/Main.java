@@ -50,6 +50,8 @@ public class Main {
 	}
 
 	private static void startGame(stg.game.player.PlayerType playerType) {
+		titleScreen.stopTitleMusic();
+		
 		window.initializePlayer(playerType);
 		window.getCenterPanel().remove(titleScreen);
 

@@ -1,8 +1,8 @@
 package stg.base;
 
-import stg.game.ui.GameCanvas;
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import stg.game.ui.GameCanvas;
 
 /**
  * 虚拟键盘面板 - 显示按键状态
