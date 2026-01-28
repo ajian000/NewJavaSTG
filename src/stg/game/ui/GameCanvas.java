@@ -19,7 +19,9 @@ import stg.game.enemy.SpiralEnemy;
 import stg.game.enemy.SpreadEnemy;
 import stg.game.enemy.TrackingEnemy;
 import stg.game.laser.*;
+import stg.game.player.MarisaPlayer;
 import stg.game.player.Player;
+import stg.game.player.ReimuPlayer;
 import stg.util.CoordinateSystem;
 import stg.util.EnemySpawnData;
 import stg.util.LevelData;
@@ -390,6 +392,13 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		this.players.clear();
 		this.players.add(this.player);
 		this.player.setGameCanvas(this);
+		
+		// 初始化子机
+		if (player instanceof ReimuPlayer) {
+			((ReimuPlayer) player).initializeOptions(this);
+		} else if (player instanceof MarisaPlayer) {
+			((MarisaPlayer) player).initializeOptions(this);
+		}
 		
 		// 初始化游戏状态面板
 		if (gameStatusPanel != null) {

@@ -26,6 +26,23 @@ public class ReimuPlayer extends Player {
 		this.bulletDamage = REIMU_BULLET_DAMAGE; // @Time 2026-01-23 设置灵梦子弹伤害
 	}
 
+	/**
+	 * 初始化灵梦的子机
+	 * 参考东方正作，灵梦通常有2-4个子机
+	 */
+	public void initializeOptions(GameCanvas canvas) {
+		setGameCanvas(canvas);
+
+		// 添加2个子机，位于玩家左右两侧
+		ReimuOption option1 = new ReimuOption(this, -25, 10, canvas);
+		ReimuOption option2 = new ReimuOption(this, 25, 10, canvas);
+
+		addOption(option1);
+		addOption(option2);
+
+		System.out.println("灵梦子机初始化完成，共2个子机");
+	}
+
 	@Override
 	protected void shoot() {
 		GameCanvas canvas = getGameCanvas();

@@ -1,6 +1,8 @@
 package stg.game.player;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import stg.game.bullet.SimpleBullet;
 import stg.game.ui.GameCanvas;
 
@@ -31,6 +33,7 @@ public class Player {
 	private int invincibleTimer; // 无敌时间计时器(帧数)
 	private int invincibleTime = 120; // 无敌时间(120帧=2秒)
 	protected int bulletDamage = 2; // @Time 2026-01-23 子弹伤害，DPS = (2 × 2 × 60) / 2 = 120
+	protected List<Option> options; // 子机列表
 
 	public Player() {
 		this(0, 0, 5.0f, 2.0f, 20, null);
@@ -59,6 +62,7 @@ public class Player {
 		this.respawnSpeed = 8.0f;
 		this.hitboxRadius = 2.0f;
 		this.invincibleTimer = invincibleTime; // @Time 2026-01-23 初始无敌时间
+		this.options = new ArrayList<>(); // 初始化子机列表
 	}
 
 	/**
@@ -129,6 +133,12 @@ public class Player {
 			shoot();
 			shootCooldown = shootInterval;
 		}
+
+		// 更新所有子机
+		for (Option option : options) {
+			option.setShooting(shooting);
+			option.update();
+		}
 	}
 
 	/**
@@ -186,6 +196,11 @@ public class Player {
 			g.setColor(Color.WHITE);
 			g.fillOval((int)(screenX - hitboxRadius), (int)(screenY - hitboxRadius),
 			          (int)(hitboxRadius * 2), (int)(hitboxRadius * 2));
+		}
+
+		// 渲染所有子机
+		for (Option option : options) {
+			option.render(g);
 		}
 	}
 
@@ -395,6 +410,11 @@ public class Player {
 		respawning = false;
 		invincibleTimer = invincibleTime; // @Time 2026-01-23 重置时获得无敌时间
 		// x 和 y 由 GameCanvas.resetGame() 设置
+
+		// 重置所有子机
+		for (Option option : options) {
+			option.reset();
+		}
 	}
 
 	/**
@@ -419,5 +439,36 @@ public class Player {
 	 */
 	public void setInvincibleTime(int frames) {
 		this.invincibleTime = frames;
+	}
+
+	/**
+	 * 添加子机
+	 * @param option 子机对象
+	 */
+	public void addOption(Option option) {
+		options.add(option);
+	}
+
+	/**
+	 * 移除子机
+	 * @param option 子机对象
+	 */
+	public void removeOption(Option option) {
+		options.remove(option);
+	}
+
+	/**
+	 * 获取子机列表
+	 * @return 子机列表
+	 */
+	public List<Option> getOptions() {
+		return options;
+	}
+
+	/**
+	 * 清除所有子机
+	 */
+	public void clearOptions() {
+		options.clear();
 	}
 }

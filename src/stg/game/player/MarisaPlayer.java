@@ -26,6 +26,23 @@ public class MarisaPlayer extends Player {
 		this.bulletDamage = MARISA_BULLET_DAMAGE; // @Time 2026-01-23 设置魔理沙子弹伤害
 	}
 
+	/**
+	 * 初始化魔理沙的子机
+	 * 参考东方正作，魔理沙通常有2-4个子机
+	 */
+	public void initializeOptions(GameCanvas canvas) {
+		setGameCanvas(canvas);
+
+		// 添加2个子机，位于玩家左右两侧
+		MarisaOption option1 = new MarisaOption(this, -20, 15, canvas);
+		MarisaOption option2 = new MarisaOption(this, 20, 15, canvas);
+
+		addOption(option1);
+		addOption(option2);
+
+		System.out.println("魔理沙子机初始化完成，共2个子机");
+	}
+
 	@Override
 	protected void shoot() {
 		GameCanvas canvas = getGameCanvas();
