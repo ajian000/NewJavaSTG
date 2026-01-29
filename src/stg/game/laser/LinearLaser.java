@@ -41,8 +41,7 @@ public class LinearLaser extends Laser {
 	 * @param damage 伤害值
 	 * @param rotationSpeed 旋转速度
 	 */
-	public LinearLaser(float x, float y, float angle, float length, float width, Color color,
-					   int warningTime, int damage, float rotationSpeed) {
+	public LinearLaser(float x, float y, float angle, float length, float width, Color color, int warningTime, int damage, float rotationSpeed) {
 		super(x, y, angle, length, width, color, warningTime, damage);
 		this.rotationSpeed = rotationSpeed;
 		this.moving = false;
@@ -51,12 +50,26 @@ public class LinearLaser extends Laser {
 	}
 
 	/**
-	 * 更新激光状态
+	 * 初始化行为参数
 	 */
 	@Override
-	public void update() {
-		super.update();
+	protected void initBehavior() {
+		// 初始化行为参数
+	}
 
+	/**
+	 * 实现每帧的自定义更新逻辑
+	 */
+	@Override
+	protected void onUpdate() {
+		// 激光的更新逻辑
+	}
+
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	@Override
+	protected void onMove() {
 		if (active) {
 			// 旋转
 			angle += rotationSpeed;
@@ -67,6 +80,14 @@ public class LinearLaser extends Laser {
 				y += (float)Math.sin(moveAngle) * moveSpeed;
 			}
 		}
+	}
+
+	/**
+	 * 更新激光状态
+	 */
+	@Override
+	public void update() {
+		super.update();
 	}
 
 	/**

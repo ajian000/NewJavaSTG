@@ -61,8 +61,7 @@ public class CurvedLaser extends Laser {
 	 * @param vy Y方向速度
 	 * @param maxTrailLength 最大拖尾长度(帧)
 	 */
-	public CurvedLaser(float x, float y, float angle, float length, float width, Color color,
-					   int warningTime, int damage, float vx, float vy, int maxTrailLength) {
+	public CurvedLaser(float x, float y, float angle, float length, float width, Color color, int warningTime, int damage, float vx, float vy, int maxTrailLength) {
 		super(x, y, angle, length, width, color, warningTime, damage);
 		this.vx = vx;
 		this.vy = vy;
@@ -72,12 +71,34 @@ public class CurvedLaser extends Laser {
 	}
 
 	/**
-	 * 更新激光状态
+	 * 初始化行为参数
 	 */
 	@Override
-	public void update() {
-		super.update();
+	protected void initBehavior() {
+		// 初始化行为参数
+	}
 
+	/**
+	 * 实现每帧的自定义更新逻辑
+	 */
+	@Override
+	protected void onUpdate() {
+		// 添加轨迹点
+		if (active) {
+			trailPoints.add(new Point(x, y, width));
+
+			// 限制轨迹长度
+			if (trailPoints.size() > maxTrailLength) {
+				trailPoints.remove(0);
+			}
+		}
+	}
+
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	@Override
+	protected void onMove() {
 		if (active) {
 			// 更新位置
 			x += vx;
@@ -87,15 +108,15 @@ public class CurvedLaser extends Laser {
 			if (vx != 0 || vy != 0) {
 				angle = (float)Math.atan2(vy, vx);
 			}
-
-			// 添加轨迹点
-			trailPoints.add(new Point(x, y, width));
-
-			// 限制轨迹长度
-			if (trailPoints.size() > maxTrailLength) {
-				trailPoints.remove(0);
-			}
 		}
+	}
+
+	/**
+	 * 更新激光状态
+	 */
+	@Override
+	public void update() {
+		super.update();
 	}
 
 	/**

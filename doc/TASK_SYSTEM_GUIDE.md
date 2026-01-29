@@ -1,431 +1,306 @@
-# Task系统使用指南
+# Task机制使用文档
 
-## 概述
+## 1. 概述
 
-Task系统是NewJavaSTG游戏引擎的核心机制之一，用于控制游戏对象（特别是敌人）的行为。通过组合不同的Task，可以创建复杂的移动和攻击模式。
+Task机制是JavaSTG游戏引擎中的行为管理系统，用于控制游戏对象（如敌人、玩家）的复杂行为序列。通过任务化的方式，开发者可以更灵活地定义和管理游戏对象的行为。
 
-## 核心Task类型
+### 核心概念
+- **Task**：任务接口，定义了任务的基本方法
+- **BaseTask**：基础任务类，实现了Task接口的通用功能
+- **TaskManager**：任务管理器，负责管理游戏对象的所有任务
+- **组合任务**：如SequenceTask（序列执行）、ParallelTask（并行执行）
+- **具体任务**：如MoveTask（移动）、WaitTask（等待）、ShootTask（射击）
 
-### 1. BaseTask（基础任务）
+## 2. 核心类说明
 
-所有Task的基类，提供任务生命周期管理：
-- `start()` - 开始任务
-- `update(deltaTime)` - 更新任务状态
-- `cancel()` - 取消任务
-- `reset()` - 重置任务
-- `isCompleted()` - 检查是否完成
-- `isCancelled()` - 检查是否已取消
-
-### 2. MoveTask（移动任务）
-
-控制游戏对象移动到指定位置。
+### 2.1 Task接口
 
 ```java
-// 构造函数
-MoveTask(Enemy enemy, float targetX, float targetY, float speed, boolean smooth)
+public interface Task {
+    boolean update(int deltaTime);
+    void start();
+    void cancel();
+    void reset();
+    boolean isCompleted();
+    boolean isCancelled();
+}
 ```
 
-**参数说明：**
-- `enemy`: 要移动的敌人对象
-- `targetX`, `targetY`: 目标坐标
-- `speed`: 移动速度
-- `smooth`: 是否平滑移动
+- **update**：更新任务状态，返回任务是否完成
+- **start**：开始任务
+- **cancel**：取消任务
+- **reset**：重置任务
+- **isCompleted**：检查任务是否完成
+- **isCancelled**：检查任务是否已取消
 
-**示例：**
+### 2.2 任务类型
+
+| 任务类 | 描述 | 主要参数 |
+|-------|------|--------|
+| BaseTask | 基础任务类 | - |
+| WaitTask | 等待指定帧数 | waitFrames |
+| MoveTask | 移动到指定位置 | enemy, targetX, targetY, speed |
+| ShootTask | 发射子弹 | enemy, gameCanvas, bulletSpeed, bulletCount |
+| SequenceTask | 序列执行多个任务 | - |
+| ParallelTask | 并行执行多个任务 | - |
+
+### 2.3 TaskManager
+
 ```java
-// 移动到(100, 200)，速度为2.0
-MoveTask move = new MoveTask(enemy, 100, 200, 2.0f, true);
+public class TaskManager {
+    public void addTask(Task task);
+    public void removeTask(Task task);
+    public void clearTasks();
+    public void update(int deltaTime);
+    public int getTaskCount();
+    public boolean hasTasks();
+}
 ```
 
-### 3. ShootTask（射击任务）
+## 3. 使用示例
 
-让敌人发射子弹。
+### 3.1 基本使用
 
 ```java
-// 简化构造函数
-ShootTask(Enemy enemy, GameCanvas gameCanvas, float bulletSpeed)
+// 创建敌人
+BasicEnemy enemy = new BasicEnemy(0, 300, 2, gameCanvas);
 
-// 完整构造函数
-ShootTask(Enemy enemy, GameCanvas gameCanvas, float bulletSpeed, int bulletCount,
-          float angleSpread, Color bulletColor, float bulletSize, int bulletDamage)
+// 获取任务管理器
+TaskManager taskManager = enemy.getTaskManager();
+
+// 添加移动任务
+MoveTask moveTask = new MoveTask(enemy, 200, 300, 2, true);
+taskManager.addTask(moveTask);
+
+// 添加等待任务
+WaitTask waitTask = new WaitTask(60);
+taskManager.addTask(waitTask);
+
+// 添加射击任务
+ShootTask shootTask = new ShootTask(enemy, gameCanvas, -10, 3, (float)Math.PI/4, 
+        Color.CYAN, 5, 10);
+taskManager.addTask(shootTask);
 ```
 
-**参数说明：**
-- `enemy`: 发射子弹的敌人
-- `gameCanvas`: 游戏画布
-- `bulletSpeed`: 子弹速度
-- `bulletCount`: 子弹数量
-- `angleSpread`: 角度扩散范围（弧度）
-- `bulletColor`: 子弹颜色
-- `bulletSize`: 子弹大小
-- `bulletDamage`: 子弹伤害
+### 3.2 序列任务
 
-**示例：**
 ```java
-// 发射单发子弹
-ShootTask shoot = new ShootTask(enemy, gameCanvas, 10.0f);
+// 创建序列任务
+SequenceTask sequenceTask = new SequenceTask();
 
-// 发射扇形弹（5发，扩散角度0.5弧度）
-ShootTask spread = new ShootTask(enemy, gameCanvas, 8.0f, 5, 0.5f, Color.RED, 6, 10);
+// 添加任务序列
+sequenceTask.addTask(new MoveTask(enemy, 200, 300, 2, true))
+            .addTask(new WaitTask(60))
+            .addTask(new MoveTask(enemy, -200, 300, 2, true))
+            .addTask(new WaitTask(60))
+            .addTask(new ShootTask(enemy, gameCanvas, -10, 3, (float)Math.PI/4, 
+                    Color.CYAN, 5, 10));
+
+// 添加到任务管理器
+enemy.getTaskManager().addTask(sequenceTask);
 ```
 
-### 4. WaitTask（等待任务）
-
-等待指定的帧数。
+### 3.3 自定义任务
 
 ```java
-WaitTask(int waitFrames)
-```
-
-**示例：**
-```java
-// 等待60帧（约1秒）
-WaitTask wait = new WaitTask(60);
-```
-
-### 5. SequenceTask（序列任务）
-
-按顺序执行多个任务，只有前一个任务完成后才开始下一个。
-
-```java
-SequenceTask seq = new SequenceTask();
-seq.addTask(task1);
-seq.addTask(task2);
-seq.addTask(task3);
-```
-
-**示例：**
-```java
-SequenceTask sequence = new SequenceTask();
-sequence.addTask(new MoveTask(enemy, 100, 200, 2.0f, true));
-sequence.addTask(new WaitTask(60));
-sequence.addTask(new ShootTask(enemy, gameCanvas, 8.0f));
-```
-
-### 6. ParallelTask（并行任务）
-
-同时执行多个任务，所有任务都完成才算完成。
-
-```java
-ParallelTask parallel = new ParallelTask();
-parallel.addTask(task1);
-parallel.addTask(task2);
-```
-
-**示例：**
-```java
-ParallelTask parallel = new ParallelTask();
-
-// 同时移动和射击
-parallel.addTask(new MoveTask(enemy, 150, 200, 2.0f, true));
-parallel.addTask(new BaseTask() {
-    private int frame = 0;
+// 创建自定义任务
+BaseTask customTask = new BaseTask() {
     @Override
     public boolean update(int deltaTime) {
-        frame += deltaTime;
-        if (frame >= 30) {
-            // 发射子弹
-            frame = 0;
+        // 自定义任务逻辑
+        System.out.println("Custom task executed!");
+        return true; // 任务完成
+    }
+};
+
+enemy.getTaskManager().addTask(customTask);
+```
+
+### 3.4 循环任务
+
+```java
+// 创建循环任务
+SequenceTask loopTask = new SequenceTask();
+loopTask.addTask(sequenceTask); // 添加主任务序列
+loopTask.addTask(new BaseTask() {
+    @Override
+    public boolean update(int deltaTime) {
+        // 重新执行任务
+        if (enemy.getTaskManager() != null) {
+            enemy.getTaskManager().clearTasks();
+            enemy.getTaskManager().addTask(loopTask);
         }
-        return false; // 不完成，持续执行
+        return true;
     }
 });
+
+enemy.getTaskManager().addTask(loopTask);
 ```
 
-## 自定义Task
+## 4. 集成到游戏对象
 
-通过继承BaseTask，可以创建自定义任务。
+### 4.1 Enemy类集成
 
-### 示例1：循环移动任务
-
-```java
-Task circleMoveTask = new BaseTask() {
-    private int frame = 0;
-    private float centerX = 100;
-    private float centerY = 200;
-    private float radius = 80;
-
-    @Override
-    public boolean update(int deltaTime) {
-        frame += deltaTime;
-        float angle = (float)(frame * 0.05);
-        float newX = centerX + (float)(Math.cos(angle) * radius);
-        float newY = centerY + (float)(Math.sin(angle) * radius);
-        enemy.setPosition(newX, newY);
-        return false; // 不完成，持续执行
-    }
-};
-```
-
-### 示例2：定时射击任务
-
-```java
-Task periodicShootTask = new BaseTask() {
-    private int frame = 0;
-    private int interval = 60; // 每秒射击一次
-
-    @Override
-    public boolean update(int deltaTime) {
-        frame += deltaTime;
-        if (frame >= interval) {
-            // 发射子弹
-            shootBullet();
-            frame = 0;
-        }
-        return false; // 持续执行
-    }
-};
-```
-
-### 示例3：螺旋移动任务
-
-```java
-Task spiralMoveTask = new BaseTask() {
-    private int frame = 0;
-    private float radius = 150;
-
-    @Override
-    public boolean update(int deltaTime) {
-        frame += deltaTime;
-        float angle = (float)(frame * 0.03);
-        radius -= 0.1f * deltaTime;
-
-        if (radius < 20) {
-            radius = 150; // 重置半径
-        }
-
-        float newX = (float)(Math.cos(angle) * radius);
-        float newY = (float)(Math.sin(angle) * radius) + 100;
-        enemy.setPosition(newX, newY);
-        return false;
-    }
-};
-```
-
-## 在Enemy中使用Task
-
-### 初始化Task
-
-重写`initTasks()`方法：
+Enemy基类已经集成了TaskManager，子类可以通过重写`initTasks()`方法来添加初始任务：
 
 ```java
 @Override
 protected void initTasks() {
-    // 创建序列任务
+    // 创建任务序列
     SequenceTask mainTask = new SequenceTask();
-
-    // 添加移动任务
-    mainTask.addTask(new MoveTask(this, 200, getY(), 2.0f, true));
-    mainTask.addTask(new WaitTask(60));
-
-    // 添加射击任务
-    mainTask.addTask(new ShootTask(this, gameCanvas, 10.0f));
-
+    
+    // 添加任务
+    mainTask.addTask(new MoveTask(this, 200, getY(), moveSpeed, true))
+            .addTask(new WaitTask(60))
+            .addTask(new MoveTask(this, -200, getY(), moveSpeed, true))
+            .addTask(new WaitTask(60))
+            .addTask(new ShootTask(this, gameCanvas, -10, 3, (float)Math.PI/4, 
+                    Color.CYAN, 5, 10));
+    
     // 添加到任务管理器
     getTaskManager().addTask(mainTask);
 }
 ```
 
-### 复杂组合示例
+### 4.2 其他游戏对象集成
+
+对于其他游戏对象（如Player），可以参考以下步骤集成TaskManager：
+
+1. 添加TaskManager成员变量
+2. 在构造函数中初始化
+3. 在update方法中更新任务
+4. 提供获取和设置TaskManager的方法
+
+## 5. 最佳实践
+
+### 5.1 任务设计原则
+
+1. **单一职责**：每个任务只负责一项功能
+2. **组合优先**：通过组合简单任务来实现复杂行为
+3. **可重用性**：设计可重用的任务类
+4. **错误处理**：在任务中添加适当的错误处理
+
+### 5.2 性能优化
+
+1. **任务清理**：及时移除已完成或已取消的任务
+2. **任务重用**：对于重复使用的任务，考虑重置而非创建新实例
+3. **批量操作**：使用TaskManager的addTask和removeTask方法，避免在update方法中直接修改任务列表
+
+### 5.3 调试技巧
+
+1. **日志输出**：在任务的关键方法中添加日志输出
+2. **任务状态检查**：定期检查任务的完成状态
+3. **可视化调试**：考虑添加任务执行状态的可视化显示
+
+## 6. 常见问题
+
+### 6.1 任务不执行
+
+**可能原因**：
+- 任务未添加到TaskManager
+- TaskManager的update方法未被调用
+- 任务已被取消或完成
+
+**解决方案**：
+- 确保任务已添加到TaskManager
+- 确保游戏对象的update方法调用了TaskManager的update方法
+- 检查任务的状态和生命周期
+
+### 6.2 任务执行异常
+
+**可能原因**：
+- 任务中的空指针异常
+- 任务参数设置错误
+- 任务执行顺序问题
+
+**解决方案**：
+- 在任务中添加适当的空指针检查
+- 确保任务参数设置正确
+- 检查任务的执行顺序和依赖关系
+
+### 6.3 性能问题
+
+**可能原因**：
+- 任务数量过多
+- 任务执行逻辑复杂
+- 任务创建和销毁频繁
+
+**解决方案**：
+- 减少不必要的任务
+- 优化任务执行逻辑
+- 考虑任务重用而非频繁创建
+
+## 7. 扩展指南
+
+### 7.1 创建自定义任务
+
+要创建自定义任务，只需继承BaseTask并实现update方法：
 
 ```java
-@Override
-protected void initTasks() {
-    // 第一阶段：入场
-    SequenceTask phase1 = new SequenceTask();
-    phase1.addTask(new MoveTask(this, 0, 150, 3.0f, true));
-    phase1.addTask(new WaitTask(30));
-
-    // 第二阶段：组合攻击
-    ParallelTask phase2 = new ParallelTask();
-
-    // 左右移动
-    Task moveTask = new BaseTask() {
-        private int frame = 0;
-        @Override
-        public boolean update(int deltaTime) {
-            frame += deltaTime;
-            float x = (float)(Math.sin(frame * 0.05) * 150);
-            setPosition(x, 150);
-            return false;
-        }
-    };
-
-    // 连续射击
-    Task shootTask = new BaseTask() {
-        private int frame = 0;
-        @Override
-        public boolean update(int deltaTime) {
-            frame += deltaTime;
-            if (frame >= 30) {
-                shootSpread(5, 0.3f, Color.RED);
-                frame = 0;
-            }
-            return false;
-        }
-    };
-
-    phase2.addTask(moveTask);
-    phase2.addTask(shootTask);
-
-    // 组合所有阶段
-    SequenceTask allPhases = new SequenceTask();
-    allPhases.addTask(phase1);
-    allPhases.addTask(phase2);
-
-    getTaskManager().addTask(allPhases);
+public class CustomTask extends BaseTask {
+    @Override
+    public boolean update(int deltaTime) {
+        // 自定义任务逻辑
+        return true; // 任务完成
+    }
 }
 ```
 
-## TaskDemoEnemy行为模式
+### 7.2 扩展TaskManager
 
-TaskDemoEnemy提供了5种预定义的行为模式：
+如果需要扩展TaskManager的功能，可以继承TaskManager类并添加新的方法：
 
-### 1. sine（正弦波）
-左右移动并发射扇形弹
-- 移动轨迹：左→右→中心循环
-- 攻击方式：扇形散开子弹
-- 适用场景：基础敌人
-
-### 2. circle（圆形）
-绕圈移动并向四周发射子弹
-- 移动轨迹：圆形
-- 攻击方式：一圈子弹（12发）
-- 适用场景：中等难度
-
-### 3. spiral（螺旋）
-从外向内螺旋移动并发射螺旋弹
-- 移动轨迹：螺旋收缩
-- 攻击方式：连续螺旋弹
-- 适用场景：高难度
-
-### 4. figure8（8字形）
-走8字并发射跟踪弹
-- 移动轨迹：8字形
-- 攻击方式：跟踪玩家子弹
-- 适用场景：高难度
-
-### 5. complex（复杂）
-结合多种任务类型的组合行为
-- 第一阶段：入场
-- 第二阶段：扇形弹→圆形弹→螺旋弹
-- 第三阶段：左右移动+连续射击
-- 适用场景：Boss或精英敌人
-
-## 在关卡中使用TaskDemoEnemy
-
-### JSON配置
-
-```json
-{
-  "type": "TaskDemoEnemy",
-  "x": 0,
-  "y": 200,
-  "speed": 2.0,
-  "pattern": "sine",
-  "frame": 60
+```java
+public class AdvancedTaskManager extends TaskManager {
+    // 添加新功能
 }
 ```
 
-**参数说明：**
-- `type`: 必须是"TaskDemoEnemy"
-- `x`, `y`: 初始位置
-- `speed`: 移动速度参数
-- `pattern`: 行为模式（sine/circle/spiral/figure8/complex）
-- `frame`: 生成帧数
+## 8. 示例场景
 
-### 完整关卡示例
-
-参见 `src/user/level_task_demo.json`
-
-这个演示关卡包含：
-- 6个波次
-- 20个敌人
-- 5种不同的行为模式
-- 约1.5分钟的游戏时间
-
-## Task系统的优势
-
-1. **模块化**：每个Task都是独立的，可复用
-2. **可组合**：通过SequenceTask和ParallelTask组合复杂行为
-3. **易扩展**：轻松添加自定义Task
-4. **易维护**：行为逻辑清晰，易于调试
-5. **高性能**：任务管理器自动处理任务生命周期
-
-## 最佳实践
-
-1. **合理使用并行任务**：将独立的行为放在ParallelTask中
-2. **避免任务嵌套过深**：保持层级清晰
-3. **及时重置任务**：使用reset()实现循环行为
-4. **利用自定义Task**：对于复杂行为，创建专用Task
-5. **测试行为**：使用简单关卡测试新的行为模式
-
-## 进阶技巧
-
-### 创建循环行为
+### 8.1 敌人巡逻模式
 
 ```java
-// 方法1：使用自定义Task
-Task loopTask = new BaseTask() {
-    @Override
-    public boolean update(int deltaTime) {
-        // 执行行为
-        doSomething();
-        return false; // 持续执行
-    }
-};
+// 创建巡逻任务
+SequenceTask patrolTask = new SequenceTask();
+patrolTask.addTask(new MoveTask(enemy, 200, 300, 2, true))
+           .addTask(new WaitTask(120))
+           .addTask(new MoveTask(enemy, -200, 300, 2, true))
+           .addTask(new WaitTask(120))
+           .addTask(new BaseTask() {
+               @Override
+               public boolean update(int deltaTime) {
+                   // 重新开始巡逻
+                   enemy.getTaskManager().clearTasks();
+                   enemy.getTaskManager().addTask(patrolTask);
+                   return true;
+               }
+           });
 
-// 方法2：重置任务
-Task loopTask = new BaseTask() {
-    @Override
-    public boolean update(int deltaTime) {
-        doSomething();
-        complete(); // 标记完成
-        return true;
-    }
-    
-    @Override
-    protected void onComplete() {
-        reset(); // 重置自身
-    }
-};
+enemy.getTaskManager().addTask(patrolTask);
 ```
 
-### 动态调整参数
+### 8.2 敌人攻击模式
 
 ```java
-Task adaptiveTask = new BaseTask() {
-    @Override
-    public boolean update(int deltaTime) {
-        float healthPercent = (float)enemy.getHp() / enemy.getMaxHp();
-        float speed = baseSpeed * (1.5f - healthPercent); // 血量越低速度越快
-        // 使用调整后的速度
-        return false;
-    }
-};
+// 创建攻击任务
+SequenceTask attackTask = new SequenceTask();
+attackTask.addTask(new MoveTask(enemy, 0, 200, 3, true))
+           .addTask(new WaitTask(30))
+           .addTask(new ShootTask(enemy, gameCanvas, -10, 5, (float)Math.PI/2, 
+                   Color.RED, 6, 15))
+           .addTask(new WaitTask(60))
+           .addTask(new MoveTask(enemy, 0, 400, 2, true));
+
+enemy.getTaskManager().addTask(attackTask);
 ```
 
-### 条件触发
+## 9. 总结
 
-```java
-Task conditionalTask = new BaseTask() {
-    @Override
-    public boolean update(int deltaTime) {
-        if (someCondition()) {
-            // 执行特定行为
-            executeSpecialMove();
-        }
-        return false;
-    }
-};
-```
+Task机制为JavaSTG游戏引擎提供了灵活的行为管理系统，通过任务化的方式，开发者可以更清晰、更灵活地定义游戏对象的行为。合理使用Task机制，可以大大提高游戏开发的效率和代码的可维护性。
 
-## 总结
+---
 
-Task系统为NewJavaSTG提供了强大而灵活的行为控制机制。通过组合不同的Task，可以轻松创建各种复杂的敌人和弹幕模式。关键在于：
-1. 理解各种Task的特性
-2. 合理组合SequenceTask和ParallelTask
-3. 善用自定义Task
-4. 多测试和调试
-
-继续探索Task系统的无限可能！
+**版本**：1.0
+**更新日期**：2026-01-29
+**适用引擎**：JavaSTG v1.0+

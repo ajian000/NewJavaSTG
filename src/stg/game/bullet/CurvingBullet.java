@@ -1,16 +1,18 @@
 package stg.game.bullet;
 
-import stg.game.enemy.EnemyBullet;
 import java.awt.*;
+import stg.game.enemy.EnemyBullet;
 
 /**
  * 弯曲弹幕类 - EnemyBullet的子类
- * @Time 2026-01-19 带有加速度的弯曲弹幕
+ * @since 2026-01-29 带有加速度的弯曲弹幕
  */
 public class CurvingBullet extends EnemyBullet {
-	private float ax; // X方向加速度
-	private float ay; // Y方向加速度
-	private float maxSpeed; // 最大速度
+	private static final float DIAMOND_WIDTH_RATIO = 0.7f;
+	
+	private float ax;
+	private float ay;
+	private float maxSpeed;
 
 	/**
 	 * 构造函数
@@ -44,46 +46,40 @@ public class CurvingBullet extends EnemyBullet {
 	public CurvingBullet(float x, float y, float vx, float vy, float ax, float ay,
 	                  float size, Color color, float maxSpeed, int damage) {
 		super(x, y, vx, vy, size, color, damage);
+		if (maxSpeed <= 0) {
+			throw new IllegalArgumentException("maxSpeed must be positive");
+		}
 		this.ax = ax;
 		this.ay = ay;
 		this.maxSpeed = maxSpeed;
 	}
 
-	/**
-	 * @Time 2026-01-19 重写update方法,添加加速度逻辑
-	 */
 	@Override
 	public void update() {
-		// 应用加速度
+		super.update();
+		
 		vx += ax;
 		vy += ay;
 
-		// 限制最大速度
-		float currentSpeed = (float)Math.sqrt(vx * vx + vy * vy);
-		if (currentSpeed > maxSpeed) {
+		float speedSquared = vx * vx + vy * vy;
+		float maxSpeedSquared = maxSpeed * maxSpeed;
+		if (speedSquared > maxSpeedSquared) {
+			float currentSpeed = (float)Math.sqrt(speedSquared);
 			float scale = maxSpeed / currentSpeed;
 			vx *= scale;
 			vy *= scale;
 		}
-
-		// 更新位置
-		x += vx;
-		y += vy;
 	}
 
-	/**
-	 * @Time 2026-01-19 重写渲染方法,绘制旋转效果
-	 */
 	@Override
 	public void render(Graphics2D g) {
 		g.setColor(color);
 
-		// 绘制旋转的菱形
 		int[] xPoints = {
 			(int)x,
-			(int)(x + size * 0.7f),
+			(int)(x + size * DIAMOND_WIDTH_RATIO),
 			(int)x,
-			(int)(x - size * 0.7f)
+			(int)(x - size * DIAMOND_WIDTH_RATIO)
 		};
 		int[] yPoints = {
 			(int)(y - size),
@@ -92,5 +88,32 @@ public class CurvingBullet extends EnemyBullet {
 			(int)y
 		};
 		g.fillPolygon(xPoints, yPoints, 4);
+	}
+
+	public float getAx() {
+		return ax;
+	}
+
+	public void setAx(float ax) {
+		this.ax = ax;
+	}
+
+	public float getAy() {
+		return ay;
+	}
+
+	public void setAy(float ay) {
+		this.ay = ay;
+	}
+
+	public float getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	public void setMaxSpeed(float maxSpeed) {
+		if (maxSpeed <= 0) {
+			throw new IllegalArgumentException("maxSpeed must be positive");
+		}
+		this.maxSpeed = maxSpeed;
 	}
 }

@@ -5,7 +5,7 @@ import java.awt.Color;
 /**
  * 简单子弹类 - 提供空的task实现
  * 用于不需要特殊task行为的子弹
- * @Time 2026-01-23 创建默认实现
+ * @since 2026-01-23 创建默认实现
  */
 public class SimpleBullet extends Bullet {
 
@@ -22,11 +22,5 @@ public class SimpleBullet extends Bullet {
 		super(x, y, vx, vy, size, color);
 	}
 
-	/**
-	 * 简单子弹不需要特殊的独立线程逻辑
-	 * 保留空的task方法以兼容父类设计
-	 */
-	protected void task() {
-		// 空实现，不需要特殊行为
-	}
+
 }

@@ -5,7 +5,7 @@ import java.awt.*;
 
 /**
  * 敌方子弹类 - 继承自Bullet,所有敌方弹幕的基类
- * @Time 2026-01-19
+ * @since 2026-01-29
  */
 public class EnemyBullet extends Bullet {
 	protected int damage; // 伤害值

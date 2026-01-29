@@ -4,11 +4,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import stg.game.bullet.SimpleBullet;
-import stg.game.task.TaskManager;
 import stg.game.ui.GameCanvas;
 
 /**
  * 玩家类 - 自机角色
+ * @since 2026-01-19
  */
 public class Player {
 	private float x; // X坐标
@@ -24,18 +24,17 @@ public class Player {
 	private boolean shooting; // 射击标志
 	private int shootCooldown; // 射击冷却时间
 	private int shootInterval = 1;
-	private int respawnTimer; // @Time 2026-01-19 重生计时器
-	private int respawnTime = 60; // @Time 2026-01-19 重生等待时间(帧数)
-	private float spawnX; // @Time 2026-01-19 重生X坐标
-	private float spawnY; // @Time 2026-01-19 重生Y坐标
-	private boolean respawning; // @Time 2026-01-19 重生动画标志
-	private float respawnSpeed; // @Time 2026-01-19 重生移动速度
+	private int respawnTimer; // @since 2026-01-19 重生计时器
+	private int respawnTime = 60; // @since 2026-01-19 重生等待时间(帧数)
+	private float spawnX; // @since 2026-01-19 重生X坐标
+	private float spawnY; // @since 2026-01-19 重生Y坐标
+	private boolean respawning; // @since 2026-01-19 重生动画标志
+	private float respawnSpeed; // @since 2026-01-19 重生移动速度
 	private float hitboxRadius; // 受击判定半径
 	private int invincibleTimer; // 无敌时间计时器(帧数)
 	private int invincibleTime = 120; // 无敌时间(120帧=2秒)
-	protected int bulletDamage = 2; // @Time 2026-01-23 子弹伤害，DPS = (2 × 2 × 60) / 2 = 120
+	protected int bulletDamage = 2; // @since 2026-01-23 子弹伤害，DPS = (2 × 2 × 60) / 2 = 120
 	protected List<Option> options; // 子机列表
-	protected TaskManager taskManager; // 任务管理器
 
 	public Player() {
 		this(0, 0, 5.0f, 2.0f, 20, null);
@@ -63,23 +62,42 @@ public class Player {
 		this.respawning = false;
 		this.respawnSpeed = 8.0f;
 		this.hitboxRadius = 2.0f;
-		this.invincibleTimer = invincibleTime; // @Time 2026-01-23 初始无敌时间
+		this.invincibleTimer = invincibleTime; // @since 2026-01-23 初始无敌时间
 		this.options = new ArrayList<>(); // 初始化子机列表
-		this.taskManager = new TaskManager(); // 初始化任务管理器
-		initTasks(); // 初始化任务
+		initBehavior();
 	}
 
 	/**
-	 * 更新玩家状态 - @Time 2026-01-19 使用中心原点坐标系
-	 * 坐标系: 右上角(+,+),左下角(-,-)
+	 * 初始化行为参数
+	 * 在构造函数中调用，用于初始化行为参数
 	 */
-	public void update() {
-		// 更新任务管理器
-		if (taskManager != null) {
-			taskManager.update(1);
-		}
+	protected void initBehavior() {
+		// 子类可以重写此方法初始化行为参数
+	}
 
-		// @Time 2026-01-19 处理重生等待计时
+	/**
+	 * 实现每帧的自定义更新逻辑
+	 */
+	protected void onUpdate() {
+		// 子类可以重写此方法实现每帧的自定义更新逻辑
+	}
+
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	protected void onMove() {
+		// 子类可以重写此方法实现自定义移动逻辑
+	}
+
+	/**
+ * 更新玩家状态 - @since 2026-01-19 使用中心原点坐标系
+ * 坐标系: 右上角(+,+),左下角(-,-)
+ */
+	public void update() {
+		// 调用自定义更新逻辑
+		onUpdate();
+
+		// @since 2026-01-19 处理重生等待计时
 		if (respawnTimer > 0) {
 			respawnTimer--;
 			if (respawnTimer == 0) {
@@ -93,8 +111,11 @@ public class Player {
 			return;
 		}
 
-		// @Time 2026-01-19 处理重生动画
+		// @since 2026-01-19 处理重生动画
 		if (respawning) {
+			// 调用自定义移动逻辑
+			onMove();
+
 			// 更新位置
 			y += vy;
 
@@ -103,11 +124,14 @@ public class Player {
 				y = spawnY;
 				respawning = false;
 				vy = 0;
-				invincibleTimer = invincibleTime; // @Time 2026-01-23 重生后获得无敌时间
+				invincibleTimer = invincibleTime; // @since 2026-01-23 重生后获得无敌时间
 				System.out.println("Player respawned at: (" + x + ", " + y + ") with " + invincibleTime + " frames invincible");
 			}
 			return; // 重生动画期间不接受玩家输入
 		}
+
+		// 调用自定义移动逻辑
+		onMove();
 
 		// 更新位置
 		x += vx;
@@ -121,7 +145,7 @@ public class Player {
 		float bottomBound = -canvasHeight / 2.0f;
 		float topBound = canvasHeight / 2.0f;
 
-		// @Time 2026-01-19 边界限制(中心原点坐标系,右上角(+,+),左下角(-,-))
+		// @since 2026-01-19 边界限制(中心原点坐标系,右上角(+,+),左下角(-,-))
 		if (x < leftBound + size) x = leftBound + size;
 		if (x > rightBound - size) x = rightBound - size;
 		if (y < bottomBound + size) y = bottomBound + size;
@@ -132,7 +156,7 @@ public class Player {
 			shootCooldown--;
 		}
 
-		// @Time 2026-01-23 更新无敌时间计时器
+		// @since 2026-01-23 更新无敌时间计时器
 		if (invincibleTimer > 0) {
 			invincibleTimer--;
 		}
@@ -151,9 +175,9 @@ public class Player {
 	}
 
 	/**
-	 * 发射子弹 - @Time 2026-01-19 向上发射(Y正方向)
-	 * 子类可重写此方法实现不同的射击模式
-	 */
+ * 发射子弹 - @since 2026-01-19 向上发射(Y正方向)
+ * 子类可重写此方法实现不同的射击模式
+ */
 	protected void shoot() {
 		float bulletSpeed = 46.0f;
 		Color bulletColor = Color.WHITE; // 子弹颜色
@@ -163,7 +187,7 @@ public class Player {
 		SimpleBullet bullet1 = new SimpleBullet(x - 5, y, 0, bulletSpeed, bulletSize, bulletColor);
 		SimpleBullet bullet2 = new SimpleBullet(x + 5, y, 0, bulletSpeed, bulletSize, bulletColor);
 
-		// @Time 2026-01-19 设置画布引用
+		// @since 2026-01-19 设置画布引用
 		bullet1.setGameCanvas(gameCanvas);
 		bullet2.setGameCanvas(gameCanvas);
 
@@ -184,7 +208,7 @@ public class Player {
 		// 开启抗锯齿
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		// @Time 2026-01-23 无敌闪烁效果：每5帧闪烁一次
+		// @since 2026-01-23 无敌闪烁效果：每5帧闪烁一次
 		boolean shouldRender = true;
 		if (invincibleTimer > 0) {
 			int flashPhase = invincibleTimer % 10; // 10帧为一个闪烁周期
@@ -214,15 +238,15 @@ public class Player {
 	}
 
 	/**
-	 * 向上移动 - @Time 2026-01-19 Y正方向
-	 */
+ * 向上移动 - @since 2026-01-19 Y正方向
+ */
 	public void moveUp() {
 		vy = slowMode ? speedSlow : speed;
 	}
 
 	/**
-	 * 向下移动 - @Time 2026-01-19 Y负方向
-	 */
+ * 向下移动 - @since 2026-01-19 Y负方向
+ */
 	public void moveDown() {
 		vy = slowMode ? -speedSlow : -speed;
 	}
@@ -319,7 +343,7 @@ public class Player {
 	public void setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
-		// @Time 2026-01-19 保存初始位置用于重生
+		// @since 2026-01-19 保存初始位置用于重生
 		this.spawnX = x;
 		this.spawnY = y;
 	}
@@ -389,9 +413,9 @@ public class Player {
 	}
 
 	/**
-	 * @Time 2026-01-19 受击处理
-	 * 玩家中弹后立即移到屏幕下方,然后等待重生
-	 */
+ * @since 2026-01-19 受击处理
+ * 玩家中弹后立即移到屏幕下方,然后等待重生
+ */
 	public void onHit() {
 		// 立即移动到屏幕下方
 		int canvasHeight = gameCanvas.getHeight();
@@ -406,22 +430,7 @@ public class Player {
 		System.out.println("Player hit! Moved off-screen. Respawn animation in " + respawnTime + " frames");
 	}
 
-	/**
-	 * 初始化任务（子类可重写以添加自定义任务）
-	 * @Time 2026-01-29
-	 */
-	protected void initTasks() {
-		// 默认实现为空，子类可重写添加自定义任务
-	}
 
-	/**
-	 * 获取任务管理器
-	 * @return 任务管理器
-	 * @Time 2026-01-29
-	 */
-	public TaskManager getTaskManager() {
-		return taskManager;
-	}
 
 	/**
 	 * 重置玩家状态（用于重新开始游戏）
@@ -434,14 +443,11 @@ public class Player {
 		shootCooldown = 0;
 		respawnTimer = 0;
 		respawning = false;
-		invincibleTimer = invincibleTime; // @Time 2026-01-23 重置时获得无敌时间
+		invincibleTimer = invincibleTime; // @since 2026-01-23 重置时获得无敌时间
 		// x 和 y 由 GameCanvas.resetGame() 设置
 
-		// 重置任务管理器
-		if (taskManager != null) {
-			taskManager.clearTasks();
-			initTasks();
-		}
+		// 初始化行为参数
+		initBehavior();
 
 		// 重置所有子机
 		for (Option option : options) {
@@ -450,25 +456,25 @@ public class Player {
 	}
 
 	/**
-	 * @Time 2026-01-23 检查玩家是否处于无敌状态
-	 * @return 是否无敌
-	 */
+ * @since 2026-01-23 检查玩家是否处于无敌状态
+ * @return 是否无敌
+ */
 	public boolean isInvincible() {
 		return invincibleTimer > 0;
 	}
 
 	/**
-	 * @Time 2026-01-23 获取无敌计时器剩余帧数
-	 * @return 无敌剩余帧数
-	 */
+ * @since 2026-01-23 获取无敌计时器剩余帧数
+ * @return 无敌剩余帧数
+ */
 	protected int getInvincibleTimer() {
 		return invincibleTimer;
 	}
 
 	/**
-	 * @Time 2026-01-23 设置无敌时间
-	 * @param frames 无敌帧数
-	 */
+ * @since 2026-01-23 设置无敌时间
+ * @param frames 无敌帧数
+ */
 	public void setInvincibleTime(int frames) {
 		this.invincibleTime = frames;
 	}

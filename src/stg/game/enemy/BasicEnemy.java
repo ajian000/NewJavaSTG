@@ -2,7 +2,6 @@
 
 import java.awt.*;
 import stg.game.bullet.CircularBullet;
-import stg.game.task.*;
 import stg.game.ui.GameCanvas;
 
 /**
@@ -25,61 +24,32 @@ public class BasicEnemy extends Enemy {
 	}
 
 	/**
-	 * 初始化任务
+	 * 初始化行为参数
 	 */
 	@Override
-	protected void initTasks() {
-		// 创建移动和射击的序列任务
-		SequenceTask mainTask = new SequenceTask();
-		
-		// 添加移动任务
-		mainTask.addTask(new MoveTask(this, 200, getY(), moveSpeed, true));
-		mainTask.addTask(new WaitTask(60));
-		mainTask.addTask(new MoveTask(this, -200, getY(), moveSpeed, true));
-		mainTask.addTask(new WaitTask(60));
-		
-		// 添加射击任务
-		if (gameCanvas != null) {
-			ShootTask shootTask = new ShootTask(this, gameCanvas, -10, 3, (float)Math.PI/4, 
-					Color.CYAN, 5, 10);
-			mainTask.addTask(shootTask);
-		} else {
-			// 备用方案
-			mainTask.addTask(new BaseTask() {
-				@Override
-				public boolean update(int deltaTime) {
-					shoot();
-					return true;
-				}
-			});
-		}
-		
-		// 循环执行
-		SequenceTask loopTask = new SequenceTask();
-		loopTask.addTask(mainTask);
-		loopTask.addTask(new BaseTask() {
-			@Override
-			public boolean update(int deltaTime) {
-				// 重新初始化任务
-				if (getTaskManager() != null) {
-					getTaskManager().clearTasks();
-					initTasks();
-				}
-				return true;
-			}
-		});
-		
-		getTaskManager().addTask(loopTask);
+	protected void initBehavior() {
+		// 初始化行为参数
+		vx = moveSpeed;
+		vy = 0;
 	}
 
 	/**
-	 * @Time 2026-01-19 重写update方法,使用任务管理器处理行为
+	 * 实现每帧的自定义更新逻辑
 	 */
 	@Override
-	public void update() {
-		super.update();
+	protected void onUpdate() {
+		// 射击逻辑
+		if (frame % 120 == 0) {
+			shoot();
+		}
+	}
 
-		// X轴左右移动逻辑（作为备用）
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	@Override
+	protected void onMove() {
+		// X轴左右移动逻辑
 		if (gameCanvas != null) {
 			int canvasWidth = gameCanvas.getWidth();
 			float leftBound = -canvasWidth / 2.0f + size;
@@ -91,6 +61,14 @@ public class BasicEnemy extends Enemy {
 				vx = -Math.abs(moveSpeed);
 			}
 		}
+	}
+
+	/**
+	 * @Time 2026-01-19 重写update方法
+	 */
+	@Override
+	public void update() {
+		super.update();
 	}
 
 	/**

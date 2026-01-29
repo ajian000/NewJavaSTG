@@ -83,6 +83,6 @@ public class TrackingBullet extends EnemyBullet {
 	/**
 	 * 追踪子弹不需要特殊的独立线程逻辑
 	 */
-	protected void task() {
+	public void task() {
 	}
 }

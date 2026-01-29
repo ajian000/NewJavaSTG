@@ -17,7 +17,6 @@ import stg.game.enemy.OrbitEnemy;
 import stg.game.enemy.RapidFireEnemy;
 import stg.game.enemy.SpiralEnemy;
 import stg.game.enemy.SpreadEnemy;
-import stg.game.enemy.TaskDemoEnemy;
 import stg.game.enemy.TrackingEnemy;
 import stg.game.item.Item;
 import stg.game.laser.*;
@@ -31,15 +30,15 @@ import stg.util.LevelManager;
 
 /**
  * 游戏画布类 - 处理游戏渲染和输入
- * @Time 2026-01-19 使用画布中心原点坐标系
- * @Time 2026-01-20 将类移动到stg.game.ui包
+ * @since 2026-01-19 使用画布中心原点坐标系
+ * @since 2026-01-20 将类移动到stg.game.ui包
  */
 public class GameCanvas extends JPanel implements KeyStateProvider {
 	private static final long serialVersionUID = 1L;
 
 	// 游戏配置常量
 	private static final float PLAYER_START_Y_OFFSET = 40f;
-	private static final int BULLET_DAMAGE = 8; // @Time 2026-01-23 调整基础子弹伤害(目标DPS≈100)
+	private static final int BULLET_DAMAGE = 8; // @since 2026-01-23 调整基础子弹伤害(目标DPS≈100)
 	private static final int WAVE_DELAY = 30;
 	private static final int WAVE_1_END_FRAME = 1800;
 	private static final int WAVE_2_END_FRAME = 3000;
@@ -59,7 +58,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	private CoordinateSystem coordinateSystem;
 	private GameStatusPanel gameStatusPanel;
 
-	// @Time 2026-01-19 按键状态跟踪 - 用于优化按键扫描逻辑
+	// @since 2026-01-19 按键状态跟踪 - 用于优化按键扫描逻辑
 	private boolean upPressed = false;
 	private boolean downPressed = false;
 	private boolean leftPressed = false;
@@ -94,11 +93,11 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		setFocusable(true); // 允许获取焦点
 		players = new ArrayList<>(); // 初始化玩家列表
 		bullets = new ArrayList<>(); // 初始化玩家子弹列表
-		enemyBullets = new ArrayList<>(); // @Time 2026-01-19 初始化敌方子弹列表
-		enemies = new ArrayList<>(); // @Time 2026-01-19 初始化敌人列表
-		enemyLasers = new ArrayList<>(); // @Time 2026-01-20 初始化敌方激光列表
+		enemyBullets = new ArrayList<>(); // @since 2026-01-19 初始化敌方子弹列表
+		enemies = new ArrayList<>(); // @since 2026-01-19 初始化敌人列表
+		enemyLasers = new ArrayList<>(); // @since 2026-01-20 初始化敌方激光列表
 		items = new ArrayList<>(); // 初始化物品列表
-		coordinateSystem = new CoordinateSystem(0, 0); // @Time 2026-01-19 初始化坐标系统
+		coordinateSystem = new CoordinateSystem(0, 0); // @since 2026-01-19 初始化坐标系统
 		spawnedEnemies = new ArrayList<>(); // 初始化已生成敌人列表
 
 		setupInput(); // 设置键盘输入
@@ -106,8 +105,8 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
-	 * @Time 2026-01-19 更新坐标系统尺寸
-	 */
+ * @since 2026-01-19 更新坐标系统尺寸
+ */
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
@@ -117,23 +116,23 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
-	 * @Time 2026-01-19 获取坐标系统
-	 */
+ * @since 2026-01-19 获取坐标系统
+ */
 	public CoordinateSystem getCoordinateSystem() {
 		return coordinateSystem;
 	}
 
 	/**
-	 * @Time 2026-01-24 设置游戏状态面板
-	 */
+ * @since 2026-01-24 设置游戏状态面板
+ */
 	public void setGameStatusPanel(GameStatusPanel gameStatusPanel) {
 		this.gameStatusPanel = gameStatusPanel;
 	}
 
 	/**
-	 * 获取游戏状态面板
-	 * @Time 2026-01-24
-	 */
+ * 获取游戏状态面板
+ * @since 2026-01-24
+ */
 	public GameStatusPanel getGameStatusPanel() {
 		return gameStatusPanel;
 	}
@@ -170,19 +169,19 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
-	 * @Time 2026-01-19 将中心原点坐标转换为屏幕坐标
-	 * 坐标系: 右上角为(+,+),左下角为(-,-)
-	 * @param x 中心原点X坐标(向右为正)
-	 * @param y 中心原点Y坐标(向上为正)
-	 * @return 屏幕坐标 [screenX, screenY]
-	 */
+ * @since 2026-01-19 将中心原点坐标转换为屏幕坐标
+ * 坐标系: 右上角为(+,+),左下角为(-,-)
+ * @param x 中心原点X坐标(向右为正)
+ * @param y 中心原点Y坐标(向上为正)
+ * @return 屏幕坐标 [screenX, screenY]
+ */
 	public float[] toScreenCoords(float x, float y) {
 		return coordinateSystem.toScreenCoords(x, y);
 	}
 
 	/**
-	 * 设置键盘输入监听 - @Time 2026-01-19 优化按键扫描,支持同时按键检测
-	 */
+ * 设置键盘输入监听 - @since 2026-01-19 优化按键扫描,支持同时按键检测
+ */
 	private void setupInput() {
 		addKeyListener(new KeyAdapter() {
 			@Override
@@ -213,7 +212,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 					return;
 				}
 
-				// @Time 2026-01-19 更新按键状态
+				// @since 2026-01-19 更新按键状态
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP:
 						upPressed = true;
@@ -244,7 +243,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 						break;
 				}
 
-				// @Time 2026-01-19 根据按键状态更新玩家移动方向
+				// @since 2026-01-19 根据按键状态更新玩家移动方向
 				updatePlayerMovement();
 			}
 
@@ -253,7 +252,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 				// 暂停时不处理按键释放
 				if (paused) return;
 
-				// @Time 2026-01-19 更新按键状态
+				// @since 2026-01-19 更新按键状态
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP:
 						upPressed = false;
@@ -284,7 +283,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 						break;
 				}
 
-				// @Time 2026-01-19 根据按键状态更新玩家移动方向
+				// @since 2026-01-19 根据按键状态更新玩家移动方向
 				updatePlayerMovement();
 			}
 		});
@@ -337,13 +336,13 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
-	 * @Time 2026-01-19 根据当前按键状态更新玩家移动方向
-	 * 同时按下相反方向键时保持静止
-	 */
+ * @since 2026-01-19 根据当前按键状态更新玩家移动方向
+ * 同时按下相反方向键时保持静止
+ */
 	private void updatePlayerMovement() {
 		if (player == null) return;
 
-		// @Time 2026-01-19 水平方向:同时按下左右键时保持静止
+		// @since 2026-01-19 水平方向:同时按下左右键时保持静止
 		if (leftPressed && rightPressed) {
 			player.stopHorizontal();
 		} else if (leftPressed) {
@@ -354,7 +353,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			player.stopHorizontal();
 		}
 
-		// @Time 2026-01-19 垂直方向:同时按下上下键时保持静止
+		// @since 2026-01-19 垂直方向:同时按下上下键时保持静止
 		if (upPressed && downPressed) {
 			player.stopVertical();
 		} else if (upPressed) {
@@ -444,8 +443,8 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
-	 * 更新游戏状态 - @Time 2026-01-19 更新敌人系统
-	 */
+ * 更新游戏状态 - @since 2026-01-19 更新敌人系统
+ */
 	public void update() {
 		// 暂停时不更新游戏逻辑
 		if (paused) return;
@@ -463,8 +462,8 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		// 更新关卡逻辑
 		updateLevel();
 
-		// @Time 2026-01-19 更新敌人位置,移除死亡或越界的敌人
-		// @Time 2026-01-19 只有当画布尺寸确定后才检查越界
+		// @since 2026-01-19 更新敌人位置,移除死亡或越界的敌人
+		// @since 2026-01-19 只有当画布尺寸确定后才检查越界
 		int canvasWidth = getWidth();
 		int canvasHeight = getHeight();
 		boolean canvasReady = canvasWidth > 0 && canvasHeight > 0;
@@ -495,7 +494,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			}
 		}
 
-		// @Time 2026-01-19 更新敌方子弹位置,移除越界子弹
+		// @since 2026-01-19 更新敌方子弹位置,移除越界子弹
 		Iterator<Bullet> enemyBulletIterator = enemyBullets.iterator();
 		while (enemyBulletIterator.hasNext()) {
 			Bullet bullet = enemyBulletIterator.next();
@@ -505,7 +504,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			}
 		}
 
-		// @Time 2026-01-20 更新敌方激光位置,移除越界激光
+		// @since 2026-01-20 更新敌方激光位置,移除越界激光
 		Iterator<EnemyLaser> laserIterator = enemyLasers.iterator();
 		while (laserIterator.hasNext()) {
 			EnemyLaser laser = laserIterator.next();
@@ -525,7 +524,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			}
 		}
 
-		// @Time 2026-01-19 碰撞检测
+		// @since 2026-01-19 碰撞检测
 		if (canvasReady) {
 			checkCollisions();
 		}
@@ -535,16 +534,16 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
-	 * 绘制游戏画面 - @Time 2026-01-19 渲染敌人系统
-	 * @param g 图形上下文
-	 */
+ * 绘制游戏画面 - @since 2026-01-19 渲染敌人系统
+ * @param g 图形上下文
+ */
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		// @Time 2026-01-19 绘制敌人
+		// @since 2026-01-19 绘制敌人
 		for (Enemy enemy : enemies) {
 			enemy.render(g2d);
 		}
@@ -554,7 +553,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			bullet.render(g2d);
 		}
 
-		// @Time 2026-01-20 绘制敌方激光
+		// @since 2026-01-20 绘制敌方激光
 		for (EnemyLaser laser : enemyLasers) {
 			laser.render(g);
 		}
@@ -642,41 +641,41 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
-	 * @Time 2026-01-19 添加敌方子弹
-	 * @param bullet 敌方子弹对象
-	 */
+ * @since 2026-01-19 添加敌方子弹
+ * @param bullet 敌方子弹对象
+ */
 	public void addEnemyBullet(EnemyBullet bullet) {
 		enemyBullets.add(bullet);
 	}
 
 	/**
-	 * @Time 2026-01-19 添加敌人
-	 * @param enemy 敌人对象
-	 */
+ * @since 2026-01-19 添加敌人
+ * @param enemy 敌人对象
+ */
 	public void addEnemy(Enemy enemy) {
 		enemies.add(enemy);
 	}
 
 	/**
-	 * @Time 2026-01-19 获取敌人列表
-	 * @return 敌人列表
-	 */
+ * @since 2026-01-19 获取敌人列表
+ * @return 敌人列表
+ */
 	public List<Enemy> getEnemies() {
 		return enemies;
 	}
 
 	/**
-	 * @Time 2026-01-19 获取敌方子弹列表
-	 * @return 敌方子弹列表
-	 */
+ * @since 2026-01-19 获取敌方子弹列表
+ * @return 敌方子弹列表
+ */
 	public List<Bullet> getEnemyBullets() {
 		return enemyBullets;
 	}
 
 	/**
-	 * @Time 2026-01-19 获取玩家子弹列表
-	 * @return 玩家子弹列表
-	 */
+ * @since 2026-01-19 获取玩家子弹列表
+ * @return 玩家子弹列表
+ */
 	public List<Bullet> getPlayerBullets() {
 		return bullets;
 	}
@@ -714,9 +713,9 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
-	 * @Time 2026-01-19 碰撞检测
-	 * 检测玩家子弹与敌人的碰撞,敌方子弹与玩家的碰撞
-	 */
+ * @since 2026-01-19 碰撞检测
+ * 检测玩家子弹与敌人的碰撞,敌方子弹与玩家的碰撞
+ */
 	private void checkCollisions() {
 		// 检测玩家子弹与敌人的碰撞
 		Iterator<Bullet> bulletIterator = bullets.iterator();
@@ -728,7 +727,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 				Enemy enemy = enemyIterator.next();
 
 				if (checkCollision(bullet, enemy)) {
-					// @Time 2026-01-23 使用子弹的伤害值，如果为0则使用默认伤害
+					// @since 2026-01-23 使用子弹的伤害值，如果为0则使用默认伤害
 					int damage = bullet.getDamage() > 0 ? bullet.getDamage() : BULLET_DAMAGE;
 					enemy.takeDamage(damage);
 					bulletIterator.remove();
@@ -744,7 +743,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 
 			if (player != null && checkCollision(bullet, player)) {
 				// 敌方子弹击中玩家
-				// @Time 2026-01-23 无敌状态下不受伤害
+				// @since 2026-01-23 无敌状态下不受伤害
 				if (!player.isInvincible()) {
 					player.onHit();
 				}
@@ -752,7 +751,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			}
 		}
 
-		// @Time 2026-01-20 检测敌方激光与玩家的碰撞
+		// @since 2026-01-20 检测敌方激光与玩家的碰撞
 		Iterator<EnemyLaser> laserIterator = enemyLasers.iterator();
 		while (laserIterator.hasNext()) {
 			EnemyLaser laser = laserIterator.next();
@@ -760,7 +759,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			// 检查碰撞（考虑冷却时间）
 			if (player != null && laser.canHit() && laser.checkCollision(player.getX(), player.getY())) {
 				// 敌方激光击中玩家
-				// @Time 2026-01-23 无敌状态下不受伤害
+				// @since 2026-01-23 无敌状态下不受伤害
 				if (!player.isInvincible()) {
 					player.onHit();
 				}
@@ -789,11 +788,11 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
-	 * @Time 2026-01-19 碰撞检测 - 圆形碰撞
-	 * @param obj1 对象1(子弹)
-	 * @param obj2 对象2(敌人或玩家)
-	 * @return 是否碰撞
-	 */
+ * @since 2026-01-19 碰撞检测 - 圆形碰撞
+ * @param obj1 对象1(子弹)
+ * @param obj2 对象2(敌人或玩家)
+ * @return 是否碰撞
+ */
 	private boolean checkCollision(Object obj1, Object obj2) {
 		float x1, y1, size1;
 		float x2, y2, size2;
@@ -803,7 +802,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			Bullet bullet = (Bullet)obj1;
 			x1 = bullet.getX();
 			y1 = bullet.getY();
-			// @Time 2026-01-23 使用碰撞判定半径而非渲染大小，避免高速子弹穿透
+			// @since 2026-01-23 使用碰撞判定半径而非渲染大小，避免高速子弹穿透
 			size1 = bullet.getHitboxRadius() > 0 ? bullet.getHitboxRadius() : bullet.getSize();
 		} else if (obj1 instanceof EnemyBullet) {
 			EnemyBullet bullet = (EnemyBullet)obj1;
@@ -999,12 +998,12 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 				enemy = new BasicEnemy(data.getX(), data.getY(), data.getSpeed(), this);
 				break;
 			case "LaserShootingEnemy":
-				int laserPattern = 2;
+				int pattern = 2;
 				if (data.getParams().containsKey("pattern")) {
-					laserPattern = (Integer)data.getParams().get("pattern");
+					pattern = (Integer)data.getParams().get("pattern");
 				}
-				System.out.println("【LaserShootingEnemy】攻击模式: " + laserPattern);
-				enemy = new LaserShootingEnemy(data.getX(), data.getY(), data.getSpeed(), this, laserPattern);
+				System.out.println("【LaserShootingEnemy】攻击模式: " + pattern);
+				enemy = new LaserShootingEnemy(data.getX(), data.getY(), data.getSpeed(), this, pattern);
 				break;
 			case "SpiralEnemy":
 				enemy = new SpiralEnemy(data.getX(), data.getY(), data.getSpeed(), this);
@@ -1024,14 +1023,6 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 					orbitRadius = ((Number)data.getParams().get("orbitRadius")).floatValue();
 				}
 				enemy = new OrbitEnemy(data.getX(), data.getY(), orbitRadius, data.getSpeed(), this);
-				break;
-			case "TaskDemoEnemy":
-				String pattern = "sine";
-				if (data.getParams().containsKey("pattern")) {
-					pattern = data.getParams().get("pattern").toString();
-				}
-				System.out.println("【TaskDemoEnemy】行为模式: " + pattern);
-				enemy = new TaskDemoEnemy(data.getX(), data.getY(), data.getSpeed(), pattern, this);
 				break;
 			default:
 				System.out.println("【警告】未知敌人类型: " + type + ", 使用BasicEnemy");

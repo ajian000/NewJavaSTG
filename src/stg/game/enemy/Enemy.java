@@ -1,12 +1,11 @@
 package stg.game.enemy;
 
 import java.awt.*;
-import stg.game.task.TaskManager;
 import stg.game.ui.GameCanvas;
 
 /**
  * 敌方类 - 所有敌人的基类
- * @Time 2026-01-19
+ * @since 2026-01-19
  */
 public class Enemy {
 	protected float x; // X坐标
@@ -19,7 +18,7 @@ public class Enemy {
 	protected int maxHp; // 最大生命值
 	protected GameCanvas gameCanvas; // 游戏画布引用
 	protected boolean alive; // 存活状态
-	protected TaskManager taskManager; // 任务管理器
+	protected int frame; // 帧计数器
 
 	public Enemy(int x, int y) {
 		this(x, y, 0, 0, 20, Color.BLUE, 10, null);
@@ -40,26 +39,44 @@ public class Enemy {
 		this.maxHp = hp;
 		this.gameCanvas = gameCanvas;
 		this.alive = true;
-		this.taskManager = new TaskManager();
-		initTasks();
+		this.frame = 0;
+		initBehavior();
 	}
 
 	/**
-	 * 初始化任务 - 子类可重写
+	 * 初始化行为参数
+	 * 在构造函数中调用，用于初始化行为参数
 	 */
-	protected void initTasks() {
-		// 子类可以重写此方法添加初始任务
+	protected void initBehavior() {
+		// 子类可以重写此方法初始化行为参数
 	}
 
 	/**
-	 * 更新敌人状态
-	 * @Time 2026-01-19 基类提供基本移动和存活检测
+	 * 实现每帧的自定义更新逻辑
 	 */
+	protected void onUpdate() {
+		// 子类可以重写此方法实现每帧的自定义更新逻辑
+	}
+
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	protected void onMove() {
+		// 子类可以重写此方法实现自定义移动逻辑
+	}
+
+	/**
+ * 更新敌人状态
+ * @since 2026-01-19 基类提供基本移动和存活检测
+ */
 	public void update() {
-		// 更新任务
-		if (taskManager != null) {
-			taskManager.update(1);
-		}
+		frame++;
+
+		// 调用自定义更新逻辑
+		onUpdate();
+
+		// 调用自定义移动逻辑
+		onMove();
 
 		// 更新位置
 		x += vx;
@@ -69,15 +86,13 @@ public class Enemy {
 		if (hp <= 0) {
 			alive = false;
 		}
-
-		// 子类可重写此方法添加特定行为
 	}
 
 	/**
-	 * 渲染敌人 - @Time 2026-01-19 使用中心原点坐标系
-	 * @param g 图形上下文
-	 * @Time 2026-01-19 基类提供基本渲染,子类可自定义渲染
-	 */
+ * 渲染敌人 - @since 2026-01-19 使用中心原点坐标系
+ * @param g 图形上下文
+ * @since 2026-01-19 基类提供基本渲染,子类可自定义渲染
+ */
 	public void render(Graphics2D g) {
 		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
 		int canvasHeight = gameCanvas != null ? gameCanvas.getHeight() : 921;
@@ -91,12 +106,12 @@ public class Enemy {
 	}
 
 	/**
-	 * 渲染生命值条 - @Time 2026-01-19 使用屏幕坐标
-	 * @param g 图形上下文
-	 * @param screenX 屏幕X坐标
-	 * @param screenY 屏幕Y坐标
-	 * @Time 2026-01-19 在敌人上方显示生命值
-	 */
+ * 渲染生命值条 - @since 2026-01-19 使用屏幕坐标
+ * @param g 图形上下文
+ * @param screenX 屏幕X坐标
+ * @param screenY 屏幕Y坐标
+ * @since 2026-01-19 在敌人上方显示生命值
+ */
 	protected void renderHealthBar(Graphics2D g, float screenX, float screenY) {
 		int barWidth = (int)(size * 2);
 		int barHeight = 4;
@@ -114,10 +129,10 @@ public class Enemy {
 	}
 
 	/**
-	 * 受到伤害
-	 * @param damage 伤害值
-	 * @Time 2026-01-19 处理伤害逻辑
-	 */
+ * 受到伤害
+ * @param damage 伤害值
+ * @since 2026-01-19 处理伤害逻辑
+ */
 	public void takeDamage(int damage) {
 		hp -= damage;
 		if (hp <= 0) {
@@ -128,19 +143,19 @@ public class Enemy {
 	}
 
 	/**
-	 * 死亡回调 - 子类可重写
-	 * @Time 2026-01-19 敌人死亡时触发
-	 */
+ * 死亡回调 - 子类可重写
+ * @since 2026-01-19 敌人死亡时触发
+ */
 	protected void onDeath() {
 		// 子类可以重写此方法添加死亡特效、掉落物等
 	}
 
 	/**
-	 * 检查是否越界 - @Time 2026-01-19 使用中心原点坐标系
-	 * @param canvasWidth 画布宽度
-	 * @param canvasHeight 画布高度
-	 * @return 是否越界
-	 */
+ * 检查是否越界 - @since 2026-01-19 使用中心原点坐标系
+ * @param canvasWidth 画布宽度
+ * @param canvasHeight 画布高度
+ * @return 是否越界
+ */
 	public boolean isOutOfBounds(int canvasWidth, int canvasHeight) {
 		if (canvasWidth <= 0 || canvasHeight <= 0) {
 			return false;
@@ -190,20 +205,20 @@ public class Enemy {
 	}
 
 	/**
-	 * @Time 2026-01-19 移动到指定坐标
-	 * @param x 目标X坐标
-	 * @param y 目标Y坐标
-	 */
+ * @since 2026-01-19 移动到指定坐标
+ * @param x 目标X坐标
+ * @param y 目标Y坐标
+ */
 	public void moveTo(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
 
 	/**
-	 * @Time 2026-01-19 在现有坐标基础上增加对应值
-	 * @param dx X方向增量
-	 * @param dy Y方向增量
-	 */
+ * @since 2026-01-19 在现有坐标基础上增加对应值
+ * @param dx X方向增量
+ * @param dy Y方向增量
+ */
 	public void moveOn(float dx, float dy) {
 		this.x += dx;
 		this.y += dy;
@@ -250,30 +265,11 @@ public class Enemy {
 	}
 
 	/**
-	 * 获取任务管理器
-	 * @return 任务管理器
-	 */
-	public TaskManager getTaskManager() {
-		return taskManager;
-	}
-
-	/**
-	 * 设置任务管理器
-	 * @param taskManager 任务管理器
-	 */
-	public void setTaskManager(TaskManager taskManager) {
-		this.taskManager = taskManager;
-	}
-
-	/**
 	 * 重置敌人状态
 	 */
 	public void reset() {
 		this.hp = maxHp;
 		this.alive = true;
-		if (taskManager != null) {
-			taskManager.clearTasks();
-			initTasks();
-		}
+		initBehavior();
 	}
 }

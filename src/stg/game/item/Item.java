@@ -1,14 +1,13 @@
 package stg.game.item;
 
 import java.awt.*;
-import stg.game.task.TaskManager;
 import stg.game.ui.GameCanvas;
 
 /**
  * 物品类 - 所有物品的基类
  * 包括道具、掉落物、特殊物品等
  */
-public class Item {
+public abstract class Item {
 	protected float x; // X坐标
 	protected float y; // Y坐标
 	protected float vx; // X方向速度
@@ -19,7 +18,6 @@ public class Item {
 	protected boolean active; // 激活状态
 	protected float hitboxRadius; // 碰撞判定半径
 	protected int frame; // 帧计数器
-	protected TaskManager taskManager; // 任务管理器
 
 	/**
 	 * 构造函数
@@ -78,9 +76,24 @@ public class Item {
 		this.active = true;
 		this.hitboxRadius = size;
 		this.frame = 0;
-		this.taskManager = new TaskManager(); // 初始化任务管理器
-		initTasks(); // 初始化任务
+		initBehavior();
 	}
+
+	/**
+	 * 初始化行为参数
+	 * 在构造函数中调用，用于初始化行为参数
+	 */
+	protected abstract void initBehavior();
+
+	/**
+	 * 实现每帧的自定义更新逻辑
+	 */
+	protected abstract void onUpdate();
+
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	protected abstract void onMove();
 
 	/**
 	 * 更新物品状态
@@ -89,10 +102,11 @@ public class Item {
 	public void update() {
 		frame++;
 
-		// 更新任务管理器
-		if (taskManager != null) {
-			taskManager.update(1);
-		}
+		// 调用自定义更新逻辑
+		onUpdate();
+
+		// 调用自定义移动逻辑
+		onMove();
 
 		x += vx;
 		y += vy;
@@ -262,33 +276,11 @@ public class Item {
 	}
 
 	/**
-	 * 初始化任务（子类可重写以添加自定义任务）
-	 * @Time 2026-01-29
-	 */
-	protected void initTasks() {
-		// 默认实现为空，子类可重写添加自定义任务
-	}
-
-	/**
-	 * 获取任务管理器
-	 * @return 任务管理器
-	 * @Time 2026-01-29
-	 */
-	public TaskManager getTaskManager() {
-		return taskManager;
-	}
-
-	/**
 	 * 重置物品状态
 	 */
 	public void reset() {
 		frame = 0;
 		active = true;
-
-		// 重置任务管理器
-		if (taskManager != null) {
-			taskManager.clearTasks();
-			initTasks();
-		}
+		initBehavior();
 	}
 }

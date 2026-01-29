@@ -5,7 +5,7 @@ import java.awt.Color;
 /**
  * 简单激光类 - 提供空的task实现
  * 用于不需要特殊task行为的激光
- * @Time 2026-01-23 创建默认实现
+ * @since 2026-01-23 创建默认实现
  */
 public class SimpleLaser extends Laser {
 
@@ -30,10 +30,26 @@ public class SimpleLaser extends Laser {
 	}
 
 	/**
-	 * 简单激光不需要特殊的独立线程逻辑
-	 * 保留空的task方法以兼容父类设计
+	 * 初始化行为参数
 	 */
-	protected void task() {
-		// 空实现，不需要特殊行为
+	@Override
+	protected void initBehavior() {
+		// 初始化行为参数
+	}
+
+	/**
+	 * 实现每帧的自定义更新逻辑
+	 */
+	@Override
+	protected void onUpdate() {
+		// 简单激光的更新逻辑
+	}
+
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	@Override
+	protected void onMove() {
+		// 简单激光的移动逻辑
 	}
 }

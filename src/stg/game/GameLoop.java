@@ -4,11 +4,12 @@ import stg.game.ui.GameCanvas;
 
 /**
  * 游戏循环类 - 控制游戏主循环
+ * @since 2026-01-29
  */
 public class GameLoop implements Runnable {
-	private GameCanvas canvas; // 游戏画布
+	private final GameCanvas canvas; // 游戏画布
 	private boolean running; // 运行标志
-	private int targetFPS = 60; // 目标帧率
+	private final int targetFPS = 60; // 目标帧率
 	private static GameLoop activeLoop; // 当前活跃的游戏循环
 
 	/**
@@ -54,7 +55,10 @@ public class GameLoop implements Runnable {
 				try {
 					Thread.sleep(sleepTime / 1000000L, (int)(sleepTime % 1000000L));
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					// 重新设置线程的中断状态
+					Thread.currentThread().interrupt();
+					// 记录中断信息
+					System.out.println("Game loop interrupted during sleep");
 				}
 			}
 		}

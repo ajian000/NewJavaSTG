@@ -1,14 +1,13 @@
 package stg.game.laser;
 
 import java.awt.*;
-import stg.game.task.TaskManager;
 import stg.game.ui.GameCanvas;
 
 /**
  * 激光基类 - 所有激光的父类
- * @Time 2026-01-21
+ * @since 2026-01-21
  */
-public class Laser {
+public abstract class Laser {
 	protected float x; // 激光起点X坐标
 	protected float y; // 激光起点Y坐标
 	protected float angle; // 激光角度(弧度)
@@ -22,7 +21,6 @@ public class Laser {
 	protected boolean active; // 激光是否激活(预警结束后)
 	protected boolean visible; // 激光是否可见
 	protected int damage; // 伤害值
-	protected TaskManager taskManager; // 任务管理器
 
 	/**
 	 * 构造函数
@@ -61,18 +59,34 @@ public class Laser {
 		this.warningOnly = false;
 		this.active = false;
 		this.visible = true;
-		this.taskManager = new TaskManager(); // 初始化任务管理器
-		initTasks(); // 初始化任务
+		initBehavior();
 	}
+	
+	/**
+	 * 初始化行为参数
+	 * 在构造函数中调用，用于初始化行为参数
+	 */
+	protected abstract void initBehavior();
+
+	/**
+	 * 实现每帧的自定义更新逻辑
+	 */
+	protected abstract void onUpdate();
+
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	protected abstract void onMove();
 
 	/**
 	 * 更新激光状态
 	 */
 	public void update() {
-		// 更新任务管理器
-		if (taskManager != null) {
-			taskManager.update(1);
-		}
+		// 调用自定义更新逻辑
+		onUpdate();
+
+		// 调用自定义移动逻辑
+		onMove();
 
 		if (warningTimer > 0) {
 			warningTimer--;
@@ -235,36 +249,14 @@ public class Laser {
 	public void setDamage(int damage) { this.damage = damage; }
 
 	/**
-	 * 初始化任务（子类可重写以添加自定义任务）
-	 * @Time 2026-01-29
-	 */
-	protected void initTasks() {
-		// 默认实现为空，子类可重写添加自定义任务
-	}
-
-	/**
-	 * 获取任务管理器
-	 * @return 任务管理器
-	 * @Time 2026-01-29
-	 */
-	public TaskManager getTaskManager() {
-		return taskManager;
-	}
-
-	/**
-	 * 重置激光状态
-	 * @Time 2026-01-29
-	 */
+ * 重置激光状态
+ * @since 2026-01-29
+ */
 	public void reset() {
 		warningTimer = warningTime;
 		active = false;
 		visible = true;
-
-		// 重置任务管理器
-		if (taskManager != null) {
-			taskManager.clearTasks();
-			initTasks();
-		}
+		initBehavior();
 	}
 
 	/**

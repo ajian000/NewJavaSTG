@@ -24,10 +24,19 @@ public class LifeUp extends Item {
 		super(x, y, LIFEUP_SIZE, LIFEUP_COLOR, gameCanvas);
 	}
 
+	/**
+	 * 初始化行为参数
+	 */
 	@Override
-	public void update() {
-		super.update();
+	protected void initBehavior() {
+		// 初始化行为参数
+	}
 
+	/**
+	 * 实现每帧的自定义更新逻辑
+	 */
+	@Override
+	protected void onUpdate() {
 		// 如果有游戏画布，向玩家方向缓慢移动
 		if (gameCanvas != null) {
 			Player player = gameCanvas.getPlayer();
@@ -43,6 +52,19 @@ public class LifeUp extends Item {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	@Override
+	protected void onMove() {
+		// 自定义移动逻辑
+	}
+
+	@Override
+	public void update() {
+		super.update();
 	}
 
 	@Override

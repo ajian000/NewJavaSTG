@@ -74,6 +74,6 @@ public class SpiralBullet extends EnemyBullet {
 	/**
 	 * 螺旋子弹不需要特殊的独立线程逻辑
 	 */
-	protected void task() {
+	public void task() {
 	}
 }

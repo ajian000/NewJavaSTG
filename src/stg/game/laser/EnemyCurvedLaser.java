@@ -41,10 +41,33 @@ public class EnemyCurvedLaser extends EnemyLaser {
 	 * @param vy Y方向速度
 	 * @param maxTrailLength 最大拖尾长度
 	 */
-	public EnemyCurvedLaser(float x, float y, float angle, float length, float width, Color color,
-						   int warningTime, int damage, float vx, float vy, int maxTrailLength) {
+	public EnemyCurvedLaser(float x, float y, float angle, float length, float width, Color color, int warningTime, int damage, float vx, float vy, int maxTrailLength) {
 		super(x, y, angle, length, width, color, warningTime, damage);
 		this.curvedLaser = new CurvedLaser(x, y, angle, length, width, color, warningTime, damage, vx, vy, maxTrailLength);
+	}
+
+	/**
+	 * 初始化行为参数
+	 */
+	@Override
+	protected void initBehavior() {
+		// 初始化行为参数
+	}
+
+	/**
+	 * 实现每帧的自定义更新逻辑
+	 */
+	@Override
+	protected void onUpdate() {
+		// 激光的更新逻辑
+	}
+
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	@Override
+	protected void onMove() {
+		// 移动逻辑由curvedLaser处理
 	}
 
 	@Override

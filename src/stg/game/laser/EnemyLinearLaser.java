@@ -35,10 +35,33 @@ public class EnemyLinearLaser extends EnemyLaser {
 	 * @param damage 伤害值
 	 * @param rotationSpeed 旋转速度
 	 */
-	public EnemyLinearLaser(float x, float y, float angle, float length, float width, Color color,
-						   int warningTime, int damage, float rotationSpeed) {
+	public EnemyLinearLaser(float x, float y, float angle, float length, float width, Color color, int warningTime, int damage, float rotationSpeed) {
 		super(x, y, angle, length, width, color, warningTime, damage);
 		this.linearLaser = new LinearLaser(x, y, angle, length, width, color, warningTime, damage, rotationSpeed);
+	}
+
+	/**
+	 * 初始化行为参数
+	 */
+	@Override
+	protected void initBehavior() {
+		// 初始化行为参数
+	}
+
+	/**
+	 * 实现每帧的自定义更新逻辑
+	 */
+	@Override
+	protected void onUpdate() {
+		// 激光的更新逻辑
+	}
+
+	/**
+	 * 实现自定义移动逻辑
+	 */
+	@Override
+	protected void onMove() {
+		// 移动逻辑由linearLaser处理
 	}
 
 	@Override
