@@ -1,0 +1,220 @@
+{
+	"name": "Task System Demo Stage",
+	"difficulty": "normal",
+	"background": "space",
+	"waves": 6,
+	"totalEnemies": 20,
+	"enemies": [
+		{
+			"type": "TaskDemoEnemy",
+			"x": 0,
+			"y": 200,
+			"speed": 2.0,
+			"pattern": "sine",
+			"frame": 60
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": -100,
+			"y": 200,
+			"speed": 1.5,
+			"pattern": "sine",
+			"frame": 120
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 100,
+			"y": 200,
+			"speed": 1.5,
+			"pattern": "sine",
+			"frame": 180
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 0,
+			"y": 180,
+			"speed": 1.0,
+			"pattern": "circle",
+			"frame": 600
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": -80,
+			"y": 200,
+			"speed": 1.0,
+			"pattern": "circle",
+			"frame": 660
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 80,
+			"y": 200,
+			"speed": 1.0,
+			"pattern": "circle",
+			"frame": 720
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 0,
+			"y": 250,
+			"speed": 1.2,
+			"pattern": "spiral",
+			"frame": 1200
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": -60,
+			"y": 220,
+			"speed": 1.2,
+			"pattern": "spiral",
+			"frame": 1260
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 60,
+			"y": 220,
+			"speed": 1.2,
+			"pattern": "spiral",
+			"frame": 1320
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 0,
+			"y": 200,
+			"speed": 1.0,
+			"pattern": "figure8",
+			"frame": 1800
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": -70,
+			"y": 180,
+			"speed": 1.0,
+			"pattern": "figure8",
+			"frame": 1860
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 70,
+			"y": 180,
+			"speed": 1.0,
+			"pattern": "figure8",
+			"frame": 1920
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 0,
+			"y": 150,
+			"speed": 2.0,
+			"pattern": "complex",
+			"frame": 2400
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": -80,
+			"y": 200,
+			"speed": 1.8,
+			"pattern": "complex",
+			"frame": 3000
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 80,
+			"y": 200,
+			"speed": 1.8,
+			"pattern": "complex",
+			"frame": 3060
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": -100,
+			"y": 150,
+			"speed": 2.2,
+			"pattern": "sine",
+			"frame": 3600
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 100,
+			"y": 150,
+			"speed": 2.2,
+			"pattern": "sine",
+			"frame": 3660
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 0,
+			"y": 220,
+			"speed": 1.5,
+			"pattern": "circle",
+			"frame": 4200
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": -90,
+			"y": 180,
+			"speed": 1.5,
+			"pattern": "spiral",
+			"frame": 4800
+		},
+		{
+			"type": "TaskDemoEnemy",
+			"x": 90,
+			"y": 180,
+			"speed": 1.5,
+			"pattern": "spiral",
+			"frame": 4860
+		}
+	],
+	"events": [
+		{
+			"type": "message",
+			"frame": 0,
+			"content": "Task System Demo Stage"
+		},
+		{
+			"type": "message",
+			"frame": 60,
+			"content": "Wave 1: Sine Pattern - 左右移动扇形弹"
+		},
+		{
+			"type": "message",
+			"frame": 600,
+			"content": "Wave 2: Circle Pattern - 绕圈圆形弹"
+		},
+		{
+			"type": "message",
+			"frame": 1200,
+			"content": "Wave 3: Spiral Pattern - 螺旋移动螺旋弹"
+		},
+		{
+			"type": "message",
+			"frame": 1800,
+			"content": "Wave 4: Figure 8 - 8字形跟踪弹"
+		},
+		{
+			"type": "message",
+			"frame": 2400,
+			"content": "Wave 5: Complex Pattern - 组合攻击"
+		},
+		{
+			"type": "message",
+			"frame": 3600,
+			"content": "Wave 6: Final Challenge - 混合模式"
+		}
+	],
+	"metadata": {
+		"createdBy": "TaskSystem Demo",
+		"version": "1.0",
+		"description": "完全基于Task机制的敌人行为演示关卡",
+		"duration": "约1.5分钟",
+		"features": [
+			"MoveTask - 移动任务",
+			"ShootTask - 射击任务",
+			"WaitTask - 等待任务",
+			"SequenceTask - 序列任务",
+			"ParallelTask - 并行任务",
+			"自定义Task - 复杂行为"
+		]
+	}
+}

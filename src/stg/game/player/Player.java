@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import stg.game.bullet.SimpleBullet;
+import stg.game.task.TaskManager;
 import stg.game.ui.GameCanvas;
 
 /**
@@ -34,6 +35,7 @@ public class Player {
 	private int invincibleTime = 120; // 无敌时间(120帧=2秒)
 	protected int bulletDamage = 2; // @Time 2026-01-23 子弹伤害，DPS = (2 × 2 × 60) / 2 = 120
 	protected List<Option> options; // 子机列表
+	protected TaskManager taskManager; // 任务管理器
 
 	public Player() {
 		this(0, 0, 5.0f, 2.0f, 20, null);
@@ -63,6 +65,8 @@ public class Player {
 		this.hitboxRadius = 2.0f;
 		this.invincibleTimer = invincibleTime; // @Time 2026-01-23 初始无敌时间
 		this.options = new ArrayList<>(); // 初始化子机列表
+		this.taskManager = new TaskManager(); // 初始化任务管理器
+		initTasks(); // 初始化任务
 	}
 
 	/**
@@ -70,6 +74,11 @@ public class Player {
 	 * 坐标系: 右上角(+,+),左下角(-,-)
 	 */
 	public void update() {
+		// 更新任务管理器
+		if (taskManager != null) {
+			taskManager.update(1);
+		}
+
 		// @Time 2026-01-19 处理重生等待计时
 		if (respawnTimer > 0) {
 			respawnTimer--;
@@ -398,6 +407,23 @@ public class Player {
 	}
 
 	/**
+	 * 初始化任务（子类可重写以添加自定义任务）
+	 * @Time 2026-01-29
+	 */
+	protected void initTasks() {
+		// 默认实现为空，子类可重写添加自定义任务
+	}
+
+	/**
+	 * 获取任务管理器
+	 * @return 任务管理器
+	 * @Time 2026-01-29
+	 */
+	public TaskManager getTaskManager() {
+		return taskManager;
+	}
+
+	/**
 	 * 重置玩家状态（用于重新开始游戏）
 	 */
 	public void reset() {
@@ -410,6 +436,12 @@ public class Player {
 		respawning = false;
 		invincibleTimer = invincibleTime; // @Time 2026-01-23 重置时获得无敌时间
 		// x 和 y 由 GameCanvas.resetGame() 设置
+
+		// 重置任务管理器
+		if (taskManager != null) {
+			taskManager.clearTasks();
+			initTasks();
+		}
 
 		// 重置所有子机
 		for (Option option : options) {

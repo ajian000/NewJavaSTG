@@ -1,7 +1,8 @@
 package stg.game.enemy;
 
-import stg.game.ui.GameCanvas;
 import java.awt.*;
+import stg.game.task.TaskManager;
+import stg.game.ui.GameCanvas;
 
 /**
  * 敌方类 - 所有敌人的基类
@@ -18,6 +19,7 @@ public class Enemy {
 	protected int maxHp; // 最大生命值
 	protected GameCanvas gameCanvas; // 游戏画布引用
 	protected boolean alive; // 存活状态
+	protected TaskManager taskManager; // 任务管理器
 
 	public Enemy(int x, int y) {
 		this(x, y, 0, 0, 20, Color.BLUE, 10, null);
@@ -38,6 +40,15 @@ public class Enemy {
 		this.maxHp = hp;
 		this.gameCanvas = gameCanvas;
 		this.alive = true;
+		this.taskManager = new TaskManager();
+		initTasks();
+	}
+
+	/**
+	 * 初始化任务 - 子类可重写
+	 */
+	protected void initTasks() {
+		// 子类可以重写此方法添加初始任务
 	}
 
 	/**
@@ -45,6 +56,11 @@ public class Enemy {
 	 * @Time 2026-01-19 基类提供基本移动和存活检测
 	 */
 	public void update() {
+		// 更新任务
+		if (taskManager != null) {
+			taskManager.update(1);
+		}
+
 		// 更新位置
 		x += vx;
 		y += vy;
@@ -231,5 +247,33 @@ public class Enemy {
 	 */
 	public int getMaxHp() {
 		return maxHp;
+	}
+
+	/**
+	 * 获取任务管理器
+	 * @return 任务管理器
+	 */
+	public TaskManager getTaskManager() {
+		return taskManager;
+	}
+
+	/**
+	 * 设置任务管理器
+	 * @param taskManager 任务管理器
+	 */
+	public void setTaskManager(TaskManager taskManager) {
+		this.taskManager = taskManager;
+	}
+
+	/**
+	 * 重置敌人状态
+	 */
+	public void reset() {
+		this.hp = maxHp;
+		this.alive = true;
+		if (taskManager != null) {
+			taskManager.clearTasks();
+			initTasks();
+		}
 	}
 }

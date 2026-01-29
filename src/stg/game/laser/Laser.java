@@ -1,7 +1,8 @@
 package stg.game.laser;
 
-import stg.game.ui.GameCanvas;
 import java.awt.*;
+import stg.game.task.TaskManager;
+import stg.game.ui.GameCanvas;
 
 /**
  * 激光基类 - 所有激光的父类
@@ -21,6 +22,7 @@ public class Laser {
 	protected boolean active; // 激光是否激活(预警结束后)
 	protected boolean visible; // 激光是否可见
 	protected int damage; // 伤害值
+	protected TaskManager taskManager; // 任务管理器
 
 	/**
 	 * 构造函数
@@ -59,12 +61,19 @@ public class Laser {
 		this.warningOnly = false;
 		this.active = false;
 		this.visible = true;
+		this.taskManager = new TaskManager(); // 初始化任务管理器
+		initTasks(); // 初始化任务
 	}
 
 	/**
 	 * 更新激光状态
 	 */
 	public void update() {
+		// 更新任务管理器
+		if (taskManager != null) {
+			taskManager.update(1);
+		}
+
 		if (warningTimer > 0) {
 			warningTimer--;
 			if (warningTimer == 0 && !warningOnly) {
@@ -224,6 +233,39 @@ public class Laser {
 	public void setWarningTime(int warningTime) { this.warningTime = warningTime; }
 	public void setVisible(boolean visible) { this.visible = visible; }
 	public void setDamage(int damage) { this.damage = damage; }
+
+	/**
+	 * 初始化任务（子类可重写以添加自定义任务）
+	 * @Time 2026-01-29
+	 */
+	protected void initTasks() {
+		// 默认实现为空，子类可重写添加自定义任务
+	}
+
+	/**
+	 * 获取任务管理器
+	 * @return 任务管理器
+	 * @Time 2026-01-29
+	 */
+	public TaskManager getTaskManager() {
+		return taskManager;
+	}
+
+	/**
+	 * 重置激光状态
+	 * @Time 2026-01-29
+	 */
+	public void reset() {
+		warningTimer = warningTime;
+		active = false;
+		visible = true;
+
+		// 重置任务管理器
+		if (taskManager != null) {
+			taskManager.clearTasks();
+			initTasks();
+		}
+	}
 
 	/**
 	 * 设置画布引用

@@ -2,6 +2,7 @@
 
 import java.awt.*;
 import stg.game.bullet.CircularBullet;
+import stg.game.task.*;
 import stg.game.ui.GameCanvas;
 
 /**
@@ -9,8 +10,6 @@ import stg.game.ui.GameCanvas;
  * @Time 2026-01-19 在X轴上左右来回移动,Y轴不动
  */
 public class BasicEnemy extends Enemy {
-	private float shootTimer; // 射击计时器
-	private float shootInterval; // 射击间隔
 	private float moveSpeed; // X轴移动速度
 
 	/**
@@ -22,36 +21,75 @@ public class BasicEnemy extends Enemy {
 	 */
 	public BasicEnemy(float x, float y, float moveSpeed, GameCanvas gameCanvas) {
 		super(x, y, moveSpeed, 0, 20, Color.BLUE, 120, gameCanvas);
-		this.shootTimer = 0;
-		this.shootInterval = 60; // 60帧(约1秒)发射一次
 		this.moveSpeed = moveSpeed;
 	}
 
 	/**
-	 * @Time 2026-01-19 重写update方法,添加X轴左右移动和射击逻辑
+	 * 初始化任务
+	 */
+	@Override
+	protected void initTasks() {
+		// 创建移动和射击的序列任务
+		SequenceTask mainTask = new SequenceTask();
+		
+		// 添加移动任务
+		mainTask.addTask(new MoveTask(this, 200, getY(), moveSpeed, true));
+		mainTask.addTask(new WaitTask(60));
+		mainTask.addTask(new MoveTask(this, -200, getY(), moveSpeed, true));
+		mainTask.addTask(new WaitTask(60));
+		
+		// 添加射击任务
+		if (gameCanvas != null) {
+			ShootTask shootTask = new ShootTask(this, gameCanvas, -10, 3, (float)Math.PI/4, 
+					Color.CYAN, 5, 10);
+			mainTask.addTask(shootTask);
+		} else {
+			// 备用方案
+			mainTask.addTask(new BaseTask() {
+				@Override
+				public boolean update(int deltaTime) {
+					shoot();
+					return true;
+				}
+			});
+		}
+		
+		// 循环执行
+		SequenceTask loopTask = new SequenceTask();
+		loopTask.addTask(mainTask);
+		loopTask.addTask(new BaseTask() {
+			@Override
+			public boolean update(int deltaTime) {
+				// 重新初始化任务
+				if (getTaskManager() != null) {
+					getTaskManager().clearTasks();
+					initTasks();
+				}
+				return true;
+			}
+		});
+		
+		getTaskManager().addTask(loopTask);
+	}
+
+	/**
+	 * @Time 2026-01-19 重写update方法,使用任务管理器处理行为
 	 */
 	@Override
 	public void update() {
 		super.update();
 
-		// X轴左右移动逻辑
-		int canvasWidth = gameCanvas.getWidth();
-		float leftBound = -canvasWidth / 2.0f + size;
-		float rightBound = canvasWidth / 2.0f - size;
+		// X轴左右移动逻辑（作为备用）
+		if (gameCanvas != null) {
+			int canvasWidth = gameCanvas.getWidth();
+			float leftBound = -canvasWidth / 2.0f + size;
+			float rightBound = canvasWidth / 2.0f - size;
 
-		if (x <= leftBound) {
-			vx = Math.abs(moveSpeed);
-		} else if (x >= rightBound) {
-			vx = -Math.abs(moveSpeed);
-		}
-
-		// 更新射击计时器
-		shootTimer++;
-
-		// 射击逻辑
-		if (shootTimer >= shootInterval) {
-			shoot();
-			shootTimer = 0;
+			if (x <= leftBound) {
+				vx = Math.abs(moveSpeed);
+			} else if (x >= rightBound) {
+				vx = -Math.abs(moveSpeed);
+			}
 		}
 	}
 

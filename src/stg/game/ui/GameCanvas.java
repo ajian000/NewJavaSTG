@@ -17,6 +17,7 @@ import stg.game.enemy.OrbitEnemy;
 import stg.game.enemy.RapidFireEnemy;
 import stg.game.enemy.SpiralEnemy;
 import stg.game.enemy.SpreadEnemy;
+import stg.game.enemy.TaskDemoEnemy;
 import stg.game.enemy.TrackingEnemy;
 import stg.game.item.Item;
 import stg.game.laser.*;
@@ -998,12 +999,12 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 				enemy = new BasicEnemy(data.getX(), data.getY(), data.getSpeed(), this);
 				break;
 			case "LaserShootingEnemy":
-				int pattern = 2;
+				int laserPattern = 2;
 				if (data.getParams().containsKey("pattern")) {
-					pattern = (Integer)data.getParams().get("pattern");
+					laserPattern = (Integer)data.getParams().get("pattern");
 				}
-				System.out.println("【LaserShootingEnemy】攻击模式: " + pattern);
-				enemy = new LaserShootingEnemy(data.getX(), data.getY(), data.getSpeed(), this, pattern);
+				System.out.println("【LaserShootingEnemy】攻击模式: " + laserPattern);
+				enemy = new LaserShootingEnemy(data.getX(), data.getY(), data.getSpeed(), this, laserPattern);
 				break;
 			case "SpiralEnemy":
 				enemy = new SpiralEnemy(data.getX(), data.getY(), data.getSpeed(), this);
@@ -1023,6 +1024,14 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 					orbitRadius = ((Number)data.getParams().get("orbitRadius")).floatValue();
 				}
 				enemy = new OrbitEnemy(data.getX(), data.getY(), orbitRadius, data.getSpeed(), this);
+				break;
+			case "TaskDemoEnemy":
+				String pattern = "sine";
+				if (data.getParams().containsKey("pattern")) {
+					pattern = data.getParams().get("pattern").toString();
+				}
+				System.out.println("【TaskDemoEnemy】行为模式: " + pattern);
+				enemy = new TaskDemoEnemy(data.getX(), data.getY(), data.getSpeed(), pattern, this);
 				break;
 			default:
 				System.out.println("【警告】未知敌人类型: " + type + ", 使用BasicEnemy");
