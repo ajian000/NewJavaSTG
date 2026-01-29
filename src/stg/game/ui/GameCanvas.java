@@ -18,6 +18,7 @@ import stg.game.enemy.RapidFireEnemy;
 import stg.game.enemy.SpiralEnemy;
 import stg.game.enemy.SpreadEnemy;
 import stg.game.enemy.TrackingEnemy;
+import stg.game.item.Item;
 import stg.game.laser.*;
 import stg.game.player.MarisaPlayer;
 import stg.game.player.Player;
@@ -53,6 +54,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	private List<Bullet> enemyBullets;
 	private List<Enemy> enemies;
 	private List<EnemyLaser> enemyLasers;
+	private List<Item> items;
 	private CoordinateSystem coordinateSystem;
 	private GameStatusPanel gameStatusPanel;
 
@@ -94,6 +96,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		enemyBullets = new ArrayList<>(); // @Time 2026-01-19 初始化敌方子弹列表
 		enemies = new ArrayList<>(); // @Time 2026-01-19 初始化敌人列表
 		enemyLasers = new ArrayList<>(); // @Time 2026-01-20 初始化敌方激光列表
+		items = new ArrayList<>(); // 初始化物品列表
 		coordinateSystem = new CoordinateSystem(0, 0); // @Time 2026-01-19 初始化坐标系统
 		spawnedEnemies = new ArrayList<>(); // 初始化已生成敌人列表
 
@@ -319,6 +322,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		bullets.clear();
 		enemyBullets.clear();
 		enemyLasers.clear();
+		items.clear();
 		paused = false;
 		pauseMenuIndex = 0;
 
@@ -510,6 +514,16 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			}
 		}
 
+		// 更新物品位置,移除不活跃或越界的物品
+		Iterator<Item> itemIterator = items.iterator();
+		while (itemIterator.hasNext()) {
+			Item item = itemIterator.next();
+			item.update();
+			if (!item.isActive() || item.isOutOfBounds(getWidth(), getHeight())) {
+				itemIterator.remove();
+			}
+		}
+
 		// @Time 2026-01-19 碰撞检测
 		if (canvasReady) {
 			checkCollisions();
@@ -542,6 +556,11 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		// @Time 2026-01-20 绘制敌方激光
 		for (EnemyLaser laser : enemyLasers) {
 			laser.render(g);
+		}
+
+		// 绘制物品
+		for (Item item : items) {
+			item.render(g2d);
 		}
 
 		// 绘制玩家子弹
@@ -662,6 +681,38 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
+	 * 添加物品
+	 * @param item 物品对象
+	 */
+	public void addItem(Item item) {
+		item.setGameCanvas(this);
+		items.add(item);
+	}
+
+	/**
+	 * 移除物品
+	 * @param item 物品对象
+	 */
+	public void removeItem(Item item) {
+		items.remove(item);
+	}
+
+	/**
+	 * 获取物品列表
+	 * @return 物品列表
+	 */
+	public List<Item> getItems() {
+		return items;
+	}
+
+	/**
+	 * 清除所有物品
+	 */
+	public void clearItems() {
+		items.clear();
+	}
+
+	/**
 	 * @Time 2026-01-19 碰撞检测
 	 * 检测玩家子弹与敌人的碰撞,敌方子弹与玩家的碰撞
 	 */
@@ -713,6 +764,25 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 					player.onHit();
 				}
 				laser.onHitPlayer(); // 启动冷却
+			}
+		}
+
+		// 检测玩家与物品的碰撞
+		if (player != null) {
+			Iterator<Item> itemIterator = items.iterator();
+			while (itemIterator.hasNext()) {
+				Item item = itemIterator.next();
+				if (!item.isActive()) continue;
+
+				// 检查碰撞
+				float dx = item.getX() - player.getX();
+				float dy = item.getY() - player.getY();
+				float distance = (float)Math.sqrt(dx * dx + dy * dy);
+
+				if (distance < item.getHitboxRadius() + player.getSize()) {
+					item.onCollect();
+					itemIterator.remove();
+				}
 			}
 		}
 	}
