@@ -24,7 +24,7 @@ public class TrackingEnemy extends Enemy {
 	public void update() {
 		super.update();
 
-		if (gameCanvas == null || !alive) return;
+		if (gameCanvas == null || !isAlive()) return;
 
 		int canvasWidth = gameCanvas.getWidth();
 		float leftBound = -canvasWidth / 2.0f + size;
@@ -45,25 +45,24 @@ public class TrackingEnemy extends Enemy {
 	}
 
 	private void shootTracking() {
-		if (!alive || gameCanvas == null) return;
+		if (!isAlive() || getGameCanvas() == null) return;
 
 		float bulletSpeed = 5.0f;
 		float initialAngle = (float)(Math.PI / 2);
 		float turnSpeed = 0.03f;
 
 		TrackingBullet bullet = new TrackingBullet(
-			x, y, bulletSpeed, initialAngle, turnSpeed, 6.0f, Color.PINK
+			getX(), getY(), bulletSpeed, initialAngle, turnSpeed, 6.0f, Color.PINK
 		);
-		bullet.setGameCanvas(gameCanvas);
-		gameCanvas.addEnemyBullet(bullet);
+		bullet.setGameCanvas(getGameCanvas());
+		getGameCanvas().addEnemyBullet(bullet);
 	}
 
 	@Override
 	public void render(Graphics2D g) {
-		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
-		int canvasHeight = gameCanvas != null ? gameCanvas.getHeight() : 921;
-		float screenX = x + canvasWidth / 2.0f;
-		float screenY = canvasHeight / 2.0f - y;
+		float[] screenCoords = toScreenCoords(x, y);
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
 		g.setColor(color);
 		g.fillOval((int)(screenX - size), (int)(screenY - size), (int)(size * 2), (int)(size * 2));
@@ -72,5 +71,21 @@ public class TrackingEnemy extends Enemy {
 		g.drawOval((int)(screenX - size), (int)(screenY - size), (int)(size * 2), (int)(size * 2));
 
 		renderHealthBar(g, screenX, screenY);
+	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
 	}
 }

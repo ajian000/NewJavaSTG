@@ -14,14 +14,17 @@ public class LifeUp extends Item {
 
 	public LifeUp(float x, float y) {
 		super(x, y, LIFEUP_SIZE, LIFEUP_COLOR);
+		setAttractionParams(150.0f, 3.0f);
 	}
 
 	public LifeUp(float x, float y, float vx, float vy) {
 		super(x, y, vx, vy, LIFEUP_SIZE, LIFEUP_COLOR);
+		setAttractionParams(150.0f, 3.0f);
 	}
 
 	public LifeUp(float x, float y, GameCanvas gameCanvas) {
 		super(x, y, LIFEUP_SIZE, LIFEUP_COLOR, gameCanvas);
+		setAttractionParams(150.0f, 3.0f);
 	}
 
 	/**
@@ -37,21 +40,7 @@ public class LifeUp extends Item {
 	 */
 	@Override
 	protected void onUpdate() {
-		// 如果有游戏画布，向玩家方向缓慢移动
-		if (gameCanvas != null) {
-			Player player = gameCanvas.getPlayer();
-			if (player != null && player.isSlowMode()) {
-				float dx = player.getX() - x;
-				float dy = player.getY() - y;
-				float distance = (float)Math.sqrt(dx * dx + dy * dy);
-
-				if (distance < 150.0f) {
-					float attractionSpeed = 3.0f;
-					vx = (dx / distance) * attractionSpeed;
-					vy = (dy / distance) * attractionSpeed;
-				}
-			}
-		}
+		applyAttraction();
 	}
 
 	/**
@@ -71,19 +60,11 @@ public class LifeUp extends Item {
 	public void render(Graphics2D g) {
 		if (!active) return;
 
-		float screenX = x;
-		float screenY = y;
+		float[] screenCoords = toScreenCoords(x, y);
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
-		if (gameCanvas != null) {
-			float[] coords = gameCanvas.getCoordinateSystem().toScreenCoords(x, y);
-			screenX = coords[0];
-			screenY = coords[1];
-		} else {
-			screenX = x + 548 / 2.0f;
-			screenY = 921 / 2.0f - y;
-		}
-
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g);
 
 		// 绘制心形
 		g.setColor(color);

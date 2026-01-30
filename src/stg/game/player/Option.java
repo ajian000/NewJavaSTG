@@ -1,7 +1,6 @@
 package stg.game.player;
 
 import java.awt.*;
-import stg.game.bullet.SimpleBullet;
 import stg.game.ui.GameCanvas;
 
 /**
@@ -88,7 +87,7 @@ public abstract class Option {
 		float screenX = x + gameCanvas.getWidth() / 2.0f;
 		float screenY = gameCanvas.getHeight() / 2.0f - y;
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g);
 
 		// 绘制子机主体
 		g.setColor(color);
@@ -122,16 +121,24 @@ public abstract class Option {
 	/**
 	 * 设置跟随速度
 	 * @param speed 跟随速度(0-1)
+	 * @throws IllegalArgumentException 如果速度不在0-1之间
 	 */
 	public void setFollowSpeed(float speed) {
+		if (speed < 0 || speed > 1) {
+			throw new IllegalArgumentException("跟随速度必须在0-1之间，当前值: " + speed);
+		}
 		this.followSpeed = speed;
 	}
 
 	/**
 	 * 设置子机大小
 	 * @param size 大小
+	 * @throws IllegalArgumentException 如果大小为负数或零
 	 */
 	public void setSize(float size) {
+		if (size <= 0) {
+			throw new IllegalArgumentException("子机大小必须为正数，当前值: " + size);
+		}
 		this.size = size;
 	}
 
@@ -146,16 +153,24 @@ public abstract class Option {
 	/**
 	 * 设置射击间隔
 	 * @param interval 射击间隔(帧数)
+	 * @throws IllegalArgumentException 如果间隔为负数
 	 */
 	public void setShootInterval(int interval) {
+		if (interval < 0) {
+			throw new IllegalArgumentException("射击间隔不能为负数，当前值: " + interval);
+		}
 		this.shootInterval = interval;
 	}
 
 	/**
 	 * 设置子弹伤害
 	 * @param damage 伤害值
+	 * @throws IllegalArgumentException 如果伤害值为负数
 	 */
 	public void setBulletDamage(int damage) {
+		if (damage < 0) {
+			throw new IllegalArgumentException("子弹伤害不能为负数，当前值: " + damage);
+		}
 		this.bulletDamage = damage;
 	}
 

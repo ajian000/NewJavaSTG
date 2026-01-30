@@ -22,5 +22,21 @@ public class SimpleBullet extends Bullet {
 		super(x, y, vx, vy, size, color);
 	}
 
+	/**
+	 * 任务开始时触发的方法 - 空实现
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现，不需要特殊行为
+	}
+
+	/**
+	 * 任务结束时触发的方法 - 空实现
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现，不需要特殊行为
+	}
 
 }
+

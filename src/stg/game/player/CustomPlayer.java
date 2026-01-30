@@ -76,10 +76,11 @@ public class CustomPlayer extends Player {
 
 	@Override
 	public void render(Graphics2D g) {
-		float screenX = getX() + getGameCanvas().getWidth() / 2.0f;
-		float screenY = getGameCanvas().getHeight() / 2.0f - getY();
+		float[] screenCoords = toScreenCoords(getX(), getY());
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g);
 
 		// 无敌闪烁效果
 		boolean shouldRender = true;

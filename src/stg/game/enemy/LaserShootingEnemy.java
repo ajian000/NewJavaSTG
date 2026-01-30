@@ -63,22 +63,22 @@ public class LaserShootingEnemy extends Enemy {
 		super.update();
 
 		// 安全检查
-		if (gameCanvas == null || !alive) {
+		if (getGameCanvas() == null || !isAlive()) {
 			return;
 		}
 
 		// 移动逻辑
-		int canvasWidth = gameCanvas.getWidth();
+		int canvasWidth = getGameCanvas().getWidth();
 		if (canvasWidth <= 0) {
 			return; // 画布未准备好
 		}
 
-		float leftBound = -canvasWidth / 2.0f + size;
-		float rightBound = canvasWidth / 2.0f - size;
+		float leftBound = -canvasWidth / 2.0f + getSize();
+		float rightBound = canvasWidth / 2.0f - getSize();
 
-		if (x <= leftBound) {
+		if (getX() <= leftBound) {
 			moveAngle = (float)Math.PI - moveAngle;
-		} else if (x >= rightBound) {
+		} else if (getX() >= rightBound) {
 			moveAngle = (float)Math.PI - moveAngle;
 		}
 
@@ -106,7 +106,7 @@ public class LaserShootingEnemy extends Enemy {
 	 * 射击 - 根据当前模式发射激光
 	 */
 	private void shoot() {
-		if (!alive || gameCanvas == null) return;
+		if (!isAlive() || gameCanvas == null) return;
 
 		switch (pattern) {
 			case 0:
@@ -158,10 +158,9 @@ public class LaserShootingEnemy extends Enemy {
 	 */
 	@Override
 	public void render(Graphics2D g) {
-		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
-		int canvasHeight = gameCanvas != null ? gameCanvas.getHeight() : 921;
-		float screenX = x + canvasWidth / 2.0f;
-		float screenY = canvasHeight / 2.0f - y;
+		float[] screenCoords = toScreenCoords(x, y);
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
 		// 绘制六边形
 		int[] xPoints = new int[6];
@@ -190,8 +189,8 @@ public class LaserShootingEnemy extends Enemy {
 	 */
 	@Override
 	public String toString() {
-		return "LaserShootingEnemy[pos=(" + x + ", " + y + "), hp=" + hp + "/" + maxHp +
-			   ", pattern=" + pattern + ", alive=" + alive + "]";
+		return "LaserShootingEnemy[pos=(" + getX() + ", " + getY() + "), hp=" + hp + "/" + maxHp +
+			   ", pattern=" + pattern + ", alive=" + isAlive() + "]";
 	}
 
 	/**
@@ -199,9 +198,25 @@ public class LaserShootingEnemy extends Enemy {
 	 */
 	@Override
 	protected void onDeath() {
-		if (gameCanvas != null && firedLasers != null) {
-			gameCanvas.removeEnemyLasers(firedLasers);
+		if (getGameCanvas() != null && firedLasers != null) {
+			getGameCanvas().removeEnemyLasers(firedLasers);
 			firedLasers.clear();
 		}
+	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
 	}
 }

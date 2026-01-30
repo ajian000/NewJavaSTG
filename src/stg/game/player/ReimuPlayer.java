@@ -1,7 +1,6 @@
 package stg.game.player;
 
 import java.awt.*;
-import stg.game.bullet.SimpleBullet;
 import stg.game.ui.GameCanvas;
 
 /**
@@ -45,47 +44,17 @@ public class ReimuPlayer extends Player {
 
 	@Override
 	protected void shoot() {
-		GameCanvas canvas = getGameCanvas();
-		if (canvas == null) return;
-
-		boolean slowMode = isSlowMode();
-		float bulletSpeed = 46.0f;
-		float bulletSize = slowMode ? 5.0f : 3.0f;
-
-		// 灵梦的特殊射击模式：主弹 + 追踪弹
-		// 主弹：5发散弹
-		float spreadAngle = 0.15f;
-		SimpleBullet[] bullets = new SimpleBullet[5];
-		for (int i = -2; i <= 2; i++) {
-			float angle = i * spreadAngle;
-			float vx = (float)Math.sin(angle) * bulletSpeed;
-			float vy = bulletSpeed;
-			bullets[i + 2] = new SimpleBullet(getX(), getY(), vx, vy, bulletSize, BULLET_COLOR);
-			// @Time 2026-01-23 设置灵梦子弹伤害
-			bullets[i + 2].setDamage(bulletDamage);
-		}
-
-		for (SimpleBullet bullet : bullets) {
-			bullet.setGameCanvas(canvas);
-			canvas.addBullet(bullet);
-		}
-
-		// 低速模式下额外发射追踪弹
-		if (slowMode) {
-			float trackingBulletSpeed = 46.0f;
-			SimpleBullet trackingBullet = new SimpleBullet(getX(), getY(), 0, trackingBulletSpeed, 4.0f, new Color(255, 255, 200));
-			trackingBullet.setDamage(bulletDamage); // @Time 2026-01-23 设置追踪弹伤害
-			trackingBullet.setGameCanvas(canvas);
-			canvas.addBullet(trackingBullet);
-		}
+		// 使用默认自机的射击实现
+		super.shoot();
 	}
 
 	@Override
 	public void render(Graphics2D g) {
-		float screenX = getX() + getGameCanvas().getWidth() / 2.0f;
-		float screenY = getGameCanvas().getHeight() / 2.0f - getY();
+		float[] screenCoords = toScreenCoords(getX(), getY());
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g);
 
 		// @Time 2026-01-23 无敌闪烁效果：每5帧闪烁一次
 		boolean shouldRender = true;

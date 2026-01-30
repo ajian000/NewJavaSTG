@@ -1,24 +1,16 @@
 package stg.game.enemy;
 
 import java.awt.*;
+import stg.game.obj.Obj;
 import stg.game.ui.GameCanvas;
 
 /**
  * 敌方类 - 所有敌人的基类
  * @since 2026-01-19
  */
-public class Enemy {
-	protected float x; // X坐标
-	protected float y; // Y坐标
-	protected float vx; // X方向速度
-	protected float vy; // Y方向速度
-	protected float size; // 敌人大小
-	protected Color color; // 敌人颜色
+public abstract class Enemy extends Obj {
 	protected int hp; // 生命值
 	protected int maxHp; // 最大生命值
-	protected GameCanvas gameCanvas; // 游戏画布引用
-	protected boolean alive; // 存活状态
-	protected int frame; // 帧计数器
 
 	public Enemy(int x, int y) {
 		this(x, y, 0, 0, 20, Color.BLUE, 10, null);
@@ -29,62 +21,22 @@ public class Enemy {
 	}
 
 	public Enemy(float x, float y, float vx, float vy, float size, Color color, int hp, GameCanvas gameCanvas) {
-		this.x = x;
-		this.y = y;
-		this.vx = vx;
-		this.vy = vy;
-		this.size = size;
-		this.color = color;
+		super(x, y, vx, vy, size, color, gameCanvas);
 		this.hp = hp;
 		this.maxHp = hp;
-		this.gameCanvas = gameCanvas;
-		this.alive = true;
-		this.frame = 0;
-		initBehavior();
-	}
-
-	/**
-	 * 初始化行为参数
-	 * 在构造函数中调用，用于初始化行为参数
-	 */
-	protected void initBehavior() {
-		// 子类可以重写此方法初始化行为参数
-	}
-
-	/**
-	 * 实现每帧的自定义更新逻辑
-	 */
-	protected void onUpdate() {
-		// 子类可以重写此方法实现每帧的自定义更新逻辑
-	}
-
-	/**
-	 * 实现自定义移动逻辑
-	 */
-	protected void onMove() {
-		// 子类可以重写此方法实现自定义移动逻辑
 	}
 
 	/**
  * 更新敌人状态
  * @since 2026-01-19 基类提供基本移动和存活检测
  */
+	@Override
 	public void update() {
-		frame++;
-
-		// 调用自定义更新逻辑
-		onUpdate();
-
-		// 调用自定义移动逻辑
-		onMove();
-
-		// 更新位置
-		x += vx;
-		y += vy;
+		super.update();
 
 		// 检查生命值
 		if (hp <= 0) {
-			alive = false;
+			setActive(false);
 		}
 	}
 
@@ -93,14 +45,16 @@ public class Enemy {
  * @param g 图形上下文
  * @since 2026-01-19 基类提供基本渲染,子类可自定义渲染
  */
+	@Override
 	public void render(Graphics2D g) {
-		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
-		int canvasHeight = gameCanvas != null ? gameCanvas.getHeight() : 921;
-		float screenX = x + canvasWidth / 2.0f;
-		float screenY = canvasHeight / 2.0f - y;
+		if (!isActive()) return;
 
-		g.setColor(color);
-		g.fillOval((int)(screenX - size), (int)(screenY - size), (int)(size * 2), (int)(size * 2));
+		float[] screenCoords = toScreenCoords(getX(), getY());
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
+
+		g.setColor(getColor());
+		g.fillOval((int)(screenX - getSize()), (int)(screenY - getSize()), (int)(getSize() * 2), (int)(getSize() * 2));
 
 		renderHealthBar(g, screenX, screenY);
 	}
@@ -113,10 +67,10 @@ public class Enemy {
  * @since 2026-01-19 在敌人上方显示生命值
  */
 	protected void renderHealthBar(Graphics2D g, float screenX, float screenY) {
-		int barWidth = (int)(size * 2);
+		int barWidth = (int)(getSize() * 2);
 		int barHeight = 4;
-		int barX = (int)(screenX - size);
-		int barY = (int)(screenY - size - 8);
+		int barX = (int)(screenX - getSize());
+		int barY = (int)(screenY - getSize() - 8);
 
 		// 背景
 		g.setColor(Color.GRAY);
@@ -137,7 +91,7 @@ public class Enemy {
 		hp -= damage;
 		if (hp <= 0) {
 			hp = 0;
-			alive = false;
+			setActive(false);
 			onDeath(); // 调用死亡回调
 		}
 	}
@@ -156,18 +110,19 @@ public class Enemy {
  * @param canvasHeight 画布高度
  * @return 是否越界
  */
+	@Override
 	public boolean isOutOfBounds(int canvasWidth, int canvasHeight) {
 		if (canvasWidth <= 0 || canvasHeight <= 0) {
 			return false;
 		}
 
-		float leftBound = -canvasWidth / 2.0f - size * 2;
-		float rightBound = canvasWidth / 2.0f + size * 2;
-		float topBound = -canvasHeight / 2.0f - size * 2;
-		float bottomBound = canvasHeight / 2.0f + size * 2;
+		float leftBound = -canvasWidth / 2.0f - getSize() * 2;
+		float rightBound = canvasWidth / 2.0f + getSize() * 2;
+		float topBound = -canvasHeight / 2.0f - getSize() * 2;
+		float bottomBound = canvasHeight / 2.0f + getSize() * 2;
 
-		return x < leftBound || x > rightBound ||
-		       y < topBound || y > bottomBound;
+		return getX() < leftBound || getX() > rightBound ||
+		       getY() < topBound || getY() > bottomBound;
 	}
 
 	/**
@@ -175,69 +130,7 @@ public class Enemy {
 	 * @return 是否存活
 	 */
 	public boolean isAlive() {
-		return alive;
-	}
-
-	/**
-	 * 获取X坐标
-	 * @return X坐标
-	 */
-	public float getX() {
-		return x;
-	}
-
-	/**
-	 * 获取Y坐标
-	 * @return Y坐标
-	 */
-	public float getY() {
-		return y;
-	}
-
-	/**
-	 * 设置位置
-	 * @param x X坐标
-	 * @param y Y坐标
-	 */
-	public void setPosition(float x, float y) {
-		this.x = x;
-		this.y = y;
-	}
-
-	/**
- * @since 2026-01-19 移动到指定坐标
- * @param x 目标X坐标
- * @param y 目标Y坐标
- */
-	public void moveTo(float x, float y) {
-		this.x = x;
-		this.y = y;
-	}
-
-	/**
- * @since 2026-01-19 在现有坐标基础上增加对应值
- * @param dx X方向增量
- * @param dy Y方向增量
- */
-	public void moveOn(float dx, float dy) {
-		this.x += dx;
-		this.y += dy;
-	}
-
-	/**
-	 * 获取敌人大小
-	 * @return 大小
-	 */
-	public float getSize() {
-		return size;
-	}
-
-	/**
-	 * 设置游戏画布
-	 * @param gameCanvas 游戏画布
-	 */
-	public void setGameCanvas(GameCanvas gameCanvas) {
-		this.gameCanvas = gameCanvas;
+		return isActive();
 	}
 
 	/**
@@ -267,9 +160,19 @@ public class Enemy {
 	/**
 	 * 重置敌人状态
 	 */
+	@Override
 	public void reset() {
+		super.reset();
 		this.hp = maxHp;
-		this.alive = true;
-		initBehavior();
 	}
+
+	/**
+	 * 任务开始时触发的方法 - 用于处理开局对话等
+	 */
+	protected abstract void onTaskStart();
+
+	/**
+	 * 任务结束时触发的方法 - 用于处理boss击破对话和道具掉落
+	 */
+	protected abstract void onTaskEnd();
 }

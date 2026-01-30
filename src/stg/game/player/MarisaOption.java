@@ -82,7 +82,7 @@ public class MarisaOption extends Option {
 		float screenX = x + gameCanvas.getWidth() / 2.0f;
 		float screenY = gameCanvas.getHeight() / 2.0f - y;
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g);
 
 		// 绘制魔理沙子机主体（蓝色）
 		g.setColor(color);

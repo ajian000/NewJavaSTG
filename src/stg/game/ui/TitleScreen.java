@@ -209,7 +209,7 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 		}
 
 		// 绘制标题
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g2d);
 		g2d.setFont(new Font("Microsoft YaHei", Font.BOLD, 48));
 		g2d.setColor(Color.WHITE);
 		String title = "东方STG引擎";

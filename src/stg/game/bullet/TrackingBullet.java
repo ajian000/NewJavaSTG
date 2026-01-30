@@ -25,7 +25,7 @@ public class TrackingBullet extends EnemyBullet {
 	 * @param color 子弹颜色
 	 */
 	public TrackingBullet(float x, float y, float speed, float initialAngle,
-						float turnSpeed, float size, Color color) {
+				float turnSpeed, float size, Color color) {
 		super(x, y, (float)Math.cos(initialAngle) * speed, (float)Math.sin(initialAngle) * speed, size, color, 10);
 		this.speed = speed;
 		this.turnSpeed = turnSpeed;
@@ -81,8 +81,18 @@ public class TrackingBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 追踪子弹不需要特殊的独立线程逻辑
+	 * 任务开始时触发的方法
 	 */
-	public void task() {
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
 	}
 }

@@ -12,6 +12,79 @@ public class ScorePoint extends Item {
 	private int scoreValue;
 	private boolean isLarge;
 
+	/**
+	 * Builder 模式 - 用于简化 ScorePoint 的创建
+	 */
+	public static class Builder {
+		private final float x;
+		private final float y;
+		private float vx = 0;
+		private float vy = 0;
+		private int scoreValue = SCORE_VALUE;
+		private boolean isLarge = false;
+		private GameCanvas gameCanvas = null;
+		
+		/**
+		 * 构造器
+		 * @param x X坐标
+		 * @param y Y坐标
+		 */
+		public Builder(float x, float y) {
+			this.x = x;
+			this.y = y;
+		}
+		
+		/**
+		 * 设置速度
+		 * @param vx X方向速度
+		 * @param vy Y方向速度
+		 * @return Builder 实例
+		 */
+		public Builder velocity(float vx, float vy) {
+			this.vx = vx;
+			this.vy = vy;
+			return this;
+		}
+		
+		/**
+		 * 设置分数值
+		 * @param scoreValue 分数值
+		 * @return Builder 实例
+		 */
+		public Builder scoreValue(int scoreValue) {
+			this.scoreValue = scoreValue;
+			return this;
+		}
+		
+		/**
+		 * 设置是否为大分数点
+		 * @param isLarge 是否为大分数点
+		 * @return Builder 实例
+		 */
+		public Builder large(boolean isLarge) {
+			this.isLarge = isLarge;
+			return this;
+		}
+		
+		/**
+		 * 设置游戏画布
+		 * @param gameCanvas 游戏画布
+		 * @return Builder 实例
+		 */
+		public Builder gameCanvas(GameCanvas gameCanvas) {
+			this.gameCanvas = gameCanvas;
+			return this;
+		}
+		
+		/**
+		 * 构建 ScorePoint 实例
+		 * @return ScorePoint 实例
+		 */
+		public ScorePoint build() {
+			return new ScorePoint(x, y, vx, vy, scoreValue, isLarge, gameCanvas);
+		}
+	}
+
 	public ScorePoint(float x, float y) {
 		this(x, y, SCORE_VALUE, false, null);
 	}
@@ -44,6 +117,7 @@ public class ScorePoint extends Item {
 		super(x, y, 0, 0, isLarge ? SCORE_POINT_SIZE * 1.5f : SCORE_POINT_SIZE, SCORE_POINT_COLOR, gameCanvas);
 		this.scoreValue = scoreValue;
 		this.isLarge = isLarge;
+		setAttractionParams(200.0f, 4.0f);
 	}
 
 	public ScorePoint(float x, float y, float vx, float vy, GameCanvas gameCanvas) {
@@ -62,6 +136,7 @@ public class ScorePoint extends Item {
 		super(x, y, vx, vy, isLarge ? SCORE_POINT_SIZE * 1.5f : SCORE_POINT_SIZE, SCORE_POINT_COLOR, gameCanvas);
 		this.scoreValue = scoreValue;
 		this.isLarge = isLarge;
+		setAttractionParams(200.0f, 4.0f);
 	}
 
 	/**
@@ -77,21 +152,7 @@ public class ScorePoint extends Item {
 	 */
 	@Override
 	protected void onUpdate() {
-		// 如果有游戏画布，向玩家方向缓慢移动
-		if (gameCanvas != null) {
-			Player player = gameCanvas.getPlayer();
-			if (player != null && player.isSlowMode()) {
-				float dx = player.getX() - x;
-				float dy = player.getY() - y;
-				float distance = (float)Math.sqrt(dx * dx + dy * dy);
-
-				if (distance < 200.0f) {
-					float attractionSpeed = 4.0f;
-					vx = (dx / distance) * attractionSpeed;
-					vy = (dy / distance) * attractionSpeed;
-				}
-			}
-		}
+		applyAttraction();
 	}
 
 	/**
@@ -111,19 +172,11 @@ public class ScorePoint extends Item {
 	public void render(Graphics2D g) {
 		if (!active) return;
 
-		float screenX = x;
-		float screenY = y;
+		float[] screenCoords = toScreenCoords(x, y);
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
-		if (gameCanvas != null) {
-			float[] coords = gameCanvas.getCoordinateSystem().toScreenCoords(x, y);
-			screenX = coords[0];
-			screenY = coords[1];
-		} else {
-			screenX = x + 548 / 2.0f;
-			screenY = 921 / 2.0f - y;
-		}
-
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g);
 
 		g.setColor(color);
 		g.fillOval((int)(screenX - size), (int)(screenY - size), (int)(size * 2), (int)(size * 2));

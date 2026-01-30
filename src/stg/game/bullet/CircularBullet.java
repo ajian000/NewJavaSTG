@@ -43,8 +43,9 @@ public class CircularBullet extends EnemyBullet {
 	 */
 	@Override
 	public void render(Graphics2D g) {
-		float screenX = x + 548 / 2.0f;
-		float screenY = 921 / 2.0f - y;
+		float[] screenCoords = toScreenCoords(x, y);
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
 		g.setColor(color);
 		g.fillOval((int)(screenX - size), (int)(screenY - size), (int)(size * 2), (int)(size * 2));
@@ -52,5 +53,21 @@ public class CircularBullet extends EnemyBullet {
 		g.setColor(innerColor);
 		float innerSize = size * 0.6f;
 		g.fillOval((int)(screenX - innerSize), (int)(screenY - innerSize), (int)(innerSize * 2), (int)(innerSize * 2));
+	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
 	}
 }

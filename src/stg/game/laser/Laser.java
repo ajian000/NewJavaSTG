@@ -105,7 +105,7 @@ public abstract class Laser {
 
 		// 设置抗锯齿
 		Graphics2D g2d = (Graphics2D) g.create();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g2d);
 
 		if (!active) {
 			// 渲染预警线
@@ -153,17 +153,6 @@ public abstract class Laser {
 		g2d.setColor(new Color(255, 255, 255, 150));
 		g2d.setStroke(new BasicStroke(width * 0.3f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g2d.drawLine((int)screenStart[0], (int)screenStart[1], (int)screenEnd[0], (int)screenEnd[1]);
-	}
-
-	/**
-	 * 坐标转换到屏幕坐标
-	 */
-	protected float[] toScreenCoords(float worldX, float worldY) {
-		if (gameCanvas != null) {
-			return gameCanvas.getCoordinateSystem().toScreenCoords(worldX, worldY);
-		}
-		// 默认中心原点转换
-		return new float[]{worldX + 548 / 2.0f, 921 / 2.0f - worldY};
 	}
 
 	/**
@@ -265,4 +254,14 @@ public abstract class Laser {
 	public void setGameCanvas(GameCanvas gameCanvas) {
 		this.gameCanvas = gameCanvas;
 	}
+
+	/**
+	 * 任务开始时触发的方法 - 用于处理开局对话等
+	 */
+	protected abstract void onTaskStart();
+
+	/**
+	 * 任务结束时触发的方法 - 用于处理boss击破对话和道具掉落
+	 */
+	protected abstract void onTaskEnd();
 }

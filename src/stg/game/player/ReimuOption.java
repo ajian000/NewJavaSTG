@@ -43,7 +43,7 @@ public class ReimuOption extends Option {
 		float screenX = x + gameCanvas.getWidth() / 2.0f;
 		float screenY = gameCanvas.getHeight() / 2.0f - y;
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g);
 
 		// 绘制灵梦子机主体（粉红色）
 		g.setColor(color);

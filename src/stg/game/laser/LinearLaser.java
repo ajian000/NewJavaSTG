@@ -129,4 +129,20 @@ public class LinearLaser extends Laser {
 		float bottomBound = height / 2.0f + length;
 		return x < leftBound || x > rightBound || y < topBound || y > bottomBound;
 	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
+	}
 }

@@ -76,7 +76,7 @@ public class BasicEnemy extends Enemy {
 	 * @Time 2026-01-19 Y负方向表示向下
 	 */
 	private void shoot() {
-		if (!alive || gameCanvas == null) return;
+		if (!isActive() || gameCanvas == null) return;
 
 		float bulletSpeed = -10.0f;
 		CircularBullet bullet = new CircularBullet(x, y, 0, bulletSpeed);
@@ -88,10 +88,9 @@ public class BasicEnemy extends Enemy {
 	 */
 	@Override
 	public void render(Graphics2D g) {
-		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
-		int canvasHeight = gameCanvas != null ? gameCanvas.getHeight() : 921;
-		float screenX = x + canvasWidth / 2.0f;
-		float screenY = canvasHeight / 2.0f - y;
+		float[] screenCoords = toScreenCoords(x, y);
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
 		int[] xPoints = {
 			(int)screenX,
@@ -125,6 +124,22 @@ public class BasicEnemy extends Enemy {
 	 */
 	@Override
 	public String toString() {
-		return "BasicEnemy[pos=(" + x + ", " + y + "), hp=" + hp + "/" + maxHp + ", alive=" + alive + "]";
+		return "BasicEnemy[pos=(" + x + ", " + y + "), hp=" + hp + "/" + maxHp + ", alive=" + isActive() + "]";
+	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
 	}
 }

@@ -134,4 +134,20 @@ public class EnemyCurvedLaser extends EnemyLaser {
 	public int getCurrentTrailLength() {
 		return curvedLaser.getCurrentTrailLength();
 	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
+	}
 }

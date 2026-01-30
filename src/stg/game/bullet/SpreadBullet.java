@@ -56,4 +56,20 @@ public class SpreadBullet extends EnemyBullet {
 		g.setColor(color);
 		g.fillOval((int)(x - size), (int)(y - size), (int)(size * 2), (int)(size * 2));
 	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
+	}
 }

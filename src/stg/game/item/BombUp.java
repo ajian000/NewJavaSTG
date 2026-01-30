@@ -49,19 +49,11 @@ public class BombUp extends Item {
 	public void render(Graphics2D g) {
 		if (!active) return;
 
-		float screenX = x;
-		float screenY = y;
+		float[] screenCoords = toScreenCoords(x, y);
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
-		if (gameCanvas != null) {
-			float[] coords = gameCanvas.getCoordinateSystem().toScreenCoords(x, y);
-			screenX = coords[0];
-			screenY = coords[1];
-		} else {
-			screenX = x + 548 / 2.0f;
-			screenY = 921 / 2.0f - y;
-		}
-
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g);
 
 		// 绘制B标志
 		g.setColor(color);

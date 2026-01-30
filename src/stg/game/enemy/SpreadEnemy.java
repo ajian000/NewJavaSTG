@@ -24,7 +24,7 @@ public class SpreadEnemy extends Enemy {
 	public void update() {
 		super.update();
 
-		if (gameCanvas == null || !alive) return;
+		if (gameCanvas == null || !isAlive()) return;
 
 		int canvasWidth = gameCanvas.getWidth();
 		float leftBound = -canvasWidth / 2.0f + size;
@@ -45,7 +45,7 @@ public class SpreadEnemy extends Enemy {
 	}
 
 	private void shootSpread() {
-		if (!alive || gameCanvas == null) return;
+		if (!isAlive() || gameCanvas == null) return;
 
 		float bulletSpeed = -8.0f;
 		int bulletCount = 7;
@@ -64,10 +64,9 @@ public class SpreadEnemy extends Enemy {
 
 	@Override
 	public void render(Graphics2D g) {
-		int canvasWidth = gameCanvas != null ? gameCanvas.getWidth() : 548;
-		int canvasHeight = gameCanvas != null ? gameCanvas.getHeight() : 921;
-		float screenX = x + canvasWidth / 2.0f;
-		float screenY = canvasHeight / 2.0f - y;
+		float[] screenCoords = toScreenCoords(x, y);
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
 		int[] xPoints = {
 			(int)screenX,
@@ -87,5 +86,21 @@ public class SpreadEnemy extends Enemy {
 		g.drawPolygon(xPoints, yPoints, 3);
 
 		renderHealthBar(g, screenX, screenY);
+	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
 	}
 }

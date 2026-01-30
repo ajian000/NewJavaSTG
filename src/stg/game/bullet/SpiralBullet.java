@@ -28,7 +28,7 @@ public class SpiralBullet extends EnemyBullet {
 	 * @param color 子弹颜色
 	 */
 	public SpiralBullet(float x, float y, float baseSpeed, float baseAngle,
-					  float radius, float angleSpeed, float size, Color color) {
+				  float radius, float angleSpeed, float size, Color color) {
 		super(x, y, 0, 0, size, color, 10);
 		this.baseSpeed = baseSpeed;
 		this.baseAngle = baseAngle;
@@ -72,8 +72,18 @@ public class SpiralBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 螺旋子弹不需要特殊的独立线程逻辑
+	 * 任务开始时触发的方法
 	 */
-	public void task() {
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
 	}
 }

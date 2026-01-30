@@ -1,7 +1,7 @@
 package stg.game.enemy;
 
-import stg.game.bullet.Bullet;
 import java.awt.*;
+import stg.game.bullet.Bullet;
 
 /**
  * 敌方子弹类 - 继承自Bullet,所有敌方弹幕的基类
@@ -58,5 +58,21 @@ public class EnemyBullet extends Bullet {
 	 */
 	public void setDamage(int damage) {
 		this.damage = damage;
+	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
 	}
 }

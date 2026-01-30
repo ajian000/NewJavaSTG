@@ -1,7 +1,6 @@
 package stg.game.player;
 
 import java.awt.*;
-import stg.game.bullet.SimpleBullet;
 import stg.game.ui.GameCanvas;
 
 /**
@@ -45,38 +44,17 @@ public class MarisaPlayer extends Player {
 
 	@Override
 	protected void shoot() {
-		GameCanvas canvas = getGameCanvas();
-		if (canvas == null) return;
-
-		boolean slowMode = isSlowMode();
-		float bulletSpeed = 46.0f;
-		float bulletSize = slowMode ? 5.0f : 3.5f;
-
-		// 魔理沙的特殊射击模式：集中火力
-		if (slowMode) {
-			// 低速模式：单发高伤害大弹
-			SimpleBullet bullet = new SimpleBullet(getX(), getY(), 0, bulletSpeed, bulletSize + 2, BULLET_COLOR);
-			bullet.setDamage(bulletDamage * 4); // @Time 2026-01-23 低速模式伤害×4，DPS = (1 × 4 × 60) / 2 = 120
-			bullet.setGameCanvas(canvas);
-			canvas.addBullet(bullet);
-		} else {
-			// 普通模式：3发集中弹
-			for (int i = -1; i <= 1; i++) {
-				float vx = i * 1.0f;
-				SimpleBullet bullet = new SimpleBullet(getX(), getY(), vx, bulletSpeed, bulletSize, BULLET_COLOR);
-				bullet.setDamage(bulletDamage); // @Time 2026-01-23 设置魔理沙子弹伤害
-				bullet.setGameCanvas(canvas);
-				canvas.addBullet(bullet);
-			}
-		}
+		// 使用默认自机的射击实现
+		super.shoot();
 	}
 
 	@Override
 	public void render(Graphics2D g) {
-		float screenX = getX() + getGameCanvas().getWidth() / 2.0f;
-		float screenY = getGameCanvas().getHeight() / 2.0f - getY();
+		float[] screenCoords = toScreenCoords(getX(), getY());
+		float screenX = screenCoords[0];
+		float screenY = screenCoords[1];
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		stg.util.RenderUtils.enableAntiAliasing(g);
 
 		// @Time 2026-01-23 无敌闪烁效果：每5帧闪烁一次
 		boolean shouldRender = true;

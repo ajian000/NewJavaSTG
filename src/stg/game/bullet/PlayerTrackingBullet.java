@@ -25,7 +25,7 @@ public class PlayerTrackingBullet extends Bullet {
 	 * @param color 子弹颜色
 	 */
 	public PlayerTrackingBullet(float x, float y, float speed, float initialAngle,
-						float turnSpeed, float size, Color color) {
+				float turnSpeed, float size, Color color) {
 		super(x, y, (float)Math.cos(initialAngle) * speed, (float)Math.sin(initialAngle) * speed, size, color);
 		this.speed = speed;
 		this.turnSpeed = turnSpeed;
@@ -104,5 +104,21 @@ public class PlayerTrackingBullet extends Bullet {
 		}
 
 		return nearest;
+	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
 	}
 }

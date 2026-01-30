@@ -223,4 +223,20 @@ public class CurvedLaser extends Laser {
 		this.vx = (float)Math.cos(angle) * speed;
 		this.vy = (float)Math.sin(angle) * speed;
 	}
+
+	/**
+	 * 任务开始时触发的方法
+	 */
+	@Override
+	protected void onTaskStart() {
+		// 空实现
+	}
+
+	/**
+	 * 任务结束时触发的方法
+	 */
+	@Override
+	protected void onTaskEnd() {
+		// 空实现
+	}
 }

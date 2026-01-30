@@ -530,18 +530,5 @@ for (int frame = 0; frame < 60; frame++) {
 - **混合使用：** 设置初始值用模式1，后续更新用模式2，既直观又高效
 - **预计算：** 对于固定角度，可预计算cos/sin值
 
-## 运行示例
 
-编译并运行示例代码：
-```bash
-# 模式1和模式2示例
-javac -encoding UTF-8 -d bin -sourcepath src src/stg/game/bullet/BulletTwoModesExample.java
-java -cp bin stg.game.bullet.BulletTwoModesExample
-
-# 基础功能示例
-javac -encoding UTF-8 -d bin -sourcepath src src/stg/game/bullet/BulletExample.java
-java -cp bin stg.game.bullet.BulletExample
-```
-
-示例程序会演示所有新功能的使用方法和效果。
 
