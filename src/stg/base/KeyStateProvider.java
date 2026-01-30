@@ -3,6 +3,7 @@ package stg.base;
 /**
  * 按键状态提供者接口
  * @Time 2026-01-20 支持标题界面的虚拟键盘显示
+ * @Time 2026-01-30 添加Shift和X键支持
  */
 public interface KeyStateProvider {
 	boolean isUpPressed();
@@ -10,4 +11,6 @@ public interface KeyStateProvider {
 	boolean isLeftPressed();
 	boolean isRightPressed();
 	boolean isZPressed();
+	boolean isShiftPressed();
+	boolean isXPressed();
 }

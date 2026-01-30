@@ -130,8 +130,8 @@ public class CurvedLaser extends Laser {
 			Point p1 = trailPoints.get(i);
 			Point p2 = trailPoints.get(i + 1);
 
-			float[] screenStart = toScreenCoords(p1.x, p1.y);
-			float[] screenEnd = toScreenCoords(p2.x, p2.y);
+			float[] screenStart = gameCanvas.toScreenCoords(p1.x, p1.y);
+			float[] screenEnd = gameCanvas.toScreenCoords(p2.x, p2.y);
 
 			// 渐变透明度
 			float alpha = (float)(i + 1) / trailPoints.size();
@@ -149,7 +149,7 @@ public class CurvedLaser extends Laser {
 		// 渲染头部
 		if (!trailPoints.isEmpty()) {
 			Point head = trailPoints.get(trailPoints.size() - 1);
-			float[] screenHead = toScreenCoords(head.x, head.y);
+			float[] screenHead = gameCanvas.toScreenCoords(head.x, head.y);
 
 			g2d.setColor(color);
 			g2d.fillOval((int)(screenHead[0] - head.width/2), (int)(screenHead[1] - head.width/2),

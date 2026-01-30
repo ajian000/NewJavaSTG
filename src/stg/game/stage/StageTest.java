@@ -140,23 +140,20 @@ public class StageTest {
                 };
             }
 
-            @Override
-            public void setLevelData(stg.util.LevelData levelData) {
-            }
 
-            @Override
-            public stg.util.LevelData getLevelData() {
-                return null;
-            }
         };
 
         // 创建关卡组
         StageGroup stageGroup = new StageGroup("Test Stage Group", mockCanvas);
 
         // 添加关卡
-        stageGroup.addStage(new SimpleStage(1, "Stage 1", mockCanvas));
-        stageGroup.addStage(new SimpleStage(2, "Stage 2", mockCanvas));
-        stageGroup.addStage(new SimpleStage(3, "Stage 3", mockCanvas));
+        SimpleStage stage1 = new SimpleStage(1, "Stage 1", mockCanvas);
+        SimpleStage stage2 = new SimpleStage(2, "Stage 2", mockCanvas);
+        SimpleStage stage3 = new SimpleStage(3, "Stage 3", mockCanvas);
+        
+        stageGroup.addStage(stage1);
+        stageGroup.addStage(stage2);
+        stageGroup.addStage(stage3);
 
         // 开始关卡组
         System.out.println("Starting stage group: " + stageGroup.getGroupName());

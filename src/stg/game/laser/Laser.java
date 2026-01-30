@@ -123,10 +123,10 @@ public abstract class Laser {
 	 * @param g2d 图形上下文
 	 */
 	protected void renderWarningLine(Graphics2D g2d) {
-		float[] screenStart = toScreenCoords(x, y);
+		float[] screenStart = gameCanvas.toScreenCoords(x, y);
 		float endX = x + (float)(Math.cos(angle) * length);
 		float endY = y + (float)(Math.sin(angle) * length);
-		float[] screenEnd = toScreenCoords(endX, endY);
+		float[] screenEnd = gameCanvas.toScreenCoords(endX, endY);
 
 		// 绘制虚线预警
 		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 100));
@@ -139,10 +139,10 @@ public abstract class Laser {
 	 * @param g2d 图形上下文
 	 */
 	protected void renderLaser(Graphics2D g2d) {
-		float[] screenStart = toScreenCoords(x, y);
+		float[] screenStart = gameCanvas.toScreenCoords(x, y);
 		float endX = x + (float)(Math.cos(angle) * length);
 		float endY = y + (float)(Math.sin(angle) * length);
-		float[] screenEnd = toScreenCoords(endX, endY);
+		float[] screenEnd = gameCanvas.toScreenCoords(endX, endY);
 
 		// 绘制激光核心
 		g2d.setColor(color);

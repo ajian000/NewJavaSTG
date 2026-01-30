@@ -2,20 +2,20 @@ package stg.game.ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import javax.swing.*;
 import stg.base.KeyStateProvider;
 import stg.game.*;
 import stg.game.bullet.Bullet;
 import stg.game.enemy.Enemy;
 import stg.game.enemy.EnemyBullet;
-import stg.game.laser.EnemyLaser;
 import stg.game.item.Item;
+import stg.game.laser.EnemyLaser;
+import stg.game.player.MarisaPlayer;
 import stg.game.player.Player;
 import stg.game.player.PlayerType;
 import stg.game.player.ReimuPlayer;
-import stg.game.player.MarisaPlayer;
 import stg.util.CoordinateSystem;
-import java.util.List;
 
 /**
  * 游戏画布类 - 游戏主界面的协调器
@@ -33,7 +33,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	private InputHandler inputHandler;
 	private CollisionSystem collisionSystem;
 	private GameStateManager gameStateManager;
-	private GameLevelManager levelManager;
+	private stg.game.stage.StageGroup currentStageGroup;
 	private PauseMenu pauseMenu;
 	
 	// 核心组件
@@ -81,6 +81,13 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
+ * 获取游戏世界
+ */
+	public GameWorld getWorld() {
+		return world;
+	}
+
+	/**
  * @since 2026-01-24 设置游戏状态面板
  */
 	public void setGameStatusPanel(GameStatusPanel gameStatusPanel) {
@@ -108,6 +115,10 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	public boolean isRightPressed() { return inputHandler.isRightPressed(); }
 	@Override
 	public boolean isZPressed() { return inputHandler.isZPressed(); }
+	@Override
+	public boolean isShiftPressed() { return inputHandler.isShiftPressed(); }
+	@Override
+	public boolean isXPressed() { return inputHandler.isXPressed(); }
 
 	/**
  * @since 2026-01-19 将中心原点坐标转换为屏幕坐标
@@ -175,7 +186,10 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	public void resetGame() {
 		world.clear();
 		gameStateManager.reset();
-		levelManager.reset();
+		
+		if (currentStageGroup != null) {
+			currentStageGroup.reset();
+		}
 		
 		if (player != null) {
 			int canvasHeight = getHeight();
@@ -184,6 +198,15 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			player.setPosition(actualPlayerX, actualPlayerY);
 			player.reset();
 		}
+	}
+
+	/**
+	 * 设置当前关卡组
+	 * @param stageGroup 关卡组对象
+	 */
+	public void setStageGroup(stg.game.stage.StageGroup stageGroup) {
+		this.currentStageGroup = stageGroup;
+		System.out.println("设置关卡组: " + stageGroup.getGroupName());
 	}
 
 	/**
@@ -197,7 +220,6 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 		// 初始化渲染器和碰撞系统
 		renderer = new GameRenderer(world, player, coordinateSystem);
 		collisionSystem = new CollisionSystem(world, player);
-		levelManager = new GameLevelManager(world, this);
 		
 		// 初始化游戏状态面板
 		if (gameStatusPanel != null) {
@@ -255,8 +277,10 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 			player.update();
 		}
 
-		// 更新关卡逻辑
-		levelManager.update();
+		// 更新关卡组逻辑
+		if (currentStageGroup != null) {
+			currentStageGroup.update();
+		}
 
 		// 更新游戏世界中的所有实体
 		int canvasWidth = getWidth();
@@ -391,4 +415,12 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	public GameStateManager getGameStateManager() {
 		return gameStateManager;
 	}
-}
+
+	/**
+	 * 获取当前关卡组
+	 * @return 当前关卡组对象
+	 */
+	public stg.game.stage.StageGroup getCurrentStageGroup() {
+		return currentStageGroup;
+	}
+} 

@@ -70,10 +70,8 @@ public class VirtualKeyboardPanel extends JPanel {
 		leftPressed = keyStateProvider.isLeftPressed();
 		rightPressed = keyStateProvider.isRightPressed();
 		zPressed = keyStateProvider.isZPressed();
-		if (keyStateProvider instanceof GameCanvas) {
-			shiftPressed = ((GameCanvas)keyStateProvider).isShiftPressed();
-			xPressed = ((GameCanvas)keyStateProvider).isXPressed();
-		}
+		shiftPressed = keyStateProvider.isShiftPressed();
+		xPressed = keyStateProvider.isXPressed();
 	}
 
 	/**
@@ -110,10 +108,7 @@ public class VirtualKeyboardPanel extends JPanel {
 
 		int zxY = funcY + keyHeight + keyGap + 15;
 		drawKey(g, funcX, zxY, keyWidth, keyHeight, "Z", zPressed);
-
-		if (keyStateProvider instanceof GameCanvas) {
-			drawKey(g, funcX + keyWidth + keyGap, zxY, keyWidth, keyHeight, "X", xPressed);
-		}
+		drawKey(g, funcX + keyWidth + keyGap, zxY, keyWidth, keyHeight, "X", xPressed);
 	}
 
 	/**

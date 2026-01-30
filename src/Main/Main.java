@@ -4,18 +4,14 @@ import java.awt.EventQueue;
 import stg.base.Window;
 import stg.game.ui.GameCanvas;
 import stg.game.ui.TitleScreen;
-import stg.util.LevelManager;
 
 public class Main {
 	private static Window window;
-	private static LevelManager levelManager;
 	private static TitleScreen titleScreen;
 	private static stg.game.player.PlayerType selectedPlayerType = stg.game.player.PlayerType.DEFAULT;
 
 	public static void main(String[] args) {
 		System.out.println("启动 STG 游戏引擎");
-
-		levelManager = LevelManager.getInstance();
 
 		EventQueue.invokeLater(() -> {
 			window = new Window(false);
@@ -26,9 +22,15 @@ public class Main {
 	private static void showTitleScreen() {
 		titleScreen = new TitleScreen(new TitleScreen.TitleCallback() {
 			@Override
-			public void onGameStart(stg.game.player.PlayerType playerType) {
-				System.out.println("开始游戏: " + playerType.getName());
-				startGame(playerType);
+			public void onStageGroupSelect(stg.game.player.PlayerType playerType) {
+				System.out.println("选择关卡组: " + playerType.getName());
+				showStageGroupSelect(playerType);
+			}
+
+			@Override
+			public void onGameStart(stg.game.stage.StageGroup stageGroup, stg.game.player.PlayerType playerType) {
+				System.out.println("开始游戏: " + playerType.getName() + ", 关卡组: " + stageGroup.getGroupName());
+				startGame(stageGroup, playerType);
 			}
 
 			@Override
@@ -49,11 +51,48 @@ public class Main {
 		window.repaint();
 	}
 
-	private static void startGame(stg.game.player.PlayerType playerType) {
+	private static void showStageGroupSelect(stg.game.player.PlayerType playerType) {
+		stg.game.ui.StageGroupSelectPanel selectPanel = new stg.game.ui.StageGroupSelectPanel(
+			new stg.game.ui.StageGroupSelectPanel.StageGroupSelectCallback() {
+				@Override
+				public void onStageGroupSelected(stg.game.stage.StageGroup stageGroup, stg.game.player.PlayerType type) {
+					System.out.println("选择关卡组: " + stageGroup.getGroupName());
+					startGame(stageGroup, type);
+				}
+
+				@Override
+				public void onBack() {
+					System.out.println("返回自机选择");
+					showTitleScreen();
+				}
+			}, playerType
+		);
+
+		// 使用StageGroupManager获取关卡组列表
+		stg.game.ui.GameCanvas gameCanvas = window.getGameCanvas();
+		stg.game.stage.StageGroupManager stageGroupManager = stg.game.stage.StageGroupManager.getInstance();
+		stageGroupManager.init(gameCanvas);
+
+		// 添加所有关卡组到选择面板
+		java.util.List<stg.game.stage.StageGroup> stageGroups = stageGroupManager.getStageGroups();
+		for (stg.game.stage.StageGroup group : stageGroups) {
+			selectPanel.addStageGroup(group);
+			System.out.println("添加关卡组: " + group.getDisplayName());
+		}
+
+		window.getCenterPanel().removeAll();
+		window.getCenterPanel().add(selectPanel);
+		window.getVirtualKeyboardPanel().setKeyStateProvider(selectPanel);
+		selectPanel.requestFocusInWindow();
+		window.revalidate();
+		window.repaint();
+	}
+
+	private static void startGame(stg.game.stage.StageGroup stageGroup, stg.game.player.PlayerType playerType) {
 		titleScreen.stopTitleMusic();
 		
 		window.initializePlayer(playerType);
-		window.getCenterPanel().remove(titleScreen);
+		window.getCenterPanel().removeAll();
 
 		// 获取游戏画布并更新虚拟键盘按键状态提供者
 		GameCanvas gameCanvas = window.getGameCanvas();
@@ -74,17 +113,17 @@ public class Main {
 			System.out.println("玩家出生位置: (" + actualPlayerX + ", " + actualPlayerY + ")");
 		}
 
+		// 启动关卡组
+		gameCanvas.setStageGroup(stageGroup);
+		stageGroup.start();
+
 		gameCanvas.requestFocusInWindow();
 		new stg.game.GameLoop(gameCanvas).start();
-		System.out.println("游戏开始，自机: " + playerType.getName());
+		System.out.println("游戏开始，自机: " + playerType.getName() + ", 关卡组: " + stageGroup.getGroupName());
 	}
 
 	public static Window getWindow() {
 		return window;
-	}
-
-	public static LevelManager getLevelManager() {
-		return levelManager;
 	}
 
 	public static stg.game.player.PlayerType getSelectedPlayerType() {

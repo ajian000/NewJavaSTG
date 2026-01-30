@@ -144,6 +144,10 @@ public class InputHandler implements KeyStateProvider {
     public boolean isRightPressed() { return rightPressed; }
     @Override
     public boolean isZPressed() { return zPressed; }
+    @Override
+    public boolean isShiftPressed() { return shiftPressed; }
+    @Override
+    public boolean isXPressed() { return xPressed; }
     
     /**
      * 设置玩家

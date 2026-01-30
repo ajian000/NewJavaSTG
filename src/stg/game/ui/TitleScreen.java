@@ -7,7 +7,6 @@ import javax.swing.*;
 import stg.base.KeyStateProvider;
 import stg.game.player.PlayerType;
 import stg.util.AudioManager;
-import stg.util.OGGAudioSupport;
 import stg.util.ResourceManager;
 
 /**
@@ -25,7 +24,8 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 
 	private enum MenuState {
 		MAIN_MENU,
-		PLAYER_SELECT
+		PLAYER_SELECT,
+		STAGE_GROUP_SELECT
 	}
 
 	private static final String[] MAIN_MENU_ITEMS = {
@@ -48,9 +48,12 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 	private boolean leftPressed = false;
 	private boolean rightPressed = false;
 	private boolean zPressed = false;
+	private boolean shiftPressed = false;
+	private boolean xPressed = false;
 
 	public interface TitleCallback {
-		void onGameStart(stg.game.player.PlayerType playerType);
+		void onStageGroupSelect(stg.game.player.PlayerType playerType);
+		void onGameStart(stg.game.stage.StageGroup stageGroup, stg.game.player.PlayerType playerType);
 		void onExit();
 	}
 
@@ -90,30 +93,10 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 	
 	private void playTitleMusic() {
 		try {
-			if (OGGAudioSupport.supportsOGG()) {
-				try {
-					OGGAudioSupport.playOGGMusic(
-						audioManager,
-						"resources/audio/",
-						"luastg.ogg",
-						true,
-						0.7f
-					);
-					System.out.println("【音频】标题音乐播放中（OGG）");
-					return;
-				} catch (Exception oggError) {
-					System.out.println("【警告】OGG 播放失败，尝试使用 WAV 格式: " + oggError.getMessage());
-				}
-			}
-			
-			try {
-				audioManager.playMusic("luastg.wav", true);
-				System.out.println("【音频】标题音乐播放中（WAV）");
-			} catch (Exception wavError) {
-				System.out.println("【警告】WAV 音乐播放失败，跳过背景音乐: " + wavError.getMessage());
-			}
-		} catch (Exception e) {
-			System.out.println("【警告】标题音乐播放失败: " + e.getMessage());
+			audioManager.playMusic("luastg.wav", true);
+			System.out.println("【音频】标题音乐播放中（WAV）");
+		} catch (Exception wavError) {
+			System.out.println("【警告】WAV 音乐播放失败，跳过背景音乐: " + wavError.getMessage());
 		}
 	}
 	
@@ -170,9 +153,9 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 				repaint();
 				break;
 			case KeyEvent.VK_Z:
-			case KeyEvent.VK_ENTER:
-				callback.onGameStart(selectedPlayerType);
-				break;
+		case KeyEvent.VK_ENTER:
+			callback.onStageGroupSelect(selectedPlayerType);
+			break;
 			case KeyEvent.VK_ESCAPE:
 				currentState = MenuState.MAIN_MENU;
 				repaint();
@@ -312,10 +295,16 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 	public boolean isRightPressed() { return rightPressed; }
 	@Override
 	public boolean isZPressed() { return zPressed; }
+	@Override
+	public boolean isShiftPressed() { return shiftPressed; }
+	@Override
+	public boolean isXPressed() { return xPressed; }
 
 	public void setUpPressed(boolean upPressed) { this.upPressed = upPressed; }
 	public void setDownPressed(boolean downPressed) { this.downPressed = downPressed; }
 	public void setLeftPressed(boolean leftPressed) { this.leftPressed = leftPressed; }
 	public void setRightPressed(boolean rightPressed) { this.rightPressed = rightPressed; }
 	public void setZPressed(boolean zPressed) { this.zPressed = zPressed; }
+	public void setShiftPressed(boolean shiftPressed) { this.shiftPressed = shiftPressed; }
+	public void setXPressed(boolean xPressed) { this.xPressed = xPressed; }
 }

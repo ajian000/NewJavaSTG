@@ -23,6 +23,9 @@ replay_pid*
 .idea/
 *.iml
 .vscode/
+.classpath
+.project
+.settings/
 *.swp
 *.swo
 *~

@@ -27,7 +27,7 @@ public class Player extends Obj {
 	private float respawnSpeed; // @since 2026-01-19 重生移动速度
 	private int invincibleTimer; // 无敌时间计时器(帧数)
 	private int invincibleTime = 120; // 无敌时间(120帧=2秒)
-	private int bulletDamage = 2; // @since 2026-01-23 子弹伤害，DPS = (2 × 2 × 60) / 2 = 120
+	protected int bulletDamage = 2; // @since 2026-01-23 子弹伤害，DPS = (2 × 2 × 60) / 2 = 120
 	private List<Option> options; // 子机列表
 
 	public Player() {

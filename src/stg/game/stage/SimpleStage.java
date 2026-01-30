@@ -10,6 +10,8 @@ import stg.game.ui.GameCanvas;
 public class SimpleStage extends Stage {
     private int enemyCount;
     private int enemiesSpawned;
+    private int spawnTimer;
+    private static final int SPAWN_INTERVAL = 120; // 2秒 @ 60fps
 
     /**
      * 构造函数
@@ -21,6 +23,7 @@ public class SimpleStage extends Stage {
         super(stageId, stageName, gameCanvas);
         this.enemyCount = 5;
         this.enemiesSpawned = 0;
+        this.spawnTimer = 0;
     }
 
     @Override
@@ -37,27 +40,25 @@ public class SimpleStage extends Stage {
     @Override
     public void load() {
         System.out.println("Loading stage: " + getStageName());
+        // 加载完成后设置状态为LOADED
+        setLoaded();
     }
 
     @Override
-    protected void task() {
-        while (isTaskRunning()) {
-            try {
-                // 每2秒生成一个敌人
-                Thread.sleep(2000);
-
-                if (enemiesSpawned < enemyCount && isActive()) {
+    public void update() {
+        super.update();
+        
+        if (isActive()) {
+            spawnTimer++;
+            
+            // 每2秒生成一个敌人
+            if (spawnTimer >= SPAWN_INTERVAL) {
+                spawnTimer = 0;
+                
+                if (enemiesSpawned < enemyCount) {
                     spawnEnemy();
                     enemiesSpawned++;
                 }
-
-                // 检查关卡完成条件
-                if (enemiesSpawned >= enemyCount && getEnemies().isEmpty()) {
-                    end();
-                }
-
-            } catch (InterruptedException e) {
-                break;
             }
         }
     }
@@ -87,12 +88,12 @@ public class SimpleStage extends Stage {
     }
 
     @Override
-    protected void onTaskStart() {
+    protected void onStageStart() {
         System.out.println("Stage started: " + getStageName());
     }
 
     @Override
-    protected void onTaskEnd() {
+    protected void onStageEnd() {
         System.out.println("Stage completed: " + getStageName());
     }
 }

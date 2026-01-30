@@ -1,6 +1,5 @@
 package stg.game.stage;
 
-import java.util.ArrayList;
 import java.util.List;
 import stg.game.enemy.Enemy;
 import stg.game.ui.GameCanvas;
@@ -12,12 +11,12 @@ import stg.game.ui.GameCanvas;
 public abstract class Stage {
     private String stageName;
     private int stageId;
-    private boolean completed;
-    private boolean started;
-    private List<Enemy> enemies;
-    private Thread taskThread;
-    private volatile boolean taskRunning = false;
+    private StageState state;
     private GameCanvas gameCanvas;
+    private StageCompletionCondition completionCondition;
+    
+    // 波次管理相关字段
+    protected int currentFrame = 0;
 
     /**
      * 构造函数
@@ -29,10 +28,9 @@ public abstract class Stage {
         this.stageId = stageId;
         this.stageName = stageName;
         this.gameCanvas = gameCanvas;
-        this.completed = false;
-        this.started = false;
-        this.enemies = new ArrayList<>();
+        this.state = StageState.CREATED;
         initStage();
+        // 移除自动加载和开始逻辑，由调用者显式控制
     }
 
     /**
@@ -46,10 +44,9 @@ public abstract class Stage {
      * 开始关卡
      */
     public void start() {
-        if (!started) {
-            started = true;
+        if (state == StageState.LOADED) {
+            state = StageState.STARTED;
             onStageStart();
-            startTask();
         }
     }
 
@@ -57,11 +54,18 @@ public abstract class Stage {
      * 结束关卡
      */
     public void end() {
-        if (!completed) {
-            completed = true;
+        if (state == StageState.STARTED) {
+            state = StageState.COMPLETED;
             onStageEnd();
-            stopTask();
         }
+    }
+
+    /**
+     * 检查关卡是否激活
+     * @return 是否激活
+     */
+    public boolean isActive() {
+        return state == StageState.STARTED;
     }
 
     /**
@@ -76,16 +80,21 @@ public abstract class Stage {
     public abstract void load();
 
     /**
+     * 设置关卡状态为LOADED
+     * 由子类在load()方法完成后调用
+     */
+    protected void setLoaded() {
+        this.state = StageState.LOADED;
+    }
+
+    /**
      * 清理关卡资源
      */
     public void cleanup() {
-        for (Enemy enemy : enemies) {
-            if (enemy != null) {
-                enemy.setActive(false);
-            }
+        if (state != StageState.CLEANED_UP) {
+            // 敌人清理由GameWorld负责
+            state = StageState.CLEANED_UP;
         }
-        enemies.clear();
-        stopTask();
     }
 
     /**
@@ -94,8 +103,8 @@ public abstract class Stage {
      */
     public void addEnemy(Enemy enemy) {
         if (enemy != null) {
-            enemies.add(enemy);
             if (gameCanvas != null) {
+                gameCanvas.getWorld().addEnemy(enemy);
                 gameCanvas.addEnemy(enemy);
             }
         }
@@ -106,7 +115,7 @@ public abstract class Stage {
      * @param enemy 敌人对象
      */
     public void removeEnemy(Enemy enemy) {
-        enemies.remove(enemy);
+        // 敌人移除逻辑由GameWorld负责
     }
 
     /**
@@ -114,7 +123,7 @@ public abstract class Stage {
      * @return 是否完成
      */
     public boolean isCompleted() {
-        return completed;
+        return state == StageState.COMPLETED;
     }
 
     /**
@@ -122,7 +131,7 @@ public abstract class Stage {
      * @return 是否已开始
      */
     public boolean isStarted() {
-        return started;
+        return state == StageState.STARTED;
     }
 
     /**
@@ -146,7 +155,10 @@ public abstract class Stage {
      * @return 敌人列表（不可修改）
      */
     public List<Enemy> getEnemies() {
-        return java.util.Collections.unmodifiableList(enemies);
+        if (gameCanvas != null) {
+            return gameCanvas.getWorld().getEnemies();
+        }
+        return java.util.Collections.emptyList();
     }
 
     /**
@@ -155,50 +167,6 @@ public abstract class Stage {
      */
     protected GameCanvas getGameCanvas() {
         return gameCanvas;
-    }
-
-    // ========== Task机制 ==========
-
-    /**
-     * 启动task线程
-     */
-    private void startTask() {
-        taskRunning = true;
-        taskThread = new Thread(() -> {
-            try {
-                executeTask();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }, "Stage-Task-" + System.currentTimeMillis());
-        taskThread.start();
-    }
-
-    /**
-     * 停止task线程
-     */
-    public void stopTask() {
-        taskRunning = false;
-        if (taskThread != null && taskThread.isAlive()) {
-            try {
-                taskThread.join(100);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-
-    /**
-     * 任务执行方法 - 子类必须实现
-     */
-    protected abstract void executeTask();
-
-    /**
-     * 检查task是否运行
-     * @return 是否运行
-     */
-    protected boolean isTaskRunning() {
-        return taskRunning;
     }
 
     /**
@@ -216,19 +184,54 @@ public abstract class Stage {
     }
 
     /**
+     * 设置关卡完成条件
+     * @param condition 关卡完成条件
+     */
+    public void setCompletionCondition(StageCompletionCondition condition) {
+        this.completionCondition = condition;
+    }
+
+    /**
      * 检查关卡完成条件
      */
     protected void checkCompletion() {
-        // 子类可以重写此方法检查关卡完成条件
+        if (completionCondition != null && completionCondition.isCompleted(this)) {
+            end();
+        }
+    }
+
+    /**
+     * 更新关卡逻辑
+     */
+    public void update() {
+        if (isActive()) {
+            currentFrame++;
+            updateWaveLogic();
+        }
+        checkCompletion();
+    }
+
+    /**
+     * 更新波次逻辑
+     * 子类可以重写此方法实现具体的波次管理
+     */
+    protected void updateWaveLogic() {
+        // 子类可以重写此方法实现具体的波次管理
+    }
+
+    /**
+     * 获取当前帧数
+     * @return 当前帧数
+     */
+    public int getCurrentFrame() {
+        return currentFrame;
     }
 
     /**
      * 重置关卡
      */
     public void reset() {
-        this.completed = false;
-        this.started = false;
-        this.enemies.clear();
+        this.state = StageState.CREATED;
         initStage();
     }
 }
