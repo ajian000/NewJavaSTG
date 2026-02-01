@@ -1,6 +1,7 @@
 package user.laser;
 
 import java.awt.Color;
+import stg.game.laser.Laser;
 
 /**
  * 简单激光类 - 提供空的task实现

@@ -3,10 +3,10 @@ package stg.game.player;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import stg.game.obj.Obj;
-import stg.game.ui.GameCanvas;
 import user.bullet.SimpleBullet;
 import user.player.Option;
+import stg.game.obj.Obj;
+import stg.game.ui.GameCanvas;
 
 /**
  * 玩家类 - 自机角色

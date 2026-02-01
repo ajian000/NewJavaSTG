@@ -1,5 +1,7 @@
 package user.stage;
 
+import stg.game.stage.Stage;
+
 /**
  * 独立的Stage系统测试类
  * 不依赖于现有Enemy类，只测试Stage和StageGroup的基本功能
@@ -70,7 +72,7 @@ public class StageSystemTest {
         System.out.println("\n--- Testing StageGroup Class ---");
         
         // 创建一个StageGroup对象
-        StageGroup stageGroup = new StageGroup("Test Group", null);
+        StageGroup stageGroup = new StageGroup("Test Group", "Test group description", StageGroup.Difficulty.NORMAL, null);
         
         System.out.println("1. Created stage group: " + stageGroup.getGroupName());
         
@@ -151,19 +153,22 @@ public class StageSystemTest {
             System.out.println("  TestStage.load() called for: " + getStageName());
         }
 
-        @Override
-        protected void task() {
-            // 空的task实现，避免线程阻塞
+        protected void initBehavior() {
         }
 
-        @Override
-        protected void onTaskStart() {
-            System.out.println("  TestStage.onTaskStart() called for: " + getStageName());
+        protected void onUpdate() {
         }
 
-        @Override
-        protected void onTaskEnd() {
-            System.out.println("  TestStage.onTaskEnd() called for: " + getStageName());
+        protected void onMove() {
+        }
+
+        protected void checkCompletion() {
+        }
+
+        protected void onStageStart() {
+        }
+
+        protected void onStageEnd() {
         }
     }
 }

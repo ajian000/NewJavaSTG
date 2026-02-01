@@ -7,7 +7,7 @@ import java.util.Random;
  * 基础敌人行为示例
  * 展示如何在新架构下实现简单的敌人行为
  */
-public class BasicEnemyExample extends Enemy {
+public class BasicEnemyExample extends stg.game.enemy.Enemy {
 	private Random random;
 	private float moveSpeed;
 	private int shootCooldown;

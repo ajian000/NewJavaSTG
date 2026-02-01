@@ -5,7 +5,7 @@ import stg.game.enemy.IEnemy;
 import user.enemy.EnemyBullet;
 import stg.game.item.IItem;
 import user.laser.EnemyLaser;
-import user.player.IPlayer;
+import stg.game.player.IPlayer;
 import stg.util.CoordinateSystem;
 
 /**

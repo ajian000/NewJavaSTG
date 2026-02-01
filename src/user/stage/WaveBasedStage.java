@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import user.enemy.*;
 import stg.game.ui.GameCanvas;
+import stg.game.stage.Stage;
 
 /**
  * 基于波次的关卡类 - 实现波次管理和敌人生成逻辑

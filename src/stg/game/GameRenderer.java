@@ -2,8 +2,8 @@ package stg.game;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import stg.util.CoordinateSystem;
 import user.player.Player;
+import stg.util.CoordinateSystem;
 
 /**
  * 游戏渲染器 - 处理游戏的渲染逻辑
@@ -74,7 +74,7 @@ public class GameRenderer {
      * 渲染物品
      */
     private void renderItems(Graphics2D g) {
-        for (user.item.Item item : world.getItems()) {
+        for (stg.game.item.Item item : world.getItems()) {
             item.render(g);
         }
     }

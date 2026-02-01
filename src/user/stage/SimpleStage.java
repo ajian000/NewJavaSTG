@@ -2,6 +2,7 @@ package user.stage;
 
 import user.enemy.BasicEnemy;
 import stg.game.ui.GameCanvas;
+import stg.game.stage.Stage;
 
 /**
  * 简单关卡示例类

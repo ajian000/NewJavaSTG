@@ -1,5 +1,7 @@
 package user.stage;
 
+import stg.game.stage.Stage;
+
 /**
  * 简化的Stage系统测试类
  * @since 2026-01-30
@@ -67,7 +69,7 @@ public class SimpleStageTest {
         
         // 创建一个StageGroup对象
         // 注意：这里我们使用null作为GameCanvas，因为这只是一个基本测试
-        StageGroup stageGroup = new StageGroup("Test Group", null);
+        StageGroup stageGroup = new StageGroup("Test Group", "Test group description", StageGroup.Difficulty.NORMAL, null);
         
         System.out.println("Created stage group: " + stageGroup.getGroupName());
         

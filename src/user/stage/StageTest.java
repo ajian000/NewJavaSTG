@@ -1,6 +1,11 @@
 package user.stage;
 
 import stg.game.ui.GameCanvas;
+import stg.game.stage.Stage;
+import stg.game.enemy.Enemy;
+import stg.game.item.Item;
+import stg.game.bullet.Bullet;
+import stg.game.laser.Laser;
 
 /**
  * Stage系统测试类
@@ -11,129 +16,99 @@ public class StageTest {
     public static void main(String[] args) {
         // 创建一个模拟的GameCanvas
         GameCanvas mockCanvas = new GameCanvas() {
-            @Override
             public void initialize() {
             }
 
-            @Override
             public void reset() {
             }
 
-            @Override
             public void update() {
             }
 
-            @Override
             public void render(java.awt.Graphics2D g) {
             }
 
-            @Override
             public void setPlayer(user.player.Player player) {
             }
 
-            @Override
             public user.player.Player getPlayer() {
                 return null;
             }
 
-            @Override
-            public void addEnemy(user.enemy.Enemy enemy) {
+            public void addEnemy(Enemy enemy) {
             }
 
-            @Override
-            public void removeEnemy(user.enemy.Enemy enemy) {
+            public void removeEnemy(Enemy enemy) {
             }
 
-            @Override
-            public void addItem(user.item.Item item) {
+            public void addItem(Item item) {
             }
 
-            @Override
-            public void addBullet(user.bullet.Bullet bullet) {
+            public void addBullet(Bullet bullet) {
             }
 
-            @Override
-            public void addLaser(user.laser.Laser laser) {
+            public void addLaser(Laser laser) {
             }
 
-            @Override
             public void setGameStatus(stg.game.ui.GameStatusPanel gameStatus) {
             }
 
-            @Override
             public stg.game.ui.GameStatusPanel getGameStatus() {
                 return null;
             }
 
-            @Override
             public void setTitleScreen(stg.game.ui.TitleScreen titleScreen) {
             }
 
-            @Override
             public stg.game.ui.TitleScreen getTitleScreen() {
                 return null;
             }
 
-            @Override
             public void showTitleScreen() {
             }
 
-            @Override
             public void hideTitleScreen() {
             }
 
-            @Override
             public void gameOver() {
             }
 
-            @Override
             public void gameClear() {
             }
 
-            @Override
             public void resetGame() {
             }
 
-            @Override
             public void startGame() {
             }
 
-            @Override
             public boolean isGameActive() {
                 return true;
             }
 
-            @Override
             public boolean isTitleScreenActive() {
                 return false;
             }
 
-            @Override
             public void setGameActive(boolean active) {
             }
 
-            @Override
             public void setTitleScreenActive(boolean active) {
             }
 
-            @Override
             public void setPlayerType(user.player.PlayerType playerType) {
             }
 
-            @Override
             public user.player.PlayerType getPlayerType() {
                 return null;
             }
 
-            @Override
             public stg.util.CoordinateSystem getCoordinateSystem() {
-                return new stg.util.CoordinateSystem() {
-                    @Override
+                return new stg.util.CoordinateSystem(getWidth(), getHeight()) {
                     public float[] toScreenCoords(float x, float y) {
                         return new float[]{x + getWidth() / 2, getHeight() / 2 - y};
                     }
 
-                    @Override
                     public float[] toWorldCoords(float screenX, float screenY) {
                         return new float[]{screenX - getWidth() / 2, getHeight() / 2 - screenY};
                     }
@@ -144,7 +119,7 @@ public class StageTest {
         };
 
         // 创建关卡组
-        StageGroup stageGroup = new StageGroup("Test Stage Group", mockCanvas);
+        StageGroup stageGroup = new StageGroup("Test Stage Group", "Test stage group description", StageGroup.Difficulty.NORMAL, mockCanvas);
 
         // 添加关卡
         SimpleStage stage1 = new SimpleStage(1, "Stage 1", mockCanvas);

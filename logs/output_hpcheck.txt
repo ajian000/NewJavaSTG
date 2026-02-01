@@ -1,9 +1,0 @@
-Æô¶¯ STG ÓÎÏ·ÒıÇæ
-Loaded level: main
-Loaded level: Multi-Wave Test Stage
-Enemy count: 5
-  Enemy: BasicEnemy at frame 60
-  Enemy: BasicEnemy at frame 250
-  Enemy: BasicEnemy at frame 550
-  Enemy: BasicEnemy at frame 800
-  Enemy: BasicEnemy at frame 1100

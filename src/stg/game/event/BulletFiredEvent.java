@@ -1,7 +1,7 @@
 package stg.game.event;
 
 import stg.game.bullet.IBullet;
-import user.player.IPlayer;
+import stg.game.player.IPlayer;
 
 /**
  * 子弹发射事件 - 当子弹被发射时触发

@@ -1,6 +1,7 @@
 package user.laser;
 
 import java.awt.*;
+import stg.game.laser.Laser;
 
 /**
  * 直线激光类 - 继承自Laser

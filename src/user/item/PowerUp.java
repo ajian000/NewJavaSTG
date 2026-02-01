@@ -3,6 +3,7 @@ package user.item;
 import java.awt.*;
 import stg.game.ui.GameCanvas;
 import user.player.Player;
+import stg.game.item.Item;
 
 /**
  * 强化道具类 - 增加玩家火力

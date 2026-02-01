@@ -1,7 +1,7 @@
 package user;
 
 import java.awt.Color;
-import user.item.Item;
+import stg.game.item.Item;
 
 /**
  * 能量道具行为示例

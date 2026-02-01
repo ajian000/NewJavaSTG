@@ -1,8 +1,9 @@
 package user.item;
 
 import java.awt.*;
-import user.player.Player;
+import stg.game.item.Item;
 import stg.game.ui.GameCanvas;
+import user.player.Player;
 
 /**
  * 炸弹道具类 - 增加玩家炸弹数量
@@ -11,6 +12,18 @@ public class BombUp extends Item {
 	private static final float BOMBUP_SIZE = 12.0f;
 	private static final Color BOMBUP_COLOR = new Color(255, 100, 100);
 	private static final int BOMB_VALUE = 1; // 增加的炸弹数量
+
+	@Override
+	protected void initBehavior() {
+	}
+
+	@Override
+	protected void onUpdate() {
+	}
+
+	@Override
+	protected void onMove() {
+	}
 
 	public BombUp(float x, float y) {
 		super(x, y, BOMBUP_SIZE, BOMBUP_COLOR);

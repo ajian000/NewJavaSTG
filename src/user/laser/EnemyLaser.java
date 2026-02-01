@@ -1,6 +1,7 @@
 package user.laser;
 
 import java.awt.*;
+import stg.game.laser.Laser;
 
 /**
  * 敌方激光基类 - 所有敌方激光的父类

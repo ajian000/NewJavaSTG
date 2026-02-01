@@ -9,7 +9,7 @@ import stg.game.*;
 import stg.game.bullet.Bullet;
 import stg.game.enemy.Enemy;
 import user.enemy.EnemyBullet;
-import user.item.Item;
+import stg.game.item.Item;
 import user.laser.EnemyLaser;
 import user.player.MarisaPlayer;
 import user.player.Player;

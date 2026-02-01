@@ -3,6 +3,7 @@ package user.item;
 import java.awt.*;
 import user.player.Player;
 import stg.game.ui.GameCanvas;
+import stg.game.item.Item;
 
 /**
  * 生命值道具类 - 恢复玩家生命

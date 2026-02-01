@@ -3,6 +3,7 @@ package user.laser;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import stg.game.laser.Laser;
 
 /**
  * 曲线激光类 - 继承自Laser，具有可调节长度的拖尾系统
