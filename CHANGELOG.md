@@ -2,12 +2,21 @@
 
 ## 2026-02-01
 
+### 清理
+- 删除临时锁文件、重复的示例文件、冗余基类文件及编译产物
+- 清理了 `examples/`、`logs/` 和 `bin/` 目录
+
+### 修改
+- 更新所有文件导入语句，确保引用正确的 `stg.game` 包基类
+- 简化 `compile_and_run.bat`，移除外部库依赖
+- 将文档文件从英文修改为中文
+
+### 新增
+- 为 `src` 和 `ai_debug` 目录添加中文 `README.md` 文件
+
 ### 修复
-- 修复了 `CollisionSystem.java` 中的玩家类型引用问题，将 `stg.game.player.Player` 改为 `user.player.Player`
-- 修复了 `CollisionSystem.java` 中 `setPlayer` 方法的参数类型，确保与类变量类型一致
-- 修复了 `PlayerTrackingBullet.java` 中的敌人类导入问题，将 `user.enemy.Enemy` 改为 `stg.game.enemy.Enemy`
-- 确保了所有类使用正确的包引用，解决了编译错误
-- 验证了项目可以正常编译和运行
+- 修正包引用错误，解决编译问题
+- 验证项目可正常编译运行
 
 ## 2026-01-31
 
