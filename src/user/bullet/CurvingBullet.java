@@ -1,7 +1,7 @@
 package user.bullet;
 
 import java.awt.*;
-import stg.game.enemy.EnemyBullet;
+import user.enemy.EnemyBullet;
 
 /**
  * 弯曲弹幕类 - EnemyBullet的子类

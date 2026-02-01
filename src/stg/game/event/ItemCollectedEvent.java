@@ -1,7 +1,7 @@
 package stg.game.event;
 
 import stg.game.item.IItem;
-import stg.game.player.IPlayer;
+import user.player.IPlayer;
 
 /**
  * 物品被收集事件 - 当物品被收集时触发

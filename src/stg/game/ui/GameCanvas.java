@@ -8,14 +8,16 @@ import stg.base.KeyStateProvider;
 import stg.game.*;
 import stg.game.bullet.Bullet;
 import stg.game.enemy.Enemy;
-import stg.game.enemy.EnemyBullet;
-import stg.game.item.Item;
-import stg.game.laser.EnemyLaser;
-import stg.game.player.MarisaPlayer;
-import stg.game.player.Player;
-import stg.game.player.PlayerType;
-import stg.game.player.ReimuPlayer;
+import user.enemy.EnemyBullet;
+import user.item.Item;
+import user.laser.EnemyLaser;
+import user.player.MarisaPlayer;
+import user.player.Player;
+import user.player.PlayerType;
+import user.player.ReimuPlayer;
+import user.stage.StageGroup;
 import stg.util.CoordinateSystem;
+import user.player.PlayerFactory;
 
 /**
  * 游戏画布类 - 游戏主界面的协调器
@@ -33,7 +35,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	private InputHandler inputHandler;
 	private CollisionSystem collisionSystem;
 	private GameStateManager gameStateManager;
-	private stg.game.stage.StageGroup currentStageGroup;
+	private StageGroup currentStageGroup;
 	private PauseMenu pauseMenu;
 	
 	// 核心组件
@@ -63,8 +65,8 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
- * @since 2026-01-19 更新坐标系统尺寸
- */
+	 * @since 2026-01-19 更新坐标系统尺寸
+	 */
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
@@ -74,37 +76,37 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
- * @since 2026-01-19 获取坐标系统
- */
+	 * @since 2026-01-19 获取坐标系统
+	 */
 	public CoordinateSystem getCoordinateSystem() {
 		return coordinateSystem;
 	}
 
 	/**
- * 获取游戏世界
- */
+	 * 获取游戏世界
+	 */
 	public GameWorld getWorld() {
 		return world;
 	}
 
 	/**
- * @since 2026-01-24 设置游戏状态面板
- */
+	 * @since 2026-01-24 设置游戏状态面板
+	 */
 	public void setGameStatusPanel(GameStatusPanel gameStatusPanel) {
 		this.gameStatusPanel = gameStatusPanel;
 	}
 
 	/**
- * 获取游戏状态面板
- * @since 2026-01-24
- */
+	 * 获取游戏状态面板
+	 * @since 2026-01-24
+	 */
 	public GameStatusPanel getGameStatusPanel() {
 		return gameStatusPanel;
 	}
 
 	/**
- * 委托到InputHandler的按键状态查询
- */
+	 * 委托到InputHandler的按键状态查询
+	 */
 	@Override
 	public boolean isUpPressed() { return inputHandler.isUpPressed(); }
 	@Override
@@ -121,19 +123,19 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	public boolean isXPressed() { return inputHandler.isXPressed(); }
 
 	/**
- * @since 2026-01-19 将中心原点坐标转换为屏幕坐标
- * 坐标系: 右上角为(+,+),左下角为(-,-)
- * @param x 中心原点X坐标(向右为正)
- * @param y 中心原点Y坐标(向上为正)
- * @return 屏幕坐标 [screenX, screenY]
- */
+	 * @since 2026-01-19 将中心原点坐标转换为屏幕坐标
+	 * 坐标系: 右上角为(+,+),左下角为(-,-)
+	 * @param x 中心原点X坐标(向右为正)
+	 * @param y 中心原点Y坐标(向上为正)
+	 * @return 屏幕坐标 [screenX, screenY]
+	 */
 	public float[] toScreenCoords(float x, float y) {
 		return coordinateSystem.toScreenCoords(x, y);
 	}
 
 	/**
- * 设置键盘输入监听
- */
+	 * 设置键盘输入监听
+	 */
 	private void setupInput() {
 		addKeyListener(new KeyAdapter() {
 			@Override
@@ -204,7 +206,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	 * 设置当前关卡组
 	 * @param stageGroup 关卡组对象
 	 */
-	public void setStageGroup(stg.game.stage.StageGroup stageGroup) {
+	public void setStageGroup(StageGroup stageGroup) {
 		this.currentStageGroup = stageGroup;
 		System.out.println("设置关卡组: " + stageGroup.getGroupName());
 	}
@@ -234,7 +236,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	 * 根据类型设置玩家
 	 */
 	public void setPlayer(PlayerType type, float spawnX, float spawnY) {
-		stg.game.player.PlayerFactory factory = stg.game.player.PlayerFactory.getInstance();
+		PlayerFactory factory = PlayerFactory.getInstance();
 		Player newPlayer = factory.createPlayer(type, spawnX, spawnY);
 		setPlayer(newPlayer);
 		
@@ -266,8 +268,8 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
- * 更新游戏状态
- */
+	 * 更新游戏状态
+	 */
 	public void update() {
 		// 暂停时不更新游戏逻辑
 		if (gameStateManager.isPaused()) return;
@@ -297,9 +299,9 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	}
 
 	/**
- * 绘制游戏画面
- * @param g 图形上下文
- */
+	 * 绘制游戏画面
+	 * @param g 图形上下文
+	 */
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -420,7 +422,7 @@ public class GameCanvas extends JPanel implements KeyStateProvider {
 	 * 获取当前关卡组
 	 * @return 当前关卡组对象
 	 */
-	public stg.game.stage.StageGroup getCurrentStageGroup() {
+	public StageGroup getCurrentStageGroup() {
 		return currentStageGroup;
 	}
 } 

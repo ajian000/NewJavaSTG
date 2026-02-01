@@ -2,8 +2,8 @@ package stg.game;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import stg.game.player.Player;
 import stg.util.CoordinateSystem;
+import user.player.Player;
 
 /**
  * 游戏渲染器 - 处理游戏的渲染逻辑
@@ -56,7 +56,7 @@ public class GameRenderer {
      * 渲染敌方子弹
      */
     private void renderEnemyBullets(Graphics2D g) {
-        for (stg.game.enemy.EnemyBullet bullet : world.getEnemyBullets()) {
+        for (user.enemy.EnemyBullet bullet : world.getEnemyBullets()) {
             bullet.render(g);
         }
     }
@@ -65,7 +65,7 @@ public class GameRenderer {
      * 渲染敌方激光
      */
     private void renderEnemyLasers(Graphics2D g) {
-        for (stg.game.laser.EnemyLaser laser : world.getEnemyLasers()) {
+        for (user.laser.EnemyLaser laser : world.getEnemyLasers()) {
             laser.render(g);
         }
     }
@@ -74,7 +74,7 @@ public class GameRenderer {
      * 渲染物品
      */
     private void renderItems(Graphics2D g) {
-        for (stg.game.item.Item item : world.getItems()) {
+        for (user.item.Item item : world.getItems()) {
             item.render(g);
         }
     }
@@ -107,7 +107,7 @@ public class GameRenderer {
     /**
      * 设置玩家
      */
-    public void setPlayer(Player player) {
+    public void setPlayer(user.player.Player player) {
         this.player = player;
     }
     

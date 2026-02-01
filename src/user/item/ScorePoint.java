@@ -1,8 +1,8 @@
-package stg.game.item;
+package user.item;
 
 import java.awt.*;
-import stg.game.player.Player;
 import stg.game.ui.GameCanvas;
+import user.player.Player;
 
 public class ScorePoint extends Item {
 	private static final float SCORE_POINT_SIZE = 8.0f;

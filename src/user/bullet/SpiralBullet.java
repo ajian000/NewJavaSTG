@@ -1,7 +1,7 @@
 package user.bullet;
 
 import java.awt.Color;
-import stg.game.enemy.EnemyBullet;
+import user.enemy.EnemyBullet;
 
 /**
  * 螺旋子弹类 - 会螺旋前进的子弹

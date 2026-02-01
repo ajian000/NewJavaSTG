@@ -1,6 +1,6 @@
 package user;
 
-import stg.game.player.Player;
+import user.player.Player;
 
 /**
  * 基础玩家行为示例

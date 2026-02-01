@@ -2,7 +2,7 @@ package stg.game;
 
 import java.awt.event.KeyEvent;
 import stg.base.KeyStateProvider;
-import stg.game.player.Player;
+import user.player.Player;
 
 /**
  * 输入处理器 - 处理键盘输入

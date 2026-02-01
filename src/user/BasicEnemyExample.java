@@ -2,7 +2,7 @@ package user;
 
 import java.awt.Color;
 import java.util.Random;
-import stg.game.enemy.Enemy;
+import user.enemy.Enemy;
 
 /**
  * 基础敌人行为示例

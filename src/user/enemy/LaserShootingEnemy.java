@@ -3,8 +3,9 @@ package user.enemy;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import stg.game.laser.*;
+import user.laser.*;
 import stg.game.ui.GameCanvas;
+import stg.game.enemy.Enemy;
 
 /**
  * 激光射击敌人 - 能够发射直线激光和曲线激光

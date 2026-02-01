@@ -1,7 +1,7 @@
 package user;
 
 import java.awt.Color;
-import stg.game.bullet.SimpleBullet;
+import user.bullet.SimpleBullet;
 
 /**
  * 直线子弹行为示例

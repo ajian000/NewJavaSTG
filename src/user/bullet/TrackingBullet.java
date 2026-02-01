@@ -1,8 +1,8 @@
 package user.bullet;
 
 import java.awt.Color;
-import stg.game.enemy.EnemyBullet;
-import stg.game.player.Player;
+import user.enemy.EnemyBullet;
+import user.player.Player;
 
 /**
  * 追踪子弹类 - 会追踪玩家的子弹

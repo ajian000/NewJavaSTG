@@ -1,8 +1,9 @@
 package user.enemy;
 
 import java.awt.*;
-import stg.game.bullet.SpiralBullet;
+import stg.game.enemy.Enemy;
 import stg.game.ui.GameCanvas;
+import user.bullet.SpiralBullet;
 
 /**
  * 螺旋弹幕敌人 - 发射螺旋前进的子弹

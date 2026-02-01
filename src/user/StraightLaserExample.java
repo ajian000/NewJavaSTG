@@ -1,7 +1,7 @@
 package user;
 
 import java.awt.Color;
-import stg.game.laser.Laser;
+import user.laser.Laser;
 
 /**
  * 直线激光行为示例

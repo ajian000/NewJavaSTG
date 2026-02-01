@@ -1,8 +1,9 @@
  package user.enemy;
 
 import java.awt.*;
-import stg.game.bullet.CircularBullet;
+import stg.game.enemy.Enemy;
 import stg.game.ui.GameCanvas;
+import user.bullet.CircularBullet;
 
 /**
  * 基础敌人类 - Enemy的子类

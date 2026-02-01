@@ -1,8 +1,9 @@
 package user.enemy;
 
 import java.awt.*;
-import stg.game.bullet.CircularBullet;
+import stg.game.enemy.Enemy;
 import stg.game.ui.GameCanvas;
+import user.bullet.CircularBullet;
 
 /**
  * 扇形弹幕敌人 - 发射扇形散开的子弹

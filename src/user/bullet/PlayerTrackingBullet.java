@@ -3,6 +3,7 @@ package user.bullet;
 import java.awt.Color;
 import stg.game.enemy.Enemy;
 import stg.game.ui.GameCanvas;
+import stg.game.bullet.Bullet;
 
 /**
  * 玩家追踪子弹类 - 会追踪敌人的子弹

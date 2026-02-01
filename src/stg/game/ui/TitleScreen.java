@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import stg.base.KeyStateProvider;
-import stg.game.player.PlayerType;
+import user.player.PlayerType;
 import stg.util.AudioManager;
 import stg.util.ResourceManager;
 
@@ -52,8 +52,8 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 	private boolean xPressed = false;
 
 	public interface TitleCallback {
-		void onStageGroupSelect(stg.game.player.PlayerType playerType);
-		void onGameStart(stg.game.stage.StageGroup stageGroup, stg.game.player.PlayerType playerType);
+		void onStageGroupSelect(PlayerType playerType);
+	void onGameStart(user.stage.StageGroup stageGroup, PlayerType playerType);
 		void onExit();
 	}
 

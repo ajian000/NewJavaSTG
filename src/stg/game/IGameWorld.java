@@ -2,10 +2,10 @@ package stg.game;
 
 import stg.game.bullet.IBullet;
 import stg.game.enemy.IEnemy;
-import stg.game.enemy.EnemyBullet;
+import user.enemy.EnemyBullet;
 import stg.game.item.IItem;
-import stg.game.laser.EnemyLaser;
-import stg.game.player.IPlayer;
+import user.laser.EnemyLaser;
+import user.player.IPlayer;
 import stg.util.CoordinateSystem;
 
 /**

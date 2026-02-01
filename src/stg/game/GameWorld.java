@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import stg.game.bullet.Bullet;
 import stg.game.enemy.Enemy;
-import stg.game.enemy.EnemyBullet;
-import stg.game.item.Item;
-import stg.game.laser.EnemyLaser;
+import user.enemy.EnemyBullet;
+import user.item.Item;
+import user.laser.EnemyLaser;
 
 /**
  * 游戏世界类 - 管理游戏中的所有实体

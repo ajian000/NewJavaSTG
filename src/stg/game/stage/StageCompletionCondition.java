@@ -1,7 +1,7 @@
 package stg.game.stage;
 
 /**
- * 关卡完成条件接口
+ * 关卡完成条件接口 - stg.game包专用
  */
 public interface StageCompletionCondition {
     /**

@@ -4,11 +4,14 @@ import java.awt.EventQueue;
 import stg.base.Window;
 import stg.game.ui.GameCanvas;
 import stg.game.ui.TitleScreen;
+import user.player.PlayerType;
+import user.stage.StageGroup;
+import user.stage.StageGroupManager;
 
 public class Main {
 	private static Window window;
 	private static TitleScreen titleScreen;
-	private static stg.game.player.PlayerType selectedPlayerType = stg.game.player.PlayerType.DEFAULT;
+	private static PlayerType selectedPlayerType = PlayerType.DEFAULT;
 
 	public static void main(String[] args) {
 		System.out.println("启动 STG 游戏引擎");
@@ -22,13 +25,13 @@ public class Main {
 	private static void showTitleScreen() {
 		titleScreen = new TitleScreen(new TitleScreen.TitleCallback() {
 			@Override
-			public void onStageGroupSelect(stg.game.player.PlayerType playerType) {
+			public void onStageGroupSelect(PlayerType playerType) {
 				System.out.println("选择关卡组: " + playerType.getName());
 				showStageGroupSelect(playerType);
 			}
 
 			@Override
-			public void onGameStart(stg.game.stage.StageGroup stageGroup, stg.game.player.PlayerType playerType) {
+			public void onGameStart(StageGroup stageGroup, PlayerType playerType) {
 				System.out.println("开始游戏: " + playerType.getName() + ", 关卡组: " + stageGroup.getGroupName());
 				startGame(stageGroup, playerType);
 			}
@@ -51,11 +54,11 @@ public class Main {
 		window.repaint();
 	}
 
-	private static void showStageGroupSelect(stg.game.player.PlayerType playerType) {
+	private static void showStageGroupSelect(PlayerType playerType) {
 		stg.game.ui.StageGroupSelectPanel selectPanel = new stg.game.ui.StageGroupSelectPanel(
 			new stg.game.ui.StageGroupSelectPanel.StageGroupSelectCallback() {
 				@Override
-				public void onStageGroupSelected(stg.game.stage.StageGroup stageGroup, stg.game.player.PlayerType type) {
+				public void onStageGroupSelected(StageGroup stageGroup, PlayerType type) {
 					System.out.println("选择关卡组: " + stageGroup.getGroupName());
 					startGame(stageGroup, type);
 				}
@@ -70,12 +73,12 @@ public class Main {
 
 		// 使用StageGroupManager获取关卡组列表
 		stg.game.ui.GameCanvas gameCanvas = window.getGameCanvas();
-		stg.game.stage.StageGroupManager stageGroupManager = stg.game.stage.StageGroupManager.getInstance();
+		StageGroupManager stageGroupManager = StageGroupManager.getInstance();
 		stageGroupManager.init(gameCanvas);
 
 		// 添加所有关卡组到选择面板
-		java.util.List<stg.game.stage.StageGroup> stageGroups = stageGroupManager.getStageGroups();
-		for (stg.game.stage.StageGroup group : stageGroups) {
+		java.util.List<StageGroup> stageGroups = stageGroupManager.getStageGroups();
+		for (StageGroup group : stageGroups) {
 			selectPanel.addStageGroup(group);
 			System.out.println("添加关卡组: " + group.getDisplayName());
 		}
@@ -88,7 +91,7 @@ public class Main {
 		window.repaint();
 	}
 
-	private static void startGame(stg.game.stage.StageGroup stageGroup, stg.game.player.PlayerType playerType) {
+	private static void startGame(StageGroup stageGroup, PlayerType playerType) {
 		titleScreen.stopTitleMusic();
 		
 		window.initializePlayer(playerType);
@@ -104,7 +107,7 @@ public class Main {
 		gameCanvas.resetGame();
 
 		// 设置玩家位置到屏幕底部中心
-		stg.game.player.Player player = gameCanvas.getPlayer();
+		user.player.Player player = gameCanvas.getPlayer();
 		if (player != null) {
 			int canvasHeight = gameCanvas.getHeight();
 			float actualPlayerX = 0; // 水平居中
@@ -126,7 +129,7 @@ public class Main {
 		return window;
 	}
 
-	public static stg.game.player.PlayerType getSelectedPlayerType() {
+	public static PlayerType getSelectedPlayerType() {
 		return selectedPlayerType;
 	}
 

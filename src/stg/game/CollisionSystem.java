@@ -2,10 +2,10 @@ package stg.game;
 
 import stg.game.bullet.Bullet;
 import stg.game.enemy.Enemy;
-import stg.game.enemy.EnemyBullet;
-import stg.game.item.Item;
-import stg.game.laser.EnemyLaser;
-import stg.game.player.Player;
+import user.enemy.EnemyBullet;
+import user.item.Item;
+import user.laser.EnemyLaser;
+import user.player.Player;
 
 /**
  * 碰撞检测系统 - 处理游戏中的碰撞检测

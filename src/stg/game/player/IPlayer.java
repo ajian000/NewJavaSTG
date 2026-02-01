@@ -1,6 +1,7 @@
 package stg.game.player;
 
 import stg.game.IGameObject;
+import user.player.Option;
 
 /**
  * 玩家接口 - 定义玩家的行为和属性

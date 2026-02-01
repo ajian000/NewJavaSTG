@@ -1,6 +1,6 @@
 package user.bullet;
 
-import stg.game.enemy.EnemyBullet;
+import user.enemy.EnemyBullet;
 import java.awt.*;
 
 /**

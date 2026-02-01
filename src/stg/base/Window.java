@@ -6,6 +6,7 @@ import javax.swing.*;
 import stg.game.GameLoop;
 import stg.game.ui.GameCanvas;
 import stg.game.ui.GameStatusPanel;
+import user.player.PlayerType;
 
 /**
  * 窗口类 - STG游戏主窗口
@@ -20,7 +21,7 @@ public class Window extends JFrame {
 	private GameStatusPanel gameStatusPanel;
 	private int totalWidth = 1280;
 	private int totalHeight = 960;
-	private stg.game.player.Player player;
+	private user.player.Player player;
 
 	/**
 	 * 构造函数
@@ -115,7 +116,7 @@ public class Window extends JFrame {
 
 		// 根据参数决定是否立即初始化玩家
 		if (initPlayer) {
-			initializePlayer(stg.game.player.PlayerType.DEFAULT);
+			initializePlayer(PlayerType.DEFAULT);
 			// 启动游戏循环（仅在初始化玩家时启动）
 			new GameLoop(gameCanvas).start();
 		}
@@ -193,7 +194,7 @@ public class Window extends JFrame {
 	 * 初始化玩家（使用指定类型）
 	 * @param type 自机类型
 	 */
-	public void initializePlayer(stg.game.player.PlayerType type) {
+	public void initializePlayer(PlayerType type) {
 		// 使用工厂创建玩家
 		gameCanvas.setPlayer(type, 0.0f, 0.0f);
 		player = gameCanvas.getPlayer(); // 获取创建的玩家

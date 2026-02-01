@@ -3,6 +3,7 @@ package stg.game.stage;
 import java.util.List;
 import stg.game.enemy.Enemy;
 import stg.game.ui.GameCanvas;
+import user.stage.StageState;
 
 /**
  * 关卡类 - 管理单个关卡的逻辑

@@ -1,7 +1,7 @@
 package user.item;
 
 import java.awt.*;
-import stg.game.player.Player;
+import user.player.Player;
 import stg.game.ui.GameCanvas;
 
 /**

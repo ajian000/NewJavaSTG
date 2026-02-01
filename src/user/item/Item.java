@@ -141,7 +141,7 @@ public abstract class Item extends Obj {
 	 */
 	protected void applyAttraction() {
 		if (gameCanvas != null) {
-			stg.game.player.Player player = gameCanvas.getPlayer();
+			user.player.Player player = gameCanvas.getPlayer();
 			if (player != null && player.isSlowMode()) {
 				float dx = player.getX() - x;
 				float dy = player.getY() - y;
