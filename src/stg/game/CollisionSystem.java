@@ -8,15 +8,16 @@ import user.laser.EnemyLaser;
 import user.player.Player;
 
 /**
- * 碰撞检测系统 - 处理游戏中的碰撞检测
- */
+ * 碰撞检测系�?- 处理游戏中的碰撞检�? */
 public class CollisionSystem {
     private GameWorld world;
     private Player player;
     private static final int DEFAULT_BULLET_DAMAGE = 8;
     
     /**
-     * 构造函数
+     * 构造函数 - 创建碰撞检测系统实例
+     * @param world 游戏世界实例
+     * @param player 玩家实例
      */
     public CollisionSystem(GameWorld world, Player player) {
         this.world = world;
@@ -24,7 +25,7 @@ public class CollisionSystem {
     }
     
     /**
-     * 执行碰撞检测
+     * 执行碰撞检测 - 检查玩家子弹、敌人子弹、敌人激光、玩家与物品的碰撞
      */
     public void checkCollisions() {
         checkPlayerBulletsVsEnemies();
@@ -34,7 +35,7 @@ public class CollisionSystem {
     }
     
     /**
-     * 检测玩家子弹与敌人的碰撞
+     * 检测玩家子弹与敌人的碰撞 - 若发生碰撞，敌人会受到伤害
      */
     private void checkPlayerBulletsVsEnemies() {
         for (Bullet bullet : world.getPlayerBullets()) {
@@ -51,7 +52,7 @@ public class CollisionSystem {
     }
     
     /**
-     * 检测敌方子弹与玩家的碰撞
+     * 检测敌方子弹与玩家的碰撞 - 若发生碰撞，玩家会受到伤害
      */
     private void checkEnemyBulletsVsPlayer() {
         if (player == null || player.isInvincible()) return;
@@ -65,7 +66,7 @@ public class CollisionSystem {
     }
     
     /**
-     * 检测敌方激光与玩家的碰撞
+     * 检测敌方激光与玩家的碰撞 - 若发生碰撞，玩家会受到伤害
      */
     private void checkEnemyLasersVsPlayer() {
         if (player == null || player.isInvincible()) return;
@@ -79,7 +80,7 @@ public class CollisionSystem {
     }
     
     /**
-     * 检测玩家与物品的碰撞
+     * 检测玩家与物品的碰撞 - 若发生碰撞，物品会被采集
      */
     private void checkPlayerVsItems() {
         if (player == null) return;

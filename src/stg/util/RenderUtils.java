@@ -3,7 +3,7 @@ package stg.util;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-/**
+    /**
  * 渲染工具类 - 提供统一的渲染设置和优化方法
  * @since 2026-01-30
  */
@@ -40,3 +40,4 @@ public class RenderUtils {
         g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_DEFAULT);
     }
 }
+

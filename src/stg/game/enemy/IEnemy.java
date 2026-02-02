@@ -3,8 +3,7 @@ package stg.game.enemy;
 import stg.game.IGameObject;
 
 /**
- * 敌人接口 - 定义敌人的行为和属性
- */
+ * 敌人接口 - 定义敌人的行为和属�? */
 public interface IEnemy extends IGameObject {
     /**
      * 承受伤害
@@ -12,28 +11,23 @@ public interface IEnemy extends IGameObject {
     void takeDamage(int damage);
     
     /**
-     * 检查敌人是否存活
-     */
+     * 检查敌人是否存�?     */
     boolean isAlive();
     
     /**
-     * 获取当前生命值
-     */
+     * 获取当前生命�?     */
     int getHp();
     
     /**
-     * 获取最大生命值
-     */
+     * 获取最大生命�?     */
     int getMaxHp();
     
     /**
-     * 设置生命值
-     */
+     * 设置生命�?     */
     void setHp(int hp);
     
     /**
-     * 检查敌人是否越界
-     */
+     * 检查敌人是否越�?     */
     boolean isOutOfBounds(int width, int height);
     
     /**

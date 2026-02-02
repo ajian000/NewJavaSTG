@@ -7,8 +7,7 @@ import stg.game.ui.GameCanvas;
 
 /**
  * 魔理沙子机类
- * 特点：发射高威力集中弹，激光攻击
- */
+ * 特点：发射高威力集中弹，激光攻�? */
 public class MarisaOption extends Option {
 	private static final float MARISA_OPTION_SIZE = 10.0f;
 	private static final Color MARISA_OPTION_COLOR = new Color(180, 200, 255);
@@ -17,9 +16,7 @@ public class MarisaOption extends Option {
 	private static final float BULLET_SPEED = 52.0f;
 	private static final float BULLET_SIZE = 4.0f;
 	private static final Color BULLET_COLOR = new Color(100, 200, 255);
-	private static final int LASER_INTERVAL = 15; // 激光发射间隔
-	private int laserCooldown; // 激光冷却
-
+	private static final int LASER_INTERVAL = 15; // 激光发射间�?	private int laserCooldown; // 激光冷�?
 	public MarisaOption(Player player, float offsetX, float offsetY, GameCanvas gameCanvas) {
 		super(player, offsetX, offsetY, gameCanvas);
 		setSize(MARISA_OPTION_SIZE);
@@ -34,8 +31,7 @@ public class MarisaOption extends Option {
 	public void update() {
 		super.update();
 
-		// 更新激光冷却
-		if (laserCooldown > 0) {
+		// 更新激光冷�?		if (laserCooldown > 0) {
 			laserCooldown--;
 		}
 	}
@@ -84,8 +80,7 @@ public class MarisaOption extends Option {
 
 		stg.util.RenderUtils.enableAntiAliasing(g);
 
-		// 绘制魔理沙子机主体（蓝色）
-		g.setColor(color);
+		// 绘制魔理沙子机主体（蓝色�?		g.setColor(color);
 		g.fillOval((int)(screenX - size), (int)(screenY - size),
 		          (int)(size * 2), (int)(size * 2));
 
@@ -99,8 +94,7 @@ public class MarisaOption extends Option {
 		g.fillOval((int)(screenX - size * 0.5f), (int)(screenY - size * 0.5f),
 		          (int)(size), (int)(size));
 
-		// 绘制魔理沙的星星图案（简化版）
-		g.setColor(new Color(255, 255, 255, 180));
+		// 绘制魔理沙的星星图案（简化版�?		g.setColor(new Color(255, 255, 255, 180));
 		int starSize = (int)(size * 0.3f);
 		g.fillOval((int)(screenX - starSize), (int)(screenY - starSize),
 		          starSize * 2, starSize * 2);
@@ -112,3 +106,4 @@ public class MarisaOption extends Option {
 		laserCooldown = 0;
 	}
 }
+

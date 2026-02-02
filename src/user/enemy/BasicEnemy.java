@@ -6,15 +6,13 @@ import stg.game.ui.GameCanvas;
 import user.bullet.CircularBullet;
 
 /**
- * 基础敌人类 - Enemy的子类
- * @Time 2026-01-19 在X轴上左右来回移动,Y轴不动
+ * 基础敌人�?- Enemy的子�? * 在X轴上左右来回移动,Y轴不�? * @since 2026-01-19
  */
 public class BasicEnemy extends Enemy {
 	private float moveSpeed; // X轴移动速度
 
 	/**
-	 * 构造函数
-	 * @param x X坐标
+	 * 构造函�?	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param moveSpeed X方向移动速度
 	 * @param gameCanvas 游戏画布引用
@@ -25,12 +23,10 @@ public class BasicEnemy extends Enemy {
 	}
 
 	/**
-	 * 初始化行为参数
-	 */
+	 * 初始化行为参�?	 */
 	@Override
 	protected void initBehavior() {
-		// 初始化行为参数
-		vx = moveSpeed;
+		// 初始化行为参�?		vx = moveSpeed;
 		vy = 0;
 	}
 
@@ -65,7 +61,8 @@ public class BasicEnemy extends Enemy {
 	}
 
 	/**
-	 * @Time 2026-01-19 重写update方法
+	 * 重写update方法
+	 * @since 2026-01-19
 	 */
 	@Override
 	public void update() {
@@ -73,8 +70,7 @@ public class BasicEnemy extends Enemy {
 	}
 
 	/**
-	 * 射击 - 向下方发射圆形子弹
-	 * @Time 2026-01-19 Y负方向表示向下
+	 * 射击 - 向下方发射圆形子�?	 * Y负方向表示向�?	 * @since 2026-01-19
 	 */
 	private void shoot() {
 		if (!isActive() || gameCanvas == null) return;
@@ -85,7 +81,7 @@ public class BasicEnemy extends Enemy {
 	}
 
 	/**
-	 * @Time 2026-01-19 重写渲染方法,自定义外观
+	 * 重写渲染方法,自定义外�?	 * @since 2026-01-19
 	 */
 	@Override
 	public void render(Graphics2D g) {
@@ -114,14 +110,16 @@ public class BasicEnemy extends Enemy {
 	}
 
 	/**
-	 * @Time 2026-01-19 重写死亡回调,添加简单的死亡效果
+	 * 重写死亡回调,添加简单的死亡效果
+	 * @since 2026-01-19
 	 */
 	@Override
 	protected void onDeath() {
 	}
 
 	/**
-	 * @Time 2026-01-19 重写toString,方便调试
+	 * 重写toString,方便调试
+	 * @since 2026-01-19
 	 */
 	@Override
 	public String toString() {
@@ -129,18 +127,16 @@ public class BasicEnemy extends Enemy {
 	}
 
 	/**
-	 * 任务开始时触发的方法
-	 */
+	 * 任务开始时触发的方�?	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实现
-	}
+		// 空实�?	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实现
-	}
+		// 空实�?	}
 }
+

@@ -9,7 +9,7 @@ public class GameStateManager {
      */
     public enum State {
         TITLE,      // 标题界面
-        PLAYING,    // 游戏中
+        PLAYING,    // 游戏进行中
         PAUSED,     // 暂停
         GAME_OVER   // 游戏结束
     }
@@ -43,10 +43,10 @@ public class GameStateManager {
     }
     
     /**
-     * 检查是否在游戏中
+     * 检查是否在游戏进行中
      */
     public boolean isPlaying() {
-        return currentState == State.PLAYING;
+        return currentState == State.PLAYING || currentState == State.PAUSED;
     }
     
     /**
@@ -112,8 +112,7 @@ public class GameStateManager {
     }
     
     /**
-     * 重置游戏状态
-     */
+     * 重置游戏状�?     */
     public void reset() {
         score = 0;
         lives = 3;
@@ -127,18 +126,15 @@ public class GameStateManager {
     public int getScore() { return score; }
     
     /**
-     * 获取生命数
-     */
+     * 获取生命�?     */
     public int getLives() { return lives; }
     
     /**
-     * 获取符卡数
-     */
+     * 获取符卡�?     */
     public int getSpellCards() { return spellCards; }
     
     /**
-     * 获取最高分数
-     */
+     * 获取最高分�?     */
     public int getMaxScore() { return maxScore; }
     
     /**
@@ -147,17 +143,14 @@ public class GameStateManager {
     public void setScore(int score) { this.score = score; }
     
     /**
-     * 设置生命数
-     */
+     * 设置生命�?     */
     public void setLives(int lives) { this.lives = lives; }
     
     /**
-     * 设置符卡数
-     */
+     * 设置符卡�?     */
     public void setSpellCards(int spellCards) { this.spellCards = spellCards; }
     
     /**
-     * 设置最高分数
-     */
+     * 设置最高分�?     */
     public void setMaxScore(int maxScore) { this.maxScore = maxScore; }
 }

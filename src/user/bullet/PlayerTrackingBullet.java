@@ -6,7 +6,7 @@ import stg.game.ui.GameCanvas;
 import stg.game.bullet.Bullet;
 
 /**
- * 玩家追踪子弹类 - 会追踪敌人的子弹
+ * 玩家追踪子弹�?- 会追踪敌人的子弹
  * 用于灵梦子机等需要自动瞄准敌人的场景
  */
 public class PlayerTrackingBullet extends Bullet {
@@ -16,12 +16,11 @@ public class PlayerTrackingBullet extends Bullet {
 	private int delayFrames;
 
 	/**
-	 * 构造函数
-	 * @param x 初始X坐标
+	 * 构造函�?	 * @param x 初始X坐标
 	 * @param y 初始Y坐标
 	 * @param speed 子弹速度
 	 * @param initialAngle 初始角度
-	 * @param turnSpeed 转向速度（弧度/帧）
+	 * @param turnSpeed 转向速度（弧�?帧）
 	 * @param size 子弹大小
 	 * @param color 子弹颜色
 	 */
@@ -108,18 +107,16 @@ public class PlayerTrackingBullet extends Bullet {
 	}
 
 	/**
-	 * 任务开始时触发的方法
-	 */
+	 * 任务开始时触发的方�?	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实现
-	}
+		// 空实�?	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实现
-	}
+		// 空实�?	}
 }
+

@@ -14,7 +14,7 @@ public class MarisaPlayer extends Player {
 	private static final int MARISA_SHOOT_INTERVAL = 1;
 	private static final Color MARISA_COLOR = new Color(255, 220, 100);
 	private static final Color BULLET_COLOR = new Color(255, 255, 150);
-	private static final int MARISA_BULLET_DAMAGE = 1; // @Time 2026-01-23 魔理沙子弹伤害，普通DPS = (3 × 1 × 60) / 2 = 90
+	private static final int MARISA_BULLET_DAMAGE = 1; // 魔理沙子弹伤害，普通DPS = (3 × 1 × 60) / 2 = 90\n\t * @since 2026-01-23
 
 	public MarisaPlayer(float spawnX, float spawnY) {
 		super(spawnX, spawnY);
@@ -22,13 +22,10 @@ public class MarisaPlayer extends Player {
 		setSpeedSlow(MARISA_SPEED_SLOW);
 		setSize(MARISA_SIZE);
 		setShootInterval(MARISA_SHOOT_INTERVAL);
-		this.bulletDamage = MARISA_BULLET_DAMAGE; // @Time 2026-01-23 设置魔理沙子弹伤害
-	}
+		this.bulletDamage = MARISA_BULLET_DAMAGE; // 设置魔理沙子弹伤�?	}\n\t * @since 2026-01-23
 
 	/**
-	 * 初始化魔理沙的子机
-	 * 参考东方正作，魔理沙通常有2-4个子机
-	 */
+	 * 初始化魔理沙的子�?	 * 参考东方正作，魔理沙通常�?-4个子�?	 */
 	public void initializeOptions(GameCanvas canvas) {
 		setGameCanvas(canvas);
 
@@ -39,13 +36,12 @@ public class MarisaPlayer extends Player {
 		addOption(option1);
 		addOption(option2);
 
-		System.out.println("魔理沙子机初始化完成，共2个子机");
+		System.out.println("魔理沙子机初始化完成，共2个子�?);
 	}
 
 	@Override
 	protected void shoot() {
-		// 使用默认自机的射击实现
-		super.shoot();
+		// 使用默认自机的射击实�?		super.shoot();
 	}
 
 	@Override
@@ -56,11 +52,9 @@ public class MarisaPlayer extends Player {
 
 		stg.util.RenderUtils.enableAntiAliasing(g);
 
-		// @Time 2026-01-23 无敌闪烁效果：每5帧闪烁一次
-		boolean shouldRender = true;
+		// 无敌闪烁效果：每5帧闪烁一�?		boolean shouldRender = true;\n\t * @since 2026-01-23
 		if (isInvincible()) {
-			// 通过反射获取父类的invincibleTimer（需要Player提供getter）
-			int invincibleTimer = getInvincibleTimer();
+			// 通过反射获取父类的invincibleTimer（需要Player提供getter�?			int invincibleTimer = getInvincibleTimer();
 			int flashPhase = invincibleTimer % 10;
 			if (flashPhase < 5) {
 				shouldRender = false;
@@ -73,8 +67,7 @@ public class MarisaPlayer extends Player {
 			          (int)(getHitboxRadius() * 2), (int)(getHitboxRadius() * 2));
 		}
 
-		// 魔理沙外观：金黄色球体
-		if (shouldRender) {
+		// 魔理沙外观：金黄色球�?		if (shouldRender) {
 			g.setColor(MARISA_COLOR);
 			g.fillOval((int)(screenX - getSize()), (int)(screenY - getSize()),
 			          (int)(getSize() * 2), (int)(getSize() * 2));
@@ -86,3 +79,4 @@ public class MarisaPlayer extends Player {
 		}
 	}
 }
+

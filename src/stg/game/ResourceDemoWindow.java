@@ -8,7 +8,7 @@ import stg.util.*;
 
 /**
  * 资源加载演示窗口 - 展示如何使用ResourceManager和AudioManager
- * @Time 2026-01-24
+ * @since 2025-01-24
  */
 public class ResourceDemoWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -90,7 +90,7 @@ public class ResourceDemoWindow extends JFrame {
 		if (loadedCount > 0) {
 			JOptionPane.showMessageDialog(this, 
 				"成功加载 " + loadedCount + " 张图片\n" +
-				"玩家图片: " + (playerImage != null ? "✓" : "✗") + "\n" +
+				"玩家图片: " + (playerImage != null ? "√" : "×") + "\n" +
 				"敌人图片: " + (enemyImage != null ? "✓" : "✗") + "\n" +
 				"子弹图片: " + (bulletImage != null ? "✓" : "✗"),
 				"加载结果",
@@ -100,6 +100,7 @@ public class ResourceDemoWindow extends JFrame {
 				"没有找到图片文件\n请确保图片文件在 resources/ 目录下",
 				"加载失败",
 				JOptionPane.WARNING_MESSAGE);
+
 		}
 	}
 	
@@ -108,6 +109,7 @@ public class ResourceDemoWindow extends JFrame {
 		audioManager.playMusic("bgm_stage1.wav", true);
 		
 		if (audioManager.isMusicPlaying()) {
+
 			updateStatus("背景音乐播放中");
 		} else {
 			updateStatus("背景音乐播放失败");
@@ -159,3 +161,4 @@ public class ResourceDemoWindow extends JFrame {
 		});
 	}
 }
+

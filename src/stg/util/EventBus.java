@@ -9,8 +9,8 @@ import java.util.function.Consumer;
  * 事件总线 - 用于游戏对象间的通信
  */
 public class EventBus {
-    private static EventBus instance;
-    private ConcurrentHashMap<Class<?>, List<Consumer<?>>> subscribers = new ConcurrentHashMap<>();
+    private static final EventBus instance = new EventBus();
+    private final ConcurrentHashMap<Class<?>, List<Consumer<?>>> subscribers = new ConcurrentHashMap<>();
     
     /**
      * 私有构造函数
@@ -21,9 +21,6 @@ public class EventBus {
      * 获取事件总线实例
      */
     public static EventBus getInstance() {
-        if (instance == null) {
-            instance = new EventBus();
-        }
         return instance;
     }
     

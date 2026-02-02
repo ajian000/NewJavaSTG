@@ -1,0 +1,5 @@
+-d
+bin
+-cp
+src
+src\\user\\stage\\StageGroup.java

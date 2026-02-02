@@ -12,11 +12,10 @@ public class SimpleStage extends Stage {
     private int enemyCount;
     private int enemiesSpawned;
     private int spawnTimer;
-    private static final int SPAWN_INTERVAL = 120; // 2秒 @ 60fps
+    private static final int SPAWN_INTERVAL = 120; // 2�?@ 60fps
 
     /**
-     * 构造函数
-     * @param stageId 关卡ID
+     * 构造函�?     * @param stageId 关卡ID
      * @param stageName 关卡名称
      * @param gameCanvas 游戏画布引用
      */
@@ -52,8 +51,7 @@ public class SimpleStage extends Stage {
         if (isActive()) {
             spawnTimer++;
             
-            // 每2秒生成一个敌人
-            if (spawnTimer >= SPAWN_INTERVAL) {
+            // �?秒生成一个敌�?            if (spawnTimer >= SPAWN_INTERVAL) {
                 spawnTimer = 0;
                 
                 if (enemiesSpawned < enemyCount) {
@@ -70,8 +68,7 @@ public class SimpleStage extends Stage {
     private void spawnEnemy() {
         GameCanvas canvas = getGameCanvas();
         if (canvas != null) {
-            // 从屏幕上方随机位置生成敌人
-            float x = (float)(Math.random() * canvas.getWidth() - canvas.getWidth() / 2);
+            // 从屏幕上方随机位置生成敌�?            float x = (float)(Math.random() * canvas.getWidth() - canvas.getWidth() / 2);
             float y = canvas.getHeight() / 2 + 50;
             
             BasicEnemy enemy = new BasicEnemy(x, y, 2, canvas);
@@ -82,8 +79,7 @@ public class SimpleStage extends Stage {
 
     @Override
     protected void checkCompletion() {
-        // 检查关卡完成条件
-        if (enemiesSpawned >= enemyCount && getEnemies().isEmpty()) {
+        // 检查关卡完成条�?        if (enemiesSpawned >= enemyCount && getEnemies().isEmpty()) {
             end();
         }
     }
@@ -98,3 +94,4 @@ public class SimpleStage extends Stage {
         System.out.println("Stage completed: " + getStageName());
     }
 }
+

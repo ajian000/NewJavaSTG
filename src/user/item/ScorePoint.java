@@ -14,8 +14,7 @@ public class ScorePoint extends Item {
 	private boolean isLarge;
 
 	/**
-	 * Builder 模式 - 用于简化 ScorePoint 的创建
-	 */
+	 * Builder 模式 - 用于简�?ScorePoint 的创�?	 */
 	public static class Builder {
 		private final float x;
 		private final float y;
@@ -48,9 +47,7 @@ public class ScorePoint extends Item {
 		}
 		
 		/**
-		 * 设置分数值
-		 * @param scoreValue 分数值
-		 * @return Builder 实例
+		 * 设置分数�?		 * @param scoreValue 分数�?		 * @return Builder 实例
 		 */
 		public Builder scoreValue(int scoreValue) {
 			this.scoreValue = scoreValue;
@@ -58,9 +55,7 @@ public class ScorePoint extends Item {
 		}
 		
 		/**
-		 * 设置是否为大分数点
-		 * @param isLarge 是否为大分数点
-		 * @return Builder 实例
+		 * 设置是否为大分数�?		 * @param isLarge 是否为大分数�?		 * @return Builder 实例
 		 */
 		public Builder large(boolean isLarge) {
 			this.isLarge = isLarge;
@@ -141,12 +136,10 @@ public class ScorePoint extends Item {
 	}
 
 	/**
-	 * 初始化行为参数
-	 */
+	 * 初始化行为参�?	 */
 	@Override
 	protected void initBehavior() {
-		// 初始化行为参数
-	}
+		// 初始化行为参�?	}
 
 	/**
 	 * 实现每帧的自定义更新逻辑

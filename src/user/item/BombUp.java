@@ -6,13 +6,12 @@ import stg.game.ui.GameCanvas;
 import user.player.Player;
 
 /**
- * 炸弹道具类 - 增加玩家炸弹数量
+ * 炸弹道具�?- 增加玩家炸弹数量
  */
 public class BombUp extends Item {
 	private static final float BOMBUP_SIZE = 12.0f;
 	private static final Color BOMBUP_COLOR = new Color(255, 100, 100);
-	private static final int BOMB_VALUE = 1; // 增加的炸弹数量
-
+	private static final int BOMB_VALUE = 1; // 增加的炸弹数�?
 	@Override
 	protected void initBehavior() {
 	}
@@ -41,8 +40,7 @@ public class BombUp extends Item {
 	public void update() {
 		super.update();
 
-		// 如果有游戏画布，向玩家方向缓慢移动
-		if (gameCanvas != null) {
+		// 如果有游戏画布，向玩家方向缓慢移�?		if (gameCanvas != null) {
 			Player player = gameCanvas.getPlayer();
 			if (player != null && player.isSlowMode()) {
 				float dx = player.getX() - x;
@@ -88,8 +86,7 @@ public class BombUp extends Item {
 		if (gameCanvas != null) {
 			Player player = gameCanvas.getPlayer();
 			if (player != null) {
-				// 增加玩家炸弹数量（这里可以扩展Player类来支持炸弹系统）
-				System.out.println("BombUp collected! Bomb +1");
+				// 增加玩家炸弹数量（这里可以扩展Player类来支持炸弹系统�?				System.out.println("BombUp collected! Bomb +1");
 			}
 		}
 	}
@@ -98,3 +95,4 @@ public class BombUp extends Item {
 		return BOMB_VALUE;
 	}
 }
+

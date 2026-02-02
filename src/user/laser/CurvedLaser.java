@@ -6,14 +6,11 @@ import java.util.List;
 import stg.game.laser.Laser;
 
 /**
- * 曲线激光类 - 继承自Laser，具有可调节长度的拖尾系统
- * @Time 2026-01-21
- */
+ * 曲线激光类 - 继承自Laser，具有可调节长度的拖尾系�? * */\n\t * @since 2026-01-21
 public class CurvedLaser extends Laser {
 	private float vx; // X方向速度
 	private float vy; // Y方向速度
-	private List<Point> trailPoints; // 拖尾轨迹点
-	private int maxTrailLength; // 最大拖尾长度(帧)
+	private List<Point> trailPoints; // 拖尾轨迹�?	private int maxTrailLength; // 最大拖尾长�?�?
 	private float trailWidth; // 拖尾宽度
 
 	/**
@@ -32,8 +29,7 @@ public class CurvedLaser extends Laser {
 	}
 
 	/**
-	 * 构造函数
-	 * @param x 起点X坐标
+	 * 构造函�?	 * @param x 起点X坐标
 	 * @param y 起点Y坐标
 	 * @param angle 角度(弧度)
 	 * @param length 长度
@@ -41,7 +37,7 @@ public class CurvedLaser extends Laser {
 	 * @param color 颜色
 	 * @param vx X方向速度
 	 * @param vy Y方向速度
-	 * @param maxTrailLength 最大拖尾长度(帧)
+	 * @param maxTrailLength 最大拖尾长�?�?
 	 */
 	public CurvedLaser(float x, float y, float angle, float length, float width, Color color,
 					   float vx, float vy, int maxTrailLength) {
@@ -49,18 +45,16 @@ public class CurvedLaser extends Laser {
 	}
 
 	/**
-	 * 完整构造函数
-	 * @param x 起点X坐标
+	 * 完整构造函�?	 * @param x 起点X坐标
 	 * @param y 起点Y坐标
 	 * @param angle 角度(弧度)
 	 * @param length 长度
 	 * @param width 宽度
 	 * @param color 颜色
 	 * @param warningTime 预警时间
-	 * @param damage 伤害值
-	 * @param vx X方向速度
+	 * @param damage 伤害�?	 * @param vx X方向速度
 	 * @param vy Y方向速度
-	 * @param maxTrailLength 最大拖尾长度(帧)
+	 * @param maxTrailLength 最大拖尾长�?�?
 	 */
 	public CurvedLaser(float x, float y, float angle, float length, float width, Color color, int warningTime, int damage, float vx, float vy, int maxTrailLength) {
 		super(x, y, angle, length, width, color, warningTime, damage);
@@ -72,20 +66,17 @@ public class CurvedLaser extends Laser {
 	}
 
 	/**
-	 * 初始化行为参数
-	 */
+	 * 初始化行为参�?	 */
 	@Override
 	protected void initBehavior() {
-		// 初始化行为参数
-	}
+		// 初始化行为参�?	}
 
 	/**
 	 * 实现每帧的自定义更新逻辑
 	 */
 	@Override
 	protected void onUpdate() {
-		// 添加轨迹点
-		if (active) {
+		// 添加轨迹�?		if (active) {
 			trailPoints.add(new Point(x, y, width));
 
 			// 限制轨迹长度
@@ -113,17 +104,14 @@ public class CurvedLaser extends Laser {
 	}
 
 	/**
-	 * 更新激光状态
-	 */
+	 * 更新激光状�?	 */
 	@Override
 	public void update() {
 		super.update();
 	}
 
 	/**
-	 * 渲染激光
-	 * @param g2d 图形上下文
-	 */
+	 * 渲染激�?	 * @param g2d 图形上下�?	 */
 	@Override
 	protected void renderLaser(Graphics2D g2d) {
 		// 渲染拖尾(从后向前)
@@ -134,14 +122,12 @@ public class CurvedLaser extends Laser {
 			float[] screenStart = gameCanvas.toScreenCoords(p1.x, p1.y);
 			float[] screenEnd = gameCanvas.toScreenCoords(p2.x, p2.y);
 
-			// 渐变透明度
-			float alpha = (float)(i + 1) / trailPoints.size();
+			// 渐变透明�?			float alpha = (float)(i + 1) / trailPoints.size();
 			int r = color.getRed();
 			int g = color.getGreen();
 			int b = color.getBlue();
 
-			// 绘制拖尾段
-			g2d.setColor(new Color(r, g, b, (int)(alpha * 200)));
+			// 绘制拖尾�?			g2d.setColor(new Color(r, g, b, (int)(alpha * 200)));
 			float segmentWidth = p1.width * alpha;
 			g2d.setStroke(new BasicStroke(segmentWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 			g2d.drawLine((int)screenStart[0], (int)screenStart[1], (int)screenEnd[0], (int)screenEnd[1]);
@@ -159,8 +145,7 @@ public class CurvedLaser extends Laser {
 	}
 
 	/**
-	 * 检查点是否在激光碰撞体内
-	 * @param px 点X坐标
+	 * 检查点是否在激光碰撞体�?	 * @param px 点X坐标
 	 * @param py 点Y坐标
 	 * @return 是否碰撞
 	 */
@@ -168,13 +153,11 @@ public class CurvedLaser extends Laser {
 	public boolean checkCollision(float px, float py) {
 		if (!active || !visible) return false;
 
-		// 检查每个拖尾段的碰撞
-		for (int i = 0; i < trailPoints.size() - 1; i++) {
+		// 检查每个拖尾段的碰�?		for (int i = 0; i < trailPoints.size() - 1; i++) {
 			Point p1 = trailPoints.get(i);
 			Point p2 = trailPoints.get(i + 1);
 
-			// 计算线段角度和长度
-			float dx = p2.x - p1.x;
+			// 计算线段角度和长�?			float dx = p2.x - p1.x;
 			float dy = p2.y - p1.y;
 			float segmentAngle = (float)Math.atan2(dy, dx);
 			float segmentLength = (float)Math.sqrt(dx * dx + dy * dy);
@@ -190,8 +173,7 @@ public class CurvedLaser extends Laser {
 	}
 
 	/**
-	 * 检查激光是否超出边界
-	 * @param width 画布宽度
+	 * 检查激光是否超出边�?	 * @param width 画布宽度
 	 * @param height 画布高度
 	 * @return 是否超出边界
 	 */
@@ -226,18 +208,16 @@ public class CurvedLaser extends Laser {
 	}
 
 	/**
-	 * 任务开始时触发的方法
-	 */
+	 * 任务开始时触发的方�?	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实现
-	}
+		// 空实�?	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实现
-	}
+		// 空实�?	}
 }
+

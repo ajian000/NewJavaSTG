@@ -3,8 +3,7 @@ package stg.game.bullet;
 import stg.game.IGameObject;
 
 /**
- * 子弹接口 - 定义子弹的行为和属性
- */
+ * 子弹接口 - 定义子弹的行为和属�? */
 public interface IBullet extends IGameObject {
     /**
      * 获取子弹伤害
@@ -17,8 +16,7 @@ public interface IBullet extends IGameObject {
     void setDamage(int damage);
     
     /**
-     * 检查子弹是否越界
-     */
+     * 检查子弹是否越�?     */
     boolean isOutOfBounds(int width, int height);
     
     /**

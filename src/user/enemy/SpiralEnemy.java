@@ -6,9 +6,7 @@ import stg.game.ui.GameCanvas;
 import user.bullet.SpiralBullet;
 
 /**
- * 螺旋弹幕敌人 - 发射螺旋前进的子弹
- * @Time 2026-01-23
- */
+ * 螺旋弹幕敌人 - 发射螺旋前进的子�? * */\n\t * @since 2026-01-23
 public class SpiralEnemy extends Enemy {
 	private float shootTimer;
 	private float shootInterval;
@@ -82,18 +80,16 @@ public class SpiralEnemy extends Enemy {
 	}
 
 	/**
-	 * 任务开始时触发的方法
-	 */
+	 * 任务开始时触发的方�?	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实现
-	}
+		// 空实�?	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实现
-	}
+		// 空实�?	}
 }
+

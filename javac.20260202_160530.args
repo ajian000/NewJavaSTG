@@ -1,0 +1,5 @@
+-d
+bin
+-cp
+src
+src\\stg\\game\\ui\\GameCanvas.java

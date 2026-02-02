@@ -3,6 +3,7 @@ package stg.game.stage;
 import java.util.List;
 import stg.game.enemy.Enemy;
 import stg.game.ui.GameCanvas;
+import user.stage.StageCompletionCondition;
 import user.stage.StageState;
 
 /**
@@ -10,10 +11,10 @@ import user.stage.StageState;
  * @since 2026-01-30
  */
 public abstract class Stage {
-    private String stageName;
-    private int stageId;
+    private final String stageName;
+    private final int stageId;
     private StageState state;
-    private GameCanvas gameCanvas;
+    private final GameCanvas gameCanvas;
     private StageCompletionCondition completionCondition;
     
     // 波次管理相关字段
@@ -31,11 +32,12 @@ public abstract class Stage {
         this.gameCanvas = gameCanvas;
         this.state = StageState.CREATED;
         initStage();
-        // 移除自动加载和开始逻辑，由调用者显式控制
+        // 移除自动加载和开始逻辑，由调用者显式调用load()和start()
     }
 
     /**
      * 初始化关卡
+     * 由子类重写，初始化关卡相关资源
      */
     protected void initStage() {
         // 子类可以重写此方法初始化关卡
@@ -43,6 +45,7 @@ public abstract class Stage {
 
     /**
      * 开始关卡
+     * 由调用者显式调用，开始关卡逻辑
      */
     public void start() {
         if (state == StageState.LOADED) {
@@ -53,6 +56,7 @@ public abstract class Stage {
 
     /**
      * 结束关卡
+     * 由调用者显式调用，结束关卡逻辑
      */
     public void end() {
         if (state == StageState.STARTED) {
@@ -70,7 +74,7 @@ public abstract class Stage {
     }
 
     /**
-     * 跳转到下一关
+     * 跳转到下一关卡
      * @return 下一关的Stage对象
      */
     public abstract Stage nextStage();
@@ -82,7 +86,7 @@ public abstract class Stage {
 
     /**
      * 设置关卡状态为LOADED
-     * 由子类在load()方法完成后调用
+     * 由子类在load()方法完成后调用，标记关卡为已加载
      */
     protected void setLoaded() {
         this.state = StageState.LOADED;
@@ -93,7 +97,7 @@ public abstract class Stage {
      */
     public void cleanup() {
         if (state != StageState.CLEANED_UP) {
-            // 敌人清理由GameWorld负责
+            // 敌人清理逻辑由GameWorld负责
             state = StageState.CLEANED_UP;
         }
     }
@@ -153,7 +157,7 @@ public abstract class Stage {
 
     /**
      * 获取当前关卡的敌人列表
-     * @return 敌人列表（不可修改）
+     * @return 敌人列表（不可修改） 
      */
     public List<Enemy> getEnemies() {
         if (gameCanvas != null) {

@@ -4,27 +4,20 @@ import java.awt.*;
 import stg.game.ui.GameCanvas;
 
 /**
- * 激光基类 - 所有激光的父类
+ * 激光基�?- 所有激光的父类
  * @since 2026-01-21
  */
 public abstract class Laser {
 	protected float x; // 激光起点X坐标
 	protected float y; // 激光起点Y坐标
-	protected float angle; // 激光角度(弧度)
-	protected float length; // 激光长度
-	protected float width; // 激光宽度
-	protected Color color; // 激光颜色
-	protected GameCanvas gameCanvas; // 画布引用
+	protected float angle; // 激光角�?弧度)
+	protected float length; // 激光长�?	protected float width; // 激光宽�?	protected Color color; // 激光颜�?	protected GameCanvas gameCanvas; // 画布引用
 	protected boolean warningOnly; // 是否仅显示预警线
-	protected int warningTime; // 预警持续时间(帧)
-	protected int warningTimer; // 预警计时器
-	protected boolean active; // 激光是否激活(预警结束后)
-	protected boolean visible; // 激光是否可见
-	protected int damage; // 伤害值
-
+	protected int warningTime; // 预警持续时间(�?
+	protected int warningTimer; // 预警计时�?	protected boolean active; // 激光是否激�?预警结束�?
+	protected boolean visible; // 激光是否可�?	protected int damage; // 伤害�?
 	/**
-	 * 构造函数
-	 * @param x 起点X坐标
+	 * 构造函�?	 * @param x 起点X坐标
 	 * @param y 起点Y坐标
 	 * @param angle 角度(弧度)
 	 * @param length 长度
@@ -36,16 +29,14 @@ public abstract class Laser {
 	}
 
 	/**
-	 * 完整构造函数
-	 * @param x 起点X坐标
+	 * 完整构造函�?	 * @param x 起点X坐标
 	 * @param y 起点Y坐标
 	 * @param angle 角度(弧度)
 	 * @param length 长度
 	 * @param width 宽度
 	 * @param color 颜色
-	 * @param warningTime 预警时间(帧)
-	 * @param damage 伤害值
-	 */
+	 * @param warningTime 预警时间(�?
+	 * @param damage 伤害�?	 */
 	public Laser(float x, float y, float angle, float length, float width, Color color, int warningTime, int damage) {
 		this.x = x;
 		this.y = y;
@@ -63,8 +54,7 @@ public abstract class Laser {
 	}
 	
 	/**
-	 * 初始化行为参数
-	 * 在构造函数中调用，用于初始化行为参数
+	 * 初始化行为参�?	 * 在构造函数中调用，用于初始化行为参数
 	 */
 	protected abstract void initBehavior();
 
@@ -79,8 +69,7 @@ public abstract class Laser {
 	protected abstract void onMove();
 
 	/**
-	 * 更新激光状态
-	 */
+	 * 更新激光状�?	 */
 	public void update() {
 		// 调用自定义更新逻辑
 		onUpdate();
@@ -97,31 +86,24 @@ public abstract class Laser {
 	}
 
 	/**
-	 * 渲染激光
-	 * @param g 图形上下文
-	 */
+	 * 渲染激�?	 * @param g 图形上下�?	 */
 	public void render(Graphics g) {
 		if (!visible) return;
 
-		// 设置抗锯齿
-		Graphics2D g2d = (Graphics2D) g.create();
+		// 设置抗锯�?		Graphics2D g2d = (Graphics2D) g.create();
 		stg.util.RenderUtils.enableAntiAliasing(g2d);
 
 		if (!active) {
-			// 渲染预警线
-			renderWarningLine(g2d);
+			// 渲染预警�?			renderWarningLine(g2d);
 		} else {
-			// 渲染实际激光
-			renderLaser(g2d);
+			// 渲染实际激�?			renderLaser(g2d);
 		}
 
 		g2d.dispose();
 	}
 
 	/**
-	 * 渲染预警线
-	 * @param g2d 图形上下文
-	 */
+	 * 渲染预警�?	 * @param g2d 图形上下�?	 */
 	protected void renderWarningLine(Graphics2D g2d) {
 		float[] screenStart = gameCanvas.toScreenCoords(x, y);
 		float endX = x + (float)(Math.cos(angle) * length);
@@ -135,17 +117,14 @@ public abstract class Laser {
 	}
 
 	/**
-	 * 渲染实际激光
-	 * @param g2d 图形上下文
-	 */
+	 * 渲染实际激�?	 * @param g2d 图形上下�?	 */
 	protected void renderLaser(Graphics2D g2d) {
 		float[] screenStart = gameCanvas.toScreenCoords(x, y);
 		float endX = x + (float)(Math.cos(angle) * length);
 		float endY = y + (float)(Math.sin(angle) * length);
 		float[] screenEnd = gameCanvas.toScreenCoords(endX, endY);
 
-		// 绘制激光核心
-		g2d.setColor(color);
+		// 绘制激光核�?		g2d.setColor(color);
 		g2d.setStroke(new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g2d.drawLine((int)screenStart[0], (int)screenStart[1], (int)screenEnd[0], (int)screenEnd[1]);
 
@@ -156,8 +135,7 @@ public abstract class Laser {
 	}
 
 	/**
-	 * 检查点是否在激光碰撞体内
-	 * @param px 点X坐标
+	 * 检查点是否在激光碰撞体�?	 * @param px 点X坐标
 	 * @param py 点Y坐标
 	 * @return 是否碰撞
 	 */
@@ -167,8 +145,7 @@ public abstract class Laser {
 	}
 
 	/**
-	 * 检查激光是否超出边界
-	 * @param width 画布宽度
+	 * 检查激光是否超出边�?	 * @param width 画布宽度
 	 * @param height 画布高度
 	 * @return 是否超出边界
 	 */
@@ -181,8 +158,7 @@ public abstract class Laser {
 	}
 
 	/**
-	 * 计算点到线段的距离
-	 * @param px 点X
+	 * 计算点到线段的距�?	 * @param px 点X
 	 * @param py 点Y
 	 * @param lx 线段起点X
 	 * @param ly 线段起点Y
@@ -238,8 +214,7 @@ public abstract class Laser {
 	public void setDamage(int damage) { this.damage = damage; }
 
 	/**
- * 重置激光状态
- * @since 2026-01-29
+ * 重置激光状�? * @since 2026-01-29
  */
 	public void reset() {
 		warningTimer = warningTime;
@@ -256,12 +231,11 @@ public abstract class Laser {
 	}
 
 	/**
-	 * 任务开始时触发的方法 - 用于处理开局对话等
-	 */
+	 * 任务开始时触发的方�?- 用于处理开局对话�?	 */
 	protected abstract void onTaskStart();
 
 	/**
-	 * 任务结束时触发的方法 - 用于处理boss击破对话和道具掉落
-	 */
+	 * 任务结束时触发的方法 - 用于处理boss击破对话和道具掉�?	 */
 	protected abstract void onTaskEnd();
 }
+

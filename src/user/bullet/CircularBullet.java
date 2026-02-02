@@ -5,14 +5,14 @@ import user.enemy.EnemyBullet;
 
 /**
  * 圆形弹幕类 - EnemyBullet的子类
- * @Time 2026-01-19 标准圆形弹幕,带有渐变效果
+ * 标准圆形弹幕,带有渐变效果
+ * @since 2026-01-19
  */
 public class CircularBullet extends EnemyBullet {
 	private Color innerColor; // 内圈颜色
 
 	/**
-	 * 构造函数
-	 * @param x X坐标
+	 * 构造函�?	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param vx X方向速度
 	 * @param vy Y方向速度
@@ -23,23 +23,21 @@ public class CircularBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 完整构造函数
-	 * @param x X坐标
+	 * 完整构造函�?	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param vx X方向速度
 	 * @param vy Y方向速度
 	 * @param size 子弹大小
 	 * @param color 外圈颜色
 	 * @param innerColor 内圈颜色
-	 * @param damage 伤害值
-	 */
+	 * @param damage 伤害�?	 */
 	public CircularBullet(float x, float y, float vx, float vy, float size, Color color, Color innerColor, int damage) {
 		super(x, y, vx, vy, size, color, damage);
 		this.innerColor = innerColor;
 	}
 
 	/**
-	 * @Time 2026-01-19 重写渲染方法,添加渐变效果
+	 * 重写渲染方法,添加渐变效果\n\t * @since 2026-01-19
 	 */
 	@Override
 	public void render(Graphics2D g) {
@@ -56,18 +54,16 @@ public class CircularBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 任务开始时触发的方法
-	 */
+	 * 任务开始时触发的方�?	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实现
-	}
+		// 空实�?	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实现
-	}
+		// 空实�?	}
 }
+

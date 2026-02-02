@@ -6,18 +6,15 @@ import user.bullet.CircularBullet;
 import stg.game.ui.GameCanvas;
 
 /**
- * 自定义子机示例 - 演示如何创建自定义子机
- */
+ * 自定义子机示�?- 演示如何创建自定义子�? */
 public class CustomOption extends Option {
 	private int shootMode; // 射击模式
-	private int modeTimer; // 模式计时器
-	private static final int MODE_SWITCH_INTERVAL = 120; // 模式切换间隔（2秒）
+	private int modeTimer; // 模式计时�?	private static final int MODE_SWITCH_INTERVAL = 120; // 模式切换间隔�?秒）
 
 	public CustomOption(Player player, float offsetX, float offsetY, GameCanvas gameCanvas) {
 		super(player, offsetX, offsetY, gameCanvas);
 		
-		// 自定义配置
-		setSize(12.0f);
+		// 自定义配�?		setSize(12.0f);
 		setColor(new Color(100, 255, 100));
 		setShootInterval(2);
 		setBulletDamage(2);
@@ -31,16 +28,14 @@ public class CustomOption extends Option {
 	protected void shoot() {
 		if (gameCanvas == null) return;
 
-		// 更新模式计时器
-		modeTimer++;
+		// 更新模式计时�?		modeTimer++;
 		if (modeTimer >= MODE_SWITCH_INTERVAL) {
 			modeTimer = 0;
 			shootMode = (shootMode + 1) % 3; // 循环切换模式
-			System.out.println("子机切换到模式: " + shootMode);
+			System.out.println("子机切换到模�? " + shootMode);
 		}
 
-		// 根据模式发射不同类型的子弹
-		switch (shootMode) {
+		// 根据模式发射不同类型的子�?		switch (shootMode) {
 			case 0:
 				shootMode0();
 				break;
@@ -113,8 +108,7 @@ public class CustomOption extends Option {
 		g.fillOval((int)(screenX - size), (int)(screenY - size),
 		          (int)(size * 2), (int)(size * 2));
 
-		// 绘制模式指示器（根据当前模式显示不同颜色）
-		Color modeColor;
+		// 绘制模式指示器（根据当前模式显示不同颜色�?		Color modeColor;
 		switch (shootMode) {
 			case 0:
 				modeColor = Color.GREEN;
@@ -151,3 +145,4 @@ public class CustomOption extends Option {
 		shootMode = 0;
 	}
 }
+

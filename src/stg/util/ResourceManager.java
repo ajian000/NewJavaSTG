@@ -8,23 +8,19 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 /**
- * 资源管理器 - 负责加载和管理游戏资源（图片等）
- * @Time 2026-01-24
+ * 资源管理类 - 负责加载和管理游戏资源（图片等）
+ * @since 2026-01-24
  */
 public class ResourceManager {
-	private static ResourceManager instance;
-	private Map<String, BufferedImage> images;
+	private static final ResourceManager instance = new ResourceManager();
+	private final Map<String, BufferedImage> images = new HashMap<>();
 	private String resourcePath;
 	
 	private ResourceManager() {
-		this.images = new HashMap<>();
 		this.resourcePath = "resources/";
 	}
 	
 	public static ResourceManager getInstance() {
-		if (instance == null) {
-			instance = new ResourceManager();
-		}
 		return instance;
 	}
 	
@@ -46,7 +42,7 @@ public class ResourceManager {
 				System.out.println("【资源】从文件系统加载图片: " + filename);
 				return image;
 			} catch (IOException e) {
-				System.err.println("【资源加载失败】无法加载图片: " + filename);
+				System.err.println("【资源加载失败】无法加载图片 " + filename);
 				e.printStackTrace();
 				return null;
 			}
@@ -56,10 +52,10 @@ public class ResourceManager {
 		try {
 			BufferedImage image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(resourcePath + filename));
 			images.put(filename, image);
-			System.out.println("【资源】从类路径加载图片: " + filename);
+			System.out.println("【资源】从类路径加载图片 " + filename);
 			return image;
 		} catch (IOException e) {
-			System.err.println("【资源加载失败】无法加载图片: " + filename);
+			System.err.println("【资源加载失败】无法加载图片 " + filename);
 			e.printStackTrace();
 			return null;
 		} catch (IllegalArgumentException e) {
@@ -83,7 +79,7 @@ public class ResourceManager {
 				System.out.println("【资源】从文件系统加载图片: " + fullPath);
 				return image;
 			} catch (IOException e) {
-				System.err.println("【资源加载失败】无法加载图片: " + fullPath);
+				System.err.println("【资源加载失败】无法加载图片 " + fullPath);
 				e.printStackTrace();
 				return null;
 			}
@@ -93,10 +89,10 @@ public class ResourceManager {
 		try {
 			BufferedImage image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(resourcePath + fullPath));
 			images.put(fullPath, image);
-			System.out.println("【资源】从类路径加载图片: " + fullPath);
+			System.out.println("【资源】从类路径加载图片 " + fullPath);
 			return image;
 		} catch (IOException e) {
-			System.err.println("【资源加载失败】无法加载图片: " + fullPath);
+			System.err.println("【资源加载失败】无法加载图片 " + fullPath);
 			e.printStackTrace();
 			return null;
 		} catch (IllegalArgumentException e) {
@@ -121,3 +117,4 @@ public class ResourceManager {
 		return images.containsKey(filename);
 	}
 }
+

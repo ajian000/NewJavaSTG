@@ -6,7 +6,7 @@ import user.player.Player;
 import stg.util.CoordinateSystem;
 
 /**
- * 游戏渲染器 - 处理游戏的渲染逻辑
+ * 游戏渲染�?- 处理游戏的渲染逻辑
  */
 public class GameRenderer {
     private GameWorld world;
@@ -14,8 +14,7 @@ public class GameRenderer {
     private CoordinateSystem coordinateSystem;
     
     /**
-     * 构造函数
-     */
+     * 构造函�?     */
     public GameRenderer(GameWorld world, Player player, CoordinateSystem coordinateSystem) {
         this.world = world;
         this.player = player;
@@ -37,8 +36,7 @@ public class GameRenderer {
     }
     
     /**
-     * 启用抗锯齿
-     */
+     * 启用抗锯�?     */
     private void enableAntiAliasing(Graphics2D g) {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
@@ -62,8 +60,7 @@ public class GameRenderer {
     }
     
     /**
-     * 渲染敌方激光
-     */
+     * 渲染敌方激�?     */
     private void renderEnemyLasers(Graphics2D g) {
         for (user.laser.EnemyLaser laser : world.getEnemyLasers()) {
             laser.render(g);

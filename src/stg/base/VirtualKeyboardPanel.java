@@ -6,7 +6,8 @@ import stg.game.ui.GameCanvas;
 
 /**
  * 虚拟键盘面板 - 显示按键状态
- * @Time 2026-01-20 支持KeyStateProvider接口,使标题界面也能显示按键
+ * 支持KeyStateProvider接口,使标题界面也能显示按键
+ * @since 2026-01-20
  */
 public class VirtualKeyboardPanel extends JPanel {
 	private KeyStateProvider keyStateProvider;
@@ -29,8 +30,8 @@ public class VirtualKeyboardPanel extends JPanel {
 	}
 
 	/**
-	 * 构造函数 - 接受KeyStateProvider
-	 * @Time 2026-01-20 支持标题界面按键显示
+	 * 构造函�?- 接受KeyStateProvider
+	 * 支持标题界面按键显示\n\t * @since 2026-01-20
 	 */
 	public VirtualKeyboardPanel(KeyStateProvider keyStateProvider) {
 		this.keyStateProvider = keyStateProvider;
@@ -61,8 +62,7 @@ public class VirtualKeyboardPanel extends JPanel {
 	}
 
 	/**
-	 * 更新按键状态
-	 */
+	 * 更新按键状�?	 */
 	private void updateKeyStates() {
 		if (keyStateProvider == null) return;
 		upPressed = keyStateProvider.isUpPressed();
@@ -115,6 +115,7 @@ public class VirtualKeyboardPanel extends JPanel {
 	 * 绘制单个按键
 	 */
 	private void drawKey(Graphics2D g, int x, int y, int width, int height, String text, boolean pressed) {
+
 		if (pressed) {
 			g.setColor(new Color(100, 200, 100));
 			g.fillRect(x, y, width, height);
@@ -151,8 +152,9 @@ public class VirtualKeyboardPanel extends JPanel {
 
 	/**
 	 * 设置按键状态提供者
-	 * @Time 2026-01-20 支持切换到标题界面
-	 */
+	 * 支持切换到标题界面
+	 * @since 2026-01-20
+	 * */
 	public void setKeyStateProvider(KeyStateProvider provider) {
 		this.keyStateProvider = provider;
 	}
@@ -163,3 +165,4 @@ public class VirtualKeyboardPanel extends JPanel {
 		}
 	}
 }
+

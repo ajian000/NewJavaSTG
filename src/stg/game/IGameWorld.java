@@ -9,8 +9,7 @@ import stg.game.player.IPlayer;
 import stg.util.CoordinateSystem;
 
 /**
- * 游戏世界接口 - 定义游戏世界的行为和属性
- */
+ * 游戏世界接口 - 定义游戏世界的行为和属�? */
 public interface IGameWorld {
     /**
      * 添加敌人
@@ -33,8 +32,7 @@ public interface IGameWorld {
     void addItem(IItem item);
     
     /**
-     * 添加敌方激光
-     */
+     * 添加敌方激�?     */
     void addEnemyLaser(EnemyLaser laser);
     
     /**
@@ -63,8 +61,7 @@ public interface IGameWorld {
     java.util.List<IItem> getItems();
     
     /**
-     * 获取敌方激光列表
-     */
+     * 获取敌方激光列�?     */
     java.util.List<EnemyLaser> getEnemyLasers();
     
     /**
@@ -88,7 +85,6 @@ public interface IGameWorld {
     void update();
     
     /**
-     * 清除所有实体
-     */
+     * 清除所有实�?     */
     void clear();
 }

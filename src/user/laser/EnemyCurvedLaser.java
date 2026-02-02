@@ -4,14 +4,11 @@ import java.awt.*;
 
 /**
  * 敌人曲线激光类 - 继承自EnemyLaser和CurvedLaser
- * @Time 2026-01-21
- */
+ * */\n\t * @since 2026-01-21
 public class EnemyCurvedLaser extends EnemyLaser {
-	private CurvedLaser curvedLaser; // 实际的曲线激光
-
+	private CurvedLaser curvedLaser; // 实际的曲线激�?
 	/**
-	 * 构造函数
-	 * @param x 起点X坐标
+	 * 构造函�?	 * @param x 起点X坐标
 	 * @param y 起点Y坐标
 	 * @param angle 角度(弧度)
 	 * @param length 长度
@@ -19,8 +16,7 @@ public class EnemyCurvedLaser extends EnemyLaser {
 	 * @param color 颜色
 	 * @param vx X方向速度
 	 * @param vy Y方向速度
-	 * @param maxTrailLength 最大拖尾长度
-	 */
+	 * @param maxTrailLength 最大拖尾长�?	 */
 	public EnemyCurvedLaser(float x, float y, float angle, float length, float width, Color color,
 						   float vx, float vy, int maxTrailLength) {
 		super(x, y, angle, length, width, color);
@@ -28,31 +24,26 @@ public class EnemyCurvedLaser extends EnemyLaser {
 	}
 
 	/**
-	 * 完整构造函数
-	 * @param x 起点X坐标
+	 * 完整构造函�?	 * @param x 起点X坐标
 	 * @param y 起点Y坐标
 	 * @param angle 角度(弧度)
 	 * @param length 长度
 	 * @param width 宽度
 	 * @param color 颜色
 	 * @param warningTime 预警时间
-	 * @param damage 伤害值
-	 * @param vx X方向速度
+	 * @param damage 伤害�?	 * @param vx X方向速度
 	 * @param vy Y方向速度
-	 * @param maxTrailLength 最大拖尾长度
-	 */
+	 * @param maxTrailLength 最大拖尾长�?	 */
 	public EnemyCurvedLaser(float x, float y, float angle, float length, float width, Color color, int warningTime, int damage, float vx, float vy, int maxTrailLength) {
 		super(x, y, angle, length, width, color, warningTime, damage);
 		this.curvedLaser = new CurvedLaser(x, y, angle, length, width, color, warningTime, damage, vx, vy, maxTrailLength);
 	}
 
 	/**
-	 * 初始化行为参数
-	 */
+	 * 初始化行为参�?	 */
 	@Override
 	protected void initBehavior() {
-		// 初始化行为参数
-	}
+		// 初始化行为参�?	}
 
 	/**
 	 * 实现每帧的自定义更新逻辑
@@ -74,8 +65,7 @@ public class EnemyCurvedLaser extends EnemyLaser {
 	public void update() {
 		super.update();
 		curvedLaser.update();
-		// 同步位置和状态
-		this.x = curvedLaser.getX();
+		// 同步位置和状�?		this.x = curvedLaser.getX();
 		this.y = curvedLaser.getY();
 		this.angle = curvedLaser.getAngle();
 		this.active = curvedLaser.isActive();
@@ -136,18 +126,16 @@ public class EnemyCurvedLaser extends EnemyLaser {
 	}
 
 	/**
-	 * 任务开始时触发的方法
-	 */
+	 * 任务开始时触发的方�?	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实现
-	}
+		// 空实�?	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实现
-	}
+		// 空实�?	}
 }
+

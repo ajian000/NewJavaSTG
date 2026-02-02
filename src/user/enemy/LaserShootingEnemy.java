@@ -3,14 +3,12 @@ package user.enemy;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import user.laser.*;
-import stg.game.ui.GameCanvas;
 import stg.game.enemy.Enemy;
+import stg.game.ui.GameCanvas;
+import user.laser.*;
 
 /**
- * 激光射击敌人 - 能够发射直线激光和曲线激光
- * @Time 2026-01-20
- */
+ * 激光射击敌�?- 能够发射直线激光和曲线激�? * */\n\t * @since 2026-01-20
 public class LaserShootingEnemy extends Enemy {
 	private float shootTimer;
 	private float shootInterval;
@@ -22,8 +20,7 @@ public class LaserShootingEnemy extends Enemy {
 	private List<EnemyLaser> firedLasers;
 
 	/**
-	 * 构造函数
-	 * @param x X坐标
+	 * 构造函�?	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param moveSpeed 移动速度
 	 * @param gameCanvas 游戏画布引用
@@ -34,8 +31,7 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 完整构造函数
-	 * @param x X坐标
+	 * 完整构造函�?	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param moveSpeed 移动速度
 	 * @param gameCanvas 游戏画布引用
@@ -57,14 +53,12 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 更新敌人状态
-	 */
+	 * 更新敌人状�?	 */
 	@Override
 	public void update() {
 		super.update();
 
-		// 安全检查
-		if (getGameCanvas() == null || !isAlive()) {
+		// 安全检�?		if (getGameCanvas() == null || !isAlive()) {
 			return;
 		}
 
@@ -83,11 +77,9 @@ public class LaserShootingEnemy extends Enemy {
 			moveAngle = (float)Math.PI - moveAngle;
 		}
 
-		// 更新射击计时器
-		shootTimer++;
+		// 更新射击计时�?		shootTimer++;
 
-		// 更新模式切换计时器
-		patternTimer++;
+		// 更新模式切换计时�?		patternTimer++;
 
 		// 切换攻击模式
 		if (pattern == 2 && patternTimer >= patternInterval) {
@@ -104,8 +96,7 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 射击 - 根据当前模式发射激光
-	 */
+	 * 射击 - 根据当前模式发射激�?	 */
 	private void shoot() {
 		if (!isAlive() || gameCanvas == null) return;
 
@@ -127,8 +118,7 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 发射直线激光
-	 */
+	 * 发射直线激�?	 */
 	private void shootLinearLaser() {
 		float angle = (float)(Math.random() * Math.PI * 2);
 		EnemyLinearLaser laser = new EnemyLinearLaser(
@@ -155,16 +145,14 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 重写渲染方法,自定义外观
-	 */
+	 * 重写渲染方法,自定义外�?	 */
 	@Override
 	public void render(Graphics2D g) {
 		float[] screenCoords = toScreenCoords(x, y);
 		float screenX = screenCoords[0];
 		float screenY = screenCoords[1];
 
-		// 绘制六边形
-		int[] xPoints = new int[6];
+		// 绘制六边�?		int[] xPoints = new int[6];
 		int[] yPoints = new int[6];
 		for (int i = 0; i < 6; i++) {
 			double angle = 2 * Math.PI * i / 6;
@@ -195,8 +183,7 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 重写死亡回调，清除所有激光
-	 */
+	 * 重写死亡回调，清除所有激�?	 */
 	@Override
 	protected void onDeath() {
 		if (getGameCanvas() != null && firedLasers != null) {
@@ -206,18 +193,16 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 任务开始时触发的方法
-	 */
+	 * 任务开始时触发的方�?	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实现
-	}
+		// 空实�?	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实现
-	}
+		// 空实�?	}
 }
+

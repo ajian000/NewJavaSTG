@@ -4,8 +4,9 @@ import java.util.Random;
 
 /**
  * 随机数生成器类
- * @Time 2026-01-20 创建stg.util.math包,添加随机数生成器
- * @Time 2026-01-20 简化类,移除不必要的功能
+ * 创建stg.util.math包，添加随机数生成器
+ * 简化类,移除不必要的功能
+ * @since 2026-01-20
  */
 public class RandomGenerator {
 	private Random random;
@@ -69,3 +70,4 @@ public class RandomGenerator {
 		return new java.awt.Color(random.nextInt(256), random.nextInt(256), random.nextInt(256), random.nextInt(256));
 	}
 }
+

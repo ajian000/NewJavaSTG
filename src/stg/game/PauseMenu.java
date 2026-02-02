@@ -7,8 +7,7 @@ import java.awt.FontMetrics;
 import stg.game.GameStateManager;
 
 /**
- * 暂停菜单 - 处理游戏暂停时的菜单显示和交互
- */
+ * 暂停菜单 - 处理游戏暂停时的菜单显示和交互 */
 public class PauseMenu {
     private static final String[] MENU_ITEMS = {
         "继续游戏",
@@ -72,7 +71,7 @@ public class PauseMenu {
         // 操作提示
         g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
         g.setColor(new Color(150, 150, 150));
-        g.drawString("↑ ↓  选择", menuX + 40, menuY + menuHeight - 40);
+        g.drawString("↑↓ 选择", menuX + 40, menuY + menuHeight - 40);
         g.drawString("Z/Enter 确认", menuX + 40, menuY + menuHeight - 20);
     }
     

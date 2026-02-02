@@ -12,7 +12,8 @@ import java.util.ArrayList;
 
 /**
  * 关卡组选择界面 - 允许玩家选择要挑战的关卡组
- * @since 2026-01-30
+ * 将类移动到stg.game.ui包内，保持与其他UI组件的一致性
+ * @Time 2026-01-30 实现KeyStateProvider以支持虚拟键盘 * @Time 2026-02-01 添加背景图片支持\n\t * @since 2026-01-30
  */
 public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
     private static final long serialVersionUID = 1L;
@@ -67,9 +68,10 @@ public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
     }
 
     /**
-     * 设置关卡组列表
-     * @param groups 关卡组列表
-     */
+     * 设置关卡组列表 - 用于更新可解锁的关卡组
+     * 将方法移动到stg.game.ui包内，保持与其他UI组件的一致性
+     * @Time 2026-02-01 实现KeyStateProvider以支持虚拟键盘 * @Time 2026-02-02 添加背景图片支持\n\t * @since 2026-02-01
+     * @param groups 关卡组列表     */
     public void setStageGroups(List<StageGroup> groups) {
         this.stageGroups = groups != null ? groups : new ArrayList<>();
         this.selectedIndex = Math.max(0, Math.min(selectedIndex, stageGroups.size() - 1));
@@ -77,9 +79,10 @@ public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
     }
 
     /**
-     * 添加关卡组
-     * @param group 关卡组
-     */
+     * 添加关卡组 - 用于动态解锁新关卡组
+     * 将方法移动到stg.game.ui包内，保持与其他UI组件的一致性
+     * @Time 2026-02-02 实现KeyStateProvider以支持虚拟键盘 * @Time 2026-02-03 添加背景图片支持\n\t * @since 2026-02-02
+     * @param group 关卡组     */
     public void addStageGroup(StageGroup group) {
         if (group != null) {
             stageGroups.add(group);
@@ -135,6 +138,8 @@ public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
         g2d.drawString(playerInfo, width / 2 - playerInfoWidth / 2, 150);
 
         // 绘制关卡组列表
+        g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 24));
+        g2d.setColor(Color.WHITE);
         drawStageGroups(g2d, width, height);
 
         // 绘制操作提示
@@ -163,7 +168,7 @@ public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
             boolean isSelected = (i == selectedIndex);
             boolean isUnlockable = group.isUnlockable();
 
-            // 绘制背景框
+            // 绘制背景矩形
             if (isSelected) {
                 g2d.setColor(new Color(255, 200, 100, 50));
                 g2d.fillRoundRect(width / 2 - 300, y - 15, 600, 50, 10, 10);
@@ -175,10 +180,11 @@ public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
             }
 
             // 绘制关卡组信息
-            g2d.setFont(new Font("Microsoft YaHei", Font.BOLD, 20));
-            String groupName = group.getDisplayName();
-            int nameWidth = g2d.getFontMetrics().stringWidth(groupName);
-            g2d.drawString(groupName, width / 2 - 280, y + 10);
+            if (isUnlockable || isSelected) {
+                g2d.setFont(new Font("Microsoft YaHei", Font.BOLD, 20));
+                String groupName = group.getDisplayName();
+                int nameWidth = g2d.getFontMetrics().stringWidth(groupName);
+                g2d.drawString(groupName, width / 2 - 280, y + 10);
 
             // 绘制难度
             g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
@@ -201,8 +207,10 @@ public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
             // 绘制选中标记
             if (isSelected) {
                 g2d.setFont(new Font("Microsoft YaHei", Font.BOLD, 24));
-                g2d.drawString("▶", width / 2 - 310, y + 15);
+                g2d.drawString("�?", width / 2 - 310, y + 15);
             }
+
+
 
             // 绘制锁定标记
             if (!isUnlockable) {
@@ -213,9 +221,10 @@ public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
     }
 
     private void drawControls(Graphics2D g2d, int width, int height) {
+
         g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
         g2d.setColor(Color.GRAY);
-        g2d.drawString("↑ ↓  选择关卡组", width / 2 - 100, height - 60);
+        g2d.drawString("上下 选择关卡组", width / 2 - 100, height - 60);
         g2d.drawString("Z/Enter 确认选择", width / 2 - 100, height - 40);
         g2d.drawString("ESC  返回", width / 2 - 100, height - 20);
     }
@@ -245,7 +254,7 @@ public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
     public void setXPressed(boolean xPressed) { this.xPressed = xPressed; }
 
     /**
-     * 停止动画计时器
+     * 停止动画计时
      */
     public void stopAnimation() {
         if (animationTimer != null && animationTimer.isRunning()) {
@@ -253,3 +262,4 @@ public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
         }
     }
 }
+

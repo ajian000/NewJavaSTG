@@ -4,8 +4,8 @@ import stg.util.*;
 
 /**
  * 资源加载测试程序
- * @Time 2026-01-24
- */
+ * @since 2026-01-24
+ * */ 
 public class ResourceTest {
 	public static void main(String[] args) {
 		System.out.println("=== 资源加载测试 ===\n");
@@ -19,12 +19,12 @@ public class ResourceTest {
 		try {
 			java.awt.image.BufferedImage testImage = resourceManager.loadImage("player.png");
 			if (testImage != null) {
-				System.out.println("   ✓ 图片加载成功: " + testImage.getWidth() + "x" + testImage.getHeight());
+				System.out.println("   玩家图片加载成功: " + testImage.getWidth() + "x" + testImage.getHeight());
 			} else {
-				System.out.println("   ✗ 图片加载失败（文件可能不存在）");
+				System.out.println("   玩家图片加载失败（文件可能不存在）");
 			}
 		} catch (Exception e) {
-			System.out.println("   ✗ 图片加载异常: " + e.getMessage());
+			System.out.println("   玩家图片加载异常: " + e.getMessage());
 		}
 		
 		System.out.println("\n2. 测试 AudioManager");
@@ -46,10 +46,11 @@ public class ResourceTest {
 		
 		System.out.println("\n=== 测试完成 ===");
 		System.out.println("\n提示：");
-		System.out.println("- 将图片文件放在 resources/ 目录下");
-		System.out.println("- 将音乐文件放在 resources/audio/music/ 目录下");
-		System.out.println("- 将音效文件放在 resources/audio/sfx/ 目录下");
+		System.out.println("- 将图片文件放入 resources/ 目录下");
+		System.out.println("- 将音乐文件放入 resources/audio/music/ 目录下");
+		System.out.println("- 将音效文件放入 resources/audio/sfx/ 目录下");
 		System.out.println("- 支持的图片格式: PNG, JPEG, GIF, BMP");
 		System.out.println("- 支持的音频格式: WAV, AU, AIFF, MIDI");
 	}
 }
+

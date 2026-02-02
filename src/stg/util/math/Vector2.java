@@ -2,7 +2,8 @@ package stg.util.math;
 
 /**
  * 向量2D类 - 用于处理2D向量运算
- * @Time 2026-01-20 创建stg.util.math包,添加向量数学工具
+ * 创建stg.util.math包，添加向量数学工具
+ * @since 2026-01-20
  */
 public class Vector2 {
 	public float x;
@@ -120,3 +121,4 @@ public class Vector2 {
 		return String.format("(%.2f, %.2f)", x, y);
 	}
 }
+

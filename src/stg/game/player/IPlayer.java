@@ -63,7 +63,7 @@ public interface IPlayer extends IGameObject {
     boolean isInvincible();
     
     /**
-     * 被击中
+     * 被击中时调用
      */
     void onHit();
     

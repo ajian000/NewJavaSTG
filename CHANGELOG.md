@@ -1,5 +1,27 @@
 # 更新日志
 
+## 2026-02-02
+
+### 修复
+- 解决编译失败问题：修复包声明与文件位置不匹配的错误
+
+### 清理
+- 删除 `src/user/` 目录下的重复示例文件，避免编译器混淆
+- 删除所有示例类：
+  - `src/user/enemy/BasicEnemyExample.java`
+  - `src/user/item/PowerUpExample.java`
+  - `src/user/laser/StraightLaserExample.java`
+  - `src/user/player/BasicPlayerExample.java`
+- 删除所有测试类：
+  - `src/user/stage/SimpleStageTest.java`
+  - `src/user/stage/StageSystemTest.java`
+  - `src/user/stage/StageTest.java`
+- 确保文件位置与包声明完全匹配
+
+### 新增
+- 创建了 `CODE_STYLE.md` 文件，制定了完整的Java代码规范，存放于doc目录中
+- 规范文档包含项目结构、命名规范、代码风格、注释规范、异常处理、性能优化、安全规范、测试规范、代码质量工具、版本控制和代码审查等方面
+
 ## 2026-02-01
 
 ### 清理

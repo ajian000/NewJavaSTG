@@ -6,9 +6,7 @@ import stg.game.ui.GameCanvas;
 import stg.util.ResourceManager;
 
 /**
- * 带图片资源的玩家示例 - 演示如何使用ResourceManager加载和显示图片
- * @Time 2026-01-24
- */
+ * 带图片资源的玩家示例 - 演示如何使用ResourceManager加载和显示图�? * */\n\t * @since 2026-01-24
 public class PlayerWithImage extends Player {
 	private BufferedImage playerImage;
 	private ResourceManager resourceManager;
@@ -25,7 +23,7 @@ public class PlayerWithImage extends Player {
 		if (playerImage == null) {
 			System.out.println("【警告】玩家图片加载失败，使用默认绘制");
 		} else {
-			System.out.println("【资源】玩家图片加载成功: " + 
+			System.out.println("【资源】玩家图片加载成�? " + 
 				playerImage.getWidth() + "x" + playerImage.getHeight());
 		}
 	}
@@ -62,3 +60,4 @@ public class PlayerWithImage extends Player {
 		playerImage = resourceManager.loadImage(filename);
 	}
 }
+

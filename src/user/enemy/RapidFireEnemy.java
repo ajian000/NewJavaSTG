@@ -6,9 +6,7 @@ import stg.game.ui.GameCanvas;
 import user.bullet.CircularBullet;
 
 /**
- * 快速射击敌人 - 高频率发射子弹
- * @Time 2026-01-23
- */
+ * 快速射击敌�?- 高频率发射子�? * */\n\t * @since 2026-01-23
 public class RapidFireEnemy extends Enemy {
 	private float shootTimer;
 	private float shootInterval;
@@ -82,18 +80,16 @@ public class RapidFireEnemy extends Enemy {
 	}
 
 	/**
-	 * 任务开始时触发的方法
-	 */
+	 * 任务开始时触发的方�?	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实现
-	}
+		// 空实�?	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实现
-	}
+		// 空实�?	}
 }
+

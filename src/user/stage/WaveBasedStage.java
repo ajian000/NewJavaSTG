@@ -27,8 +27,7 @@ public class WaveBasedStage extends Stage {
     private boolean waveStarted[];
 
     /**
-     * 构造函数
-     * @param stageId 关卡ID
+     * 构造函�?     * @param stageId 关卡ID
      * @param stageName 关卡名称
      * @param gameCanvas 游戏画布引用
      */
@@ -63,16 +62,15 @@ public class WaveBasedStage extends Stage {
                 ", 场上敌人: " + getEnemies().size() + ", 冷却: " + waveCooldown);
         }
         
-        // 如果波次冷却中,减少冷却时间
+        // 如果波次冷却�?减少冷却时间
         if (waveCooldown > 0) {
             waveCooldown--;
             if (waveCooldown == 0) {
-                // 冷却结束后,切换到下一波
-                if (activeWaveNumber < WAVE_COUNT) {
+                // 冷却结束�?切换到下一�?                if (activeWaveNumber < WAVE_COUNT) {
                     int oldWave = activeWaveNumber;
                     activeWaveNumber++;
                     waveStarted[activeWaveNumber] = true;
-                    System.out.println("【波次切换】第" + oldWave + "波结束 -> 第" + activeWaveNumber + "波开始");
+                    System.out.println("【波次切换】第" + oldWave + "波结�?-> �? + activeWaveNumber + "波开�?);
                 } else {
                     System.out.println("【波次切换】所有波次已完成");
                 }
@@ -80,37 +78,33 @@ public class WaveBasedStage extends Stage {
             return;
         }
         
-        // 如果还没有活跃波次,开始第一波
-        if (activeWaveNumber == 0) {
+        // 如果还没有活跃波�?开始第一�?        if (activeWaveNumber == 0) {
             activeWaveNumber = 1;
             waveStarted[1] = true;
-            System.out.println("【波次开始】第1波开始");
+            System.out.println("【波次开始】第1波开�?);
             return;
         }
         
-        // 尝试生成当前波次的敌人
-        boolean spawned = trySpawnWaveEnemies(activeWaveNumber);
+        // 尝试生成当前波次的敌�?        boolean spawned = trySpawnWaveEnemies(activeWaveNumber);
         
         if (getEnemies().isEmpty() && isWaveComplete(activeWaveNumber) && !spawned) {
-            System.out.println("【波次完成】第" + activeWaveNumber + "波完成, 开始冷却(" + WAVE_DELAY + "帧)");
+            System.out.println("【波次完成】第" + activeWaveNumber + "波完�? 开始冷�?" + WAVE_DELAY + "�?");
             waveCooldown = WAVE_DELAY;
             return;
         }
     }
 
     /**
-     * 检查指定波次是否完成
-     */
+     * 检查指定波次是否完�?     */
     private boolean isWaveComplete(int wave) {
         return true;
     }
 
     /**
-     * 尝试生成指定波次的敌人
-     */
+     * 尝试生成指定波次的敌�?     */
     private boolean trySpawnWaveEnemies(int wave) {
         boolean spawned = false;
-        System.out.println("【波次生成】波次: " + wave + ", 当前帧: " + currentFrame);
+        System.out.println("【波次生成】波�? " + wave + ", 当前�? " + currentFrame);
         
         // 根据波次和当前帧直接生成敌人
         GameCanvas canvas = getGameCanvas();
@@ -118,30 +112,26 @@ public class WaveBasedStage extends Stage {
             switch (wave) {
                 case 1:
                     if (currentFrame == 60) {
-                        // 生成第一波敌人
-                        addEnemy(new BasicEnemy(canvas.getWidth() / 2, 50, 2, canvas));
+                        // 生成第一波敌�?                        addEnemy(new BasicEnemy(canvas.getWidth() / 2, 50, 2, canvas));
                         spawned = true;
                     }
                     break;
                 case 2:
                     if (currentFrame == 120) {
-                        // 生成第二波敌人
-                        addEnemy(new BasicEnemy(canvas.getWidth() / 3, 50, 2, canvas));
+                        // 生成第二波敌�?                        addEnemy(new BasicEnemy(canvas.getWidth() / 3, 50, 2, canvas));
                         addEnemy(new BasicEnemy(2 * canvas.getWidth() / 3, 50, 2, canvas));
                         spawned = true;
                     }
                     break;
                 case 3:
                     if (currentFrame == 180) {
-                        // 生成第三波敌人
-                        addEnemy(new LaserShootingEnemy(canvas.getWidth() / 2, 50, 2, canvas, 1));
+                        // 生成第三波敌�?                        addEnemy(new LaserShootingEnemy(canvas.getWidth() / 2, 50, 2, canvas, 1));
                         spawned = true;
                     }
                     break;
                 case 4:
                     if (currentFrame == 240) {
-                        // 生成第四波敌人
-                        addEnemy(new SpiralEnemy(canvas.getWidth() / 2, 50, 2, canvas));
+                        // 生成第四波敌�?                        addEnemy(new SpiralEnemy(canvas.getWidth() / 2, 50, 2, canvas));
                         addEnemy(new BasicEnemy(canvas.getWidth() / 4, 50, 2, canvas));
                         addEnemy(new BasicEnemy(3 * canvas.getWidth() / 4, 50, 2, canvas));
                         spawned = true;
@@ -149,8 +139,7 @@ public class WaveBasedStage extends Stage {
                     break;
                 case 5:
                     if (currentFrame == 300) {
-                        // 生成第五波敌人
-                        addEnemy(new SpreadEnemy(canvas.getWidth() / 2, 50, 2, canvas));
+                        // 生成第五波敌�?                        addEnemy(new SpreadEnemy(canvas.getWidth() / 2, 50, 2, canvas));
                         addEnemy(new LaserShootingEnemy(canvas.getWidth() / 3, 50, 2, canvas, 2));
                         addEnemy(new LaserShootingEnemy(2 * canvas.getWidth() / 3, 50, 2, canvas, 2));
                         spawned = true;
@@ -168,7 +157,7 @@ public class WaveBasedStage extends Stage {
             }
         }
         
-        System.out.println("【波次生成结束】波次: " + wave + ", 本次生成: " + spawned);
+        System.out.println("【波次生成结束】波�? " + wave + ", 本次生成: " + spawned);
         return spawned;
     }
 
@@ -189,13 +178,11 @@ public class WaveBasedStage extends Stage {
 
     @Override
     protected void checkCompletion() {
-        // 检查是否所有波次都已完成且敌人已全部消灭
-        if (activeWaveNumber >= WAVE_COUNT && isWaveComplete(WAVE_COUNT) && getEnemies().isEmpty()) {
+        // 检查是否所有波次都已完成且敌人已全部消�?        if (activeWaveNumber >= WAVE_COUNT && isWaveComplete(WAVE_COUNT) && getEnemies().isEmpty()) {
             end();
         }
         
-        // 调用父类的检查方法，支持自定义完成条件
-        super.checkCompletion();
+        // 调用父类的检查方法，支持自定义完成条�?        super.checkCompletion();
     }
 
     @Override
@@ -219,3 +206,4 @@ public class WaveBasedStage extends Stage {
         }
     }
 }
+

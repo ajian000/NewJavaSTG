@@ -6,8 +6,7 @@ import stg.game.ui.GameCanvas;
 import stg.game.stage.Stage;
 
 /**
- * 关卡组类 - 管理多个关卡的顺序、切换和状态
- * @since 2026-01-30
+ * 关卡组类 - 管理多个关卡的顺序、切换和状�? * @since 2026-01-30
  */
 public class StageGroup {
     private String groupName;
@@ -23,8 +22,8 @@ public class StageGroup {
      * 难度枚举
      */
     public enum Difficulty {
-        EASY("简单"),
-        NORMAL("普通"),
+        EASY("简�?),
+        NORMAL("普�?),
         HARD("困难"),
         LUNATIC(" Lunatic");
 
@@ -40,10 +39,7 @@ public class StageGroup {
     }
 
     /**
-     * 构造函数
-     * @param groupName 关卡组名称
-     * @param description 关卡组描述
-     * @param difficulty 难度级别
+     * 构造函�?     * @param groupName 关卡组名�?     * @param description 关卡组描�?     * @param difficulty 难度级别
      * @param gameCanvas 游戏画布引用
      */
     public StageGroup(String groupName, String description, Difficulty difficulty, GameCanvas gameCanvas) {
@@ -58,9 +54,7 @@ public class StageGroup {
 
     /**
      * 构造函数（带图标路径）
-     * @param groupName 关卡组名称
-     * @param description 关卡组描述
-     * @param difficulty 难度级别
+     * @param groupName 关卡组名�?     * @param description 关卡组描�?     * @param difficulty 难度级别
      * @param iconPath 图标路径
      * @param gameCanvas 游戏画布引用
      */
@@ -92,9 +86,7 @@ public class StageGroup {
     }
 
     /**
-     * 进入下一关
-     * @return 是否成功进入下一关
-     */
+     * 进入下一�?     * @return 是否成功进入下一�?     */
     public boolean nextStage() {
         if (currentStageIndex < stages.size() - 1) {
             // 清理当前关卡
@@ -102,8 +94,7 @@ public class StageGroup {
             currentStage.cleanup();
             currentStage.end();
 
-            // 进入下一关
-            currentStageIndex++;
+            // 进入下一�?            currentStageIndex++;
             Stage nextStage = stages.get(currentStageIndex);
             nextStage.load();
             nextStage.start();
@@ -151,8 +142,7 @@ public class StageGroup {
     }
 
     /**
-     * 获取关卡组中的关卡数量
-     * @return 关卡数量
+     * 获取关卡组中的关卡数�?     * @return 关卡数量
      */
     public int getStageCount() {
         return stages.size();
@@ -175,16 +165,13 @@ public class StageGroup {
     }
 
     /**
-     * 获取关卡组名称
-     * @return 关卡组名称
-     */
+     * 获取关卡组名�?     * @return 关卡组名�?     */
     public String getGroupName() {
         return groupName;
     }
 
     /**
-     * 清理关卡组资源
-     */
+     * 清理关卡组资�?     */
     public void cleanup() {
         for (Stage stage : stages) {
             if (stage != null) {
@@ -193,27 +180,23 @@ public class StageGroup {
         }
         stages.clear();
         currentStageIndex = -1;
-        // 移除completed = false，cleanup()只负责资源清理，不修改业务状态
-    }
+        // 移除completed = false，cleanup()只负责资源清理，不修改业务状�?    }
 
     /**
-     * 更新关卡组状态
-     */
+     * 更新关卡组状�?     */
     public void update() {
         Stage currentStage = getCurrentStage();
         if (currentStage != null) {
             currentStage.update();
 
-            // 检查当前关卡是否完成
-            if (currentStage.isCompleted()) {
+            // 检查当前关卡是否完�?            if (currentStage.isCompleted()) {
                 nextStage();
             }
         }
     }
 
     /**
-     * 重置关卡组
-     */
+     * 重置关卡�?     */
     public void reset() {
         cleanup();
         completed = false;
@@ -229,17 +212,13 @@ public class StageGroup {
     }
 
     /**
-     * 获取关卡组描述
-     * @return 关卡组描述
-     */
+     * 获取关卡组描�?     * @return 关卡组描�?     */
     public String getDescription() {
         return description;
     }
 
     /**
-     * 设置关卡组描述
-     * @param description 关卡组描述
-     */
+     * 设置关卡组描�?     * @param description 关卡组描�?     */
     public void setDescription(String description) {
         this.description = description;
     }
@@ -277,25 +256,20 @@ public class StageGroup {
     }
 
     /**
-     * 检查关卡组是否可解锁
-     * @return 是否可解锁
-     */
+     * 检查关卡组是否可解�?     * @return 是否可解�?     */
     public boolean isUnlockable() {
         // 这里可以添加解锁条件逻辑
         return true;
     }
 
     /**
-     * 获取关卡组显示信息
-     * @return 显示信息字符串
-     */
+     * 获取关卡组显示信�?     * @return 显示信息字符�?     */
     public String getDisplayInfo() {
         return groupName + " - " + difficulty.getDisplayName();
     }
 
     /**
-     * 获取关卡组显示名称
-     * @return 显示名称
+     * 获取关卡组显示名�?     * @return 显示名称
      */
     public String getDisplayName() {
         return groupName;
@@ -318,10 +292,9 @@ public class StageGroup {
     }
 
     /**
-     * 设置关卡组名称
-     * @param groupName 关卡组名称
-     */
+     * 设置关卡组名�?     * @param groupName 关卡组名�?     */
     protected void setGroupName(String groupName) {
         this.groupName = groupName;
     }
 } 
+

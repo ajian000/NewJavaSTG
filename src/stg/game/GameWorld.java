@@ -11,14 +11,13 @@ import stg.game.item.Item;
 import user.laser.EnemyLaser;
 
 /**
- * 游戏世界类 - 管理游戏中的所有实体
- */
+ * 游戏世界�?- 管理游戏中的所有实�? */
 public class GameWorld {
-    private List<Enemy> enemies = new ArrayList<>();
-    private List<Bullet> playerBullets = new ArrayList<>();
-    private List<EnemyBullet> enemyBullets = new ArrayList<>();
-    private List<Item> items = new ArrayList<>();
-    private List<EnemyLaser> enemyLasers = new ArrayList<>();
+    private final List<Enemy> enemies = new ArrayList<>();
+    private final List<Bullet> playerBullets = new ArrayList<>();
+    private final List<EnemyBullet> enemyBullets = new ArrayList<>();
+    private final List<Item> items = new ArrayList<>();
+    private final List<EnemyLaser> enemyLasers = new ArrayList<>();
     
     /**
      * 添加敌人
@@ -57,8 +56,7 @@ public class GameWorld {
     }
     
     /**
-     * 添加敌方激光
-     */
+     * 添加敌方激�?     */
     public void addEnemyLaser(EnemyLaser laser) {
         if (laser != null) {
             enemyLasers.add(laser);
@@ -66,8 +64,7 @@ public class GameWorld {
     }
     
     /**
-     * 更新所有实体
-     */
+     * 更新所有实�?     */
     public void update(int canvasWidth, int canvasHeight) {
         updateEnemies(canvasWidth, canvasHeight);
         updateBullets(canvasWidth, canvasHeight);
@@ -130,8 +127,7 @@ public class GameWorld {
     }
     
     /**
-     * 更新激光
-     */
+     * 更新激�?     */
     private void updateLasers(int canvasWidth, int canvasHeight) {
         Iterator<EnemyLaser> iterator = enemyLasers.iterator();
         while (iterator.hasNext()) {
@@ -172,15 +168,13 @@ public class GameWorld {
     }
     
     /**
-     * 获取敌方激光列表（只读）
-     */
+     * 获取敌方激光列表（只读�?     */
     public List<EnemyLaser> getEnemyLasers() {
         return Collections.unmodifiableList(enemyLasers);
     }
     
     /**
-     * 清除所有实体
-     */
+     * 清除所有实�?     */
     public void clear() {
         enemies.clear();
         playerBullets.clear();
@@ -190,29 +184,25 @@ public class GameWorld {
     }
     
     /**
-     * 移除指定的敌方激光
-     */
+     * 移除指定的敌方激�?     */
     public void removeEnemyLasers(List<EnemyLaser> lasersToRemove) {
         enemyLasers.removeAll(lasersToRemove);
     }
     
     /**
-     * 清除所有物品
-     */
+     * 清除所有物�?     */
     public void clearItems() {
         items.clear();
     }
     
     /**
-     * 清除所有敌方激光
-     */
+     * 清除所有敌方激�?     */
     public void clearEnemyLasers() {
         enemyLasers.clear();
     }
     
     /**
-     * 移除指定的物品
-     */
+     * 移除指定的物�?     */
     public void removeItem(Item item) {
         items.remove(item);
     }

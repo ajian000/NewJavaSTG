@@ -9,7 +9,7 @@ import stg.game.obj.Obj;
 import stg.game.ui.GameCanvas;
 
 /**
- * 玩家类 - 自机角色
+ * 玩家�?- 自机角色
  * @since 2026-01-19
  */
 public class Player extends Obj {
@@ -17,19 +17,20 @@ public class Player extends Obj {
 	private float speedSlow; // 低速移动速度
 
 	private boolean slowMode; // 低速模式标志
+	private boolean invincible; // 无敌标志
 	private boolean shooting; // 射击标志
 	private int shootCooldown; // 射击冷却时间
 	private int shootInterval = 1;
-	private int respawnTimer; // @since 2026-01-19 重生计时器
-	private int respawnTime = 60; // @since 2026-01-19 重生等待时间(帧数)
+	private int respawnTimer; // @since 2026-01-19 重生计时(帧数)
+	private final int respawnTime = 60; // @since 2026-01-19 重生等待时间(帧数)
 	private float spawnX; // @since 2026-01-19 重生X坐标
 	private float spawnY; // @since 2026-01-19 重生Y坐标
 	private boolean respawning; // @since 2026-01-19 重生动画标志
-	private float respawnSpeed; // @since 2026-01-19 重生移动速度
-	private int invincibleTimer; // 无敌时间计时器(帧数)
-	private int invincibleTime = 120; // 无敌时间(120帧=2秒)
+	private final float respawnSpeed = 8.0f; // @since 2026-01-19 重生移动速度
+	private int invincibleTimer; // 无敌时间计时(帧数)
+	private int invincibleTime = 120; // 无敌时间(120f)
 	protected int bulletDamage = 2; // @since 2026-01-23 子弹伤害，DPS = (2 × 2 × 60) / 2 = 120
-	private List<Option> options; // 子机列表
+	private final List<Option> options = new ArrayList<>(); // 子机列表
 
 	public Player() {
 		this(0, 0, 5.0f, 2.0f, 20, null);
@@ -50,10 +51,8 @@ public class Player extends Obj {
 		this.spawnX = x;
 		this.spawnY = y;
 		this.respawning = false;
-		this.respawnSpeed = 8.0f;
 		setHitboxRadius(2.0f);
 		this.invincibleTimer = invincibleTime; // @since 2026-01-23 初始无敌时间
-		this.options = new ArrayList<>(); // 初始化子机列表
 	}
 
 	/**
@@ -71,9 +70,8 @@ public class Player extends Obj {
 	}
 
 	/**
- * 更新玩家状态 - @since 2026-01-19 使用中心原点坐标系
- * 坐标系: 右上角(+,+),左下角(-,-)
- */
+	 * 更新玩家状态- @since 2026-01-19 使用中心原点坐标系 * 坐标系 右上为+,+),左下为-,-)
+ 	*/
 	@Override
 	public void update() {
 		// 调用自定义更新逻辑
@@ -106,7 +104,7 @@ public class Player extends Obj {
 				invincibleTimer = invincibleTime; // @since 2026-01-23 重生后获得无敌时间
 				System.out.println("Player respawned at: (" + getX() + ", " + getY() + ") with " + invincibleTime + " frames invincible");
 			}
-			return; // 重生动画期间不接受玩家输入
+			return; // 重生动画期间不接受玩家输入		
 		}
 
 		// 调用自定义移动逻辑
@@ -115,15 +113,14 @@ public class Player extends Obj {
 		// 更新位置
 		moveOn(getVelocityX(), getVelocityY());
 
-		// 获取画布尺寸和坐标系统
-		int canvasWidth = getGameCanvas().getWidth();
+		// 获取画布尺寸和坐标系�?		int canvasWidth = getGameCanvas().getWidth();
 		int canvasHeight = getGameCanvas().getHeight();
 		float leftBound = -canvasWidth / 2.0f;
 		float rightBound = canvasWidth / 2.0f;
 		float bottomBound = -canvasHeight / 2.0f;
 		float topBound = canvasHeight / 2.0f;
 
-		// @since 2026-01-19 边界限制(中心原点坐标系,右上角(+,+),左下角(-,-))
+		// @since 2026-01-19 边界限制(中心原点坐标系 * 坐标系 右上为+,+),左下为-,-))
 		if (getX() < leftBound + getSize()) setPosition(leftBound + getSize(), getY());
 		if (getX() > rightBound - getSize()) setPosition(rightBound - getSize(), getY());
 		if (getY() < bottomBound + getSize()) setPosition(getX(), bottomBound + getSize());
@@ -134,7 +131,7 @@ public class Player extends Obj {
 			shootCooldown--;
 		}
 
-		// @since 2026-01-23 更新无敌时间计时器
+		// @since 2026-01-23 更新无敌时间计时
 		if (invincibleTimer > 0) {
 			invincibleTimer--;
 		}
@@ -145,7 +142,7 @@ public class Player extends Obj {
 			shootCooldown = shootInterval;
 		}
 
-		// 更新所有子机
+		// 更新所有子机状态
 		for (Option option : options) {
 			option.setShooting(shooting);
 			option.update();
@@ -153,15 +150,14 @@ public class Player extends Obj {
 	}
 
 	/**
- * 发射子弹 - @since 2026-01-19 向上发射(Y正方向)
- * 子类可重写此方法实现不同的射击模式
- */
+ 	* 发射子弹 - @since 2026-01-19 向上发射(Y轴正方向)
+ 	* 子类可重写此方法实现不同的射击模式 */
 	protected void shoot() {
 		float bulletSpeed = 46.0f;
 		Color bulletColor = Color.WHITE; // 子弹颜色
 		float bulletSize = slowMode ? 6.0f : 4.0f; // 子弹大小(低速模式更大)
 
-		// 发射两发子弹,从玩家中心位置,向上发射(Y为正)
+		// 发射两发子弹,从玩家中心位置向上发射(Y为正)
 		SimpleBullet bullet1 = new SimpleBullet(getX() - 5, getY(), 0, bulletSpeed, bulletSize, bulletColor);
 		SimpleBullet bullet2 = new SimpleBullet(getX() + 5, getY(), 0, bulletSpeed, bulletSize, bulletColor);
 
@@ -216,17 +212,14 @@ public class Player extends Obj {
 			option.render(g);
 		}
 	}
-
 	/**
- * 向上移动 - @since 2026-01-19 Y正方向
- */
+ * 向上移动 - @since 2026-01-19 Y轴正方向 */
 	public void moveUp() {
 		setVelocityByComponent(getVelocityX(), slowMode ? speedSlow : speed);
 	}
 
 	/**
- * 向下移动 - @since 2026-01-19 Y负方向
- */
+ * 向下移动 - @since 2026-01-19 Y轴负方向 */
 	public void moveDown() {
 		setVelocityByComponent(getVelocityX(), slowMode ? -speedSlow : -speed);
 	}
@@ -337,9 +330,10 @@ public class Player extends Obj {
 	}
 
 	/**
- * @since 2026-01-19 受击处理
- * 玩家中弹后立即移到屏幕下方,然后等待重生
- */
+	/**
+	 * @since 2026-01-19 受击处理
+	 * 玩家中弹后立即移到屏幕下方，然后等待重生
+	 */
 	public void onHit() {
 		// 立即移动到屏幕下方
 		int canvasHeight = getGameCanvas().getHeight();
@@ -365,8 +359,7 @@ public class Player extends Obj {
 		shootCooldown = 0;
 		respawnTimer = 0;
 		respawning = false;
-		invincibleTimer = invincibleTime; // @since 2026-01-23 重置时获得无敌时间
-		// x 和 y 由 GameCanvas.resetGame() 设置
+		invincibleTimer = invincibleTime; // @since 2026-01-23 重置时获得无敌时�?		// x �?y �?GameCanvas.resetGame() 设置
 
 		// 重置所有子机
 		for (Option option : options) {
@@ -375,25 +368,25 @@ public class Player extends Obj {
 	}
 
 	/**
- * @since 2026-01-23 检查玩家是否处于无敌状态
- * @return 是否无敌
- */
+	 * @since 2026-01-23 检查玩家是否处于无敌状态
+	 * @return 是否无敌
+	 */
 	public boolean isInvincible() {
 		return invincibleTimer > 0;
 	}
 
 	/**
- * @since 2026-01-23 获取无敌计时器剩余帧数
- * @return 无敌剩余帧数
- */
+	 * @since 2026-01-23 获取无敌计时器剩余帧数
+	 * @return 无敌剩余帧数
+	 */
 	protected int getInvincibleTimer() {
 		return invincibleTimer;
 	}
 
 	/**
- * @since 2026-01-23 设置无敌时间
- * @param frames 无敌帧数
- */
+	 * @since 2026-01-23 设置无敌时间
+	 * @param frames 无敌帧数
+	 */
 	public void setInvincibleTime(int frames) {
 		this.invincibleTime = frames;
 	}
@@ -446,8 +439,8 @@ public class Player extends Obj {
 	}
 
 	/**
-	 * 任务开始时触发的方法 - 用于处理开局对话等
-	 */
+	 * 任务开始时触发的方法 - 用于处理开局对话
+	 */	
 	protected void onTaskStart() {
 		// 实现任务开始逻辑
 	}
@@ -459,3 +452,4 @@ public class Player extends Obj {
 		// 实现任务结束逻辑
 	}
 }
+

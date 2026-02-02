@@ -2,7 +2,8 @@ package stg.util.math;
 
 /**
  * 数学工具类
- * @Time 2026-01-20 创建stg.util.math包,添加数学工具函数
+ * 创建stg.util.math包，添加数学工具函数
+ * @since 2026-01-20
  */
 public class MathUtils {
 
@@ -41,14 +42,14 @@ public class MathUtils {
 	}
 
 	/**
-	 * 限制值在指定范围内
+	 * 限制值在指定范围
 	 */
 	public static float clamp(float value, float min, float max) {
 		return Math.max(min, Math.min(max, value));
 	}
 
 	/**
-	 * 限制整数值在指定范围内
+	 * 限制整数值在指定范围
 	 */
 	public static int clamp(int value, int min, int max) {
 		return Math.max(min, Math.min(max, value));
@@ -89,7 +90,7 @@ public class MathUtils {
 
 	/**
 	 * 规范化角度到 [-180, 180] 或 [-π, π]
-	 * @param angle 角度（度）
+	 * @param angle 角度（度数）
 	 */
 	public static float normalizeAngle(float angle) {
 		while (angle > 180) angle -= 360;
@@ -170,3 +171,4 @@ public class MathUtils {
 		return min + (int)(Math.random() * (max - min + 1));
 	}
 }
+

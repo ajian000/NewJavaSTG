@@ -7,21 +7,19 @@ import java.util.Map;
 import javax.sound.sampled.*;
 
 /**
- * 音频管理器 - 负责加载和播放游戏音频（背景音乐、音效等）
- * @Time 2026-01-24
+ * 音频管理类 - 负责加载和播放游戏音频（背景音乐、音效等）
+ * @since 2026-01-24
  */
 public class AudioManager {
-	private static AudioManager instance;
-	private Map<String, Clip> musicClips;
-	private Map<String, Clip> soundEffects;
+	private static final AudioManager instance = new AudioManager();
+	private final Map<String, Clip> musicClips = new HashMap<>();
+	private final Map<String, Clip> soundEffects = new HashMap<>();
 	private String resourcePath;
 	private Clip currentMusic;
 	private float musicVolume;
 	private float soundVolume;
 	
 	private AudioManager() {
-		this.musicClips = new HashMap<>();
-		this.soundEffects = new HashMap<>();
 		this.resourcePath = "resources/audio/";
 		this.currentMusic = null;
 		this.musicVolume = 0.7f;
@@ -29,9 +27,6 @@ public class AudioManager {
 	}
 	
 	public static AudioManager getInstance() {
-		if (instance == null) {
-			instance = new AudioManager();
-		}
 		return instance;
 	}
 	
@@ -79,11 +74,11 @@ public class AudioManager {
 			musicClips.put(filename, clip);
 			return clip;
 		} catch (UnsupportedAudioFileException e) {
-			System.err.println("【音频加载失败】不支持的音频格式: " + filename);
+			System.err.println("【音频加载失败】不支持的音频格式 " + filename);
 			e.printStackTrace();
 			return null;
 		} catch (IOException e) {
-			System.err.println("【音频加载失败】无法读取音频文件: " + filename);
+			System.err.println("【音频加载失败】无法读取音频文件 " + filename);
 			e.printStackTrace();
 			return null;
 		} catch (LineUnavailableException e) {
@@ -112,11 +107,11 @@ public class AudioManager {
 			soundEffects.put(filename, clip);
 			return clip;
 		} catch (UnsupportedAudioFileException e) {
-			System.err.println("【音频加载失败】不支持的音频格式: " + filename);
+			System.err.println("【音频加载失败】不支持的音频格式 " + filename);
 			e.printStackTrace();
 			return null;
 		} catch (IOException e) {
-			System.err.println("【音频加载失败】无法读取音频文件: " + filename);
+			System.err.println("【音频加载失败】无法读取音频文件 " + filename);
 			e.printStackTrace();
 			return null;
 		} catch (LineUnavailableException e) {
@@ -245,3 +240,4 @@ public class AudioManager {
 		return soundEffects.containsKey(filename);
 	}
 }
+

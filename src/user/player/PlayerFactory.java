@@ -1,11 +1,9 @@
 package user.player;
 
 /**
- * 自机工厂类
- * 负责根据类型创建不同的自机实例
- */
+ * 自机工厂�? * 负责根据类型创建不同的自机实�? */
 public class PlayerFactory {
-	private static PlayerFactory instance;
+	private static final PlayerFactory instance = new PlayerFactory();
 
 	private PlayerFactory() {
 	}
@@ -14,9 +12,6 @@ public class PlayerFactory {
 	 * 获取工厂单例
 	 */
 	public static PlayerFactory getInstance() {
-		if (instance == null) {
-			instance = new PlayerFactory();
-		}
 		return instance;
 	}
 
@@ -47,9 +42,9 @@ public class PlayerFactory {
 	}
 
 	/**
-	 * 创建魔理沙自机
-	 */
+	 * 创建魔理沙自�?	 */
 	private Player createMarisaPlayer(float spawnX, float spawnY) {
 		return new MarisaPlayer(spawnX, spawnY);
 	}
 }
+

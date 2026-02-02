@@ -26,13 +26,13 @@ public class Main {
 		titleScreen = new TitleScreen(new TitleScreen.TitleCallback() {
 			@Override
 			public void onStageGroupSelect(PlayerType playerType) {
-				System.out.println("选择关卡组: " + playerType.getName());
+				System.out.println("选择关卡�? " + playerType.getName());
 				showStageGroupSelect(playerType);
 			}
 
 			@Override
 			public void onGameStart(StageGroup stageGroup, PlayerType playerType) {
-				System.out.println("开始游戏: " + playerType.getName() + ", 关卡组: " + stageGroup.getGroupName());
+				System.out.println("开始游�? " + playerType.getName() + ", 关卡�? " + stageGroup.getGroupName());
 				startGame(stageGroup, playerType);
 			}
 
@@ -56,10 +56,12 @@ public class Main {
 
 	private static void showStageGroupSelect(PlayerType playerType) {
 		stg.game.ui.StageGroupSelectPanel selectPanel = new stg.game.ui.StageGroupSelectPanel(
+
+
 			new stg.game.ui.StageGroupSelectPanel.StageGroupSelectCallback() {
 				@Override
 				public void onStageGroupSelected(StageGroup stageGroup, PlayerType type) {
-					System.out.println("选择关卡组: " + stageGroup.getGroupName());
+					System.out.println("选择关卡组 " + stageGroup.getGroupName());
 					startGame(stageGroup, type);
 				}
 
@@ -80,7 +82,7 @@ public class Main {
 		java.util.List<StageGroup> stageGroups = stageGroupManager.getStageGroups();
 		for (StageGroup group : stageGroups) {
 			selectPanel.addStageGroup(group);
-			System.out.println("添加关卡组: " + group.getDisplayName());
+			System.out.println("添加关卡�? " + group.getDisplayName());
 		}
 
 		window.getCenterPanel().removeAll();
@@ -111,7 +113,7 @@ public class Main {
 		if (player != null) {
 			int canvasHeight = gameCanvas.getHeight();
 			float actualPlayerX = 0; // 水平居中
-			float actualPlayerY = -canvasHeight / 2.0f + 40; // 距离底部40像素(Y为负值)
+			float actualPlayerY = -canvasHeight / 2.0f + 40; // 距离底部40像素(Y为负�?
 			player.setPosition(actualPlayerX, actualPlayerY);
 			System.out.println("玩家出生位置: (" + actualPlayerX + ", " + actualPlayerY + ")");
 		}
@@ -122,7 +124,7 @@ public class Main {
 
 		gameCanvas.requestFocusInWindow();
 		new stg.game.GameLoop(gameCanvas).start();
-		System.out.println("游戏开始，自机: " + playerType.getName() + ", 关卡组: " + stageGroup.getGroupName());
+		System.out.println("游戏开始，自机: " + playerType.getName() + ", 关卡�? " + stageGroup.getGroupName());
 	}
 
 	public static Window getWindow() {
@@ -141,3 +143,4 @@ public class Main {
 		showTitleScreen();
 	}
 }
+

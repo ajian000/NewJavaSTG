@@ -5,7 +5,7 @@ import stg.base.KeyStateProvider;
 import user.player.Player;
 
 /**
- * 输入处理器 - 处理键盘输入
+ * 输入处理�?- 处理键盘输入
  */
 public class InputHandler implements KeyStateProvider {
     private boolean upPressed = false;
@@ -20,8 +20,7 @@ public class InputHandler implements KeyStateProvider {
     private GameStateManager gameStateManager;
     
     /**
-     * 构造函数
-     */
+     * 构造函�?     */
     public InputHandler(Player player, GameStateManager gameStateManager) {
         this.player = player;
         this.gameStateManager = gameStateManager;
@@ -48,20 +47,18 @@ public class InputHandler implements KeyStateProvider {
                 rightPressed = true;
                 updatePlayerMovement();
                 break;
-            case KeyEvent.VK_Z: // Z键 - 射击
+            case KeyEvent.VK_Z: // Z�?- 射击
                 zPressed = true;
                 if (player != null) {
                     player.setShooting(true);
                 }
                 break;
-            case KeyEvent.VK_SHIFT: // Shift键 - 低速模式
-                shiftPressed = true;
+            case KeyEvent.VK_SHIFT: // Shift�?- 低速模�?                shiftPressed = true;
                 if (player != null) {
                     player.setSlowMode(true);
                 }
                 break;
-            case KeyEvent.VK_X: // X键
-                xPressed = true;
+            case KeyEvent.VK_X: // X�?                xPressed = true;
                 break;
         }
     }
@@ -87,27 +84,24 @@ public class InputHandler implements KeyStateProvider {
                 rightPressed = false;
                 updatePlayerMovement();
                 break;
-            case KeyEvent.VK_Z: // Z键 - 射击
+            case KeyEvent.VK_Z: // Z�?- 射击
                 zPressed = false;
                 if (player != null) {
                     player.setShooting(false);
                 }
                 break;
-            case KeyEvent.VK_SHIFT: // Shift键 - 低速模式
-                shiftPressed = false;
+            case KeyEvent.VK_SHIFT: // Shift�?- 低速模�?                shiftPressed = false;
                 if (player != null) {
                     player.setSlowMode(false);
                 }
                 break;
-            case KeyEvent.VK_X: // X键
-                xPressed = false;
+            case KeyEvent.VK_X: // X�?                xPressed = false;
                 break;
         }
     }
     
     /**
-     * 根据当前按键状态更新玩家移动方向
-     */
+     * 根据当前按键状态更新玩家移动方�?     */
     private void updatePlayerMovement() {
         if (player == null) return;
         

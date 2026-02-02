@@ -10,11 +10,10 @@ import stg.util.AudioManager;
 import stg.util.ResourceManager;
 
 /**
- * 标题界面类 - 游戏主菜单和角色选择
- * @Time 2026-01-20 将类移动到stg.game.ui包
- * @Time 2026-01-20 实现KeyStateProvider以支持虚拟键盘
- * @Time 2026-01-24 添加背景图片支持
- * @Time 2026-01-27 添加标题音乐播放功能
+ * 标题界面 - 游戏主菜单和角色选择
+ * 将类移动到stg.game.ui包内，保持与其他UI组件的一致性
+ * @Time 2026-01-20 实现KeyStateProvider以支持虚拟键盘 * @Time 2026-01-24 添加背景图片支持\n\t * @since 2026-01-20
+ * 添加标题音乐播放功能\n\t * @since 2026-01-27
  */
 public class TitleScreen extends JPanel implements KeyStateProvider {
 	private static final long serialVersionUID = 1L;
@@ -94,9 +93,9 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 	private void playTitleMusic() {
 		try {
 			audioManager.playMusic("luastg.wav", true);
-			System.out.println("【音频】标题音乐播放中（WAV）");
+			System.out.println("【音频】标题音乐播放中（WAV 格式）");	
 		} catch (Exception wavError) {
-			System.out.println("【警告】WAV 音乐播放失败，跳过背景音乐: " + wavError.getMessage());
+			System.out.println("【警告】WAV 音乐播放失败，跳过背景音乐 " + wavError.getMessage());
 		}
 	}
 	
@@ -186,7 +185,7 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 			// 缩放图片以适应窗口
 			g2d.drawImage(backgroundImage, 0, 0, width, height, null);
 		} else {
-			// 默认背景色
+			// 默认背景颜色
 			g2d.setColor(BG_COLOR);
 			g2d.fillRect(0, 0, width, height);
 		}
@@ -227,7 +226,7 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 			if (i == selectedIndex) {
 				g2d.setColor(SELECTED_COLOR);
 				// 绘制选中效果
-				g2d.drawString("▶", x - 30, y);
+				g2d.drawString("�?, x - 30, y);
 			} else {
 				g2d.setColor(UNSELECTED_COLOR);
 			}
@@ -237,7 +236,7 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 		// 绘制操作提示
 		g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
 		g2d.setColor(Color.GRAY);
-		g2d.drawString("↑ ↓  选择菜单", width / 2 - 80, height - 40);
+		g2d.drawString("上下 选择菜单", width / 2 - 80, height - 40);
 		g2d.drawString("Z/Enter 确认", width / 2 - 80, height - 20);
 	}
 
@@ -258,7 +257,7 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 
 			if (type == selectedPlayerType) {
 				g2d.setColor(SELECTED_COLOR);
-				// 绘制选中框
+				// 绘制选中效果
 				g2d.drawRect(x - 60, y - 20, 120, 40);
 			} else {
 				g2d.setColor(UNSELECTED_COLOR);
@@ -269,7 +268,7 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 		// 绘制操作提示
 		g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
 		g2d.setColor(Color.GRAY);
-		g2d.drawString("↑ ↓  切换自机", width / 2 - 100, height - 60);
+		g2d.drawString("上下 切换自机", width / 2 - 100, height - 60);
 		g2d.drawString("Z/Enter 确认选择", width / 2 - 100, height - 40);
 		g2d.drawString("ESC  返回主菜单", width / 2 - 100, height - 20);
 	}
@@ -308,3 +307,4 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 	public void setShiftPressed(boolean shiftPressed) { this.shiftPressed = shiftPressed; }
 	public void setXPressed(boolean xPressed) { this.xPressed = xPressed; }
 }
+

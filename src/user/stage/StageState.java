@@ -1,8 +1,7 @@
 package user.stage;
 
 /**
- * 关卡状态枚举
- */
+ * 关卡状态枚�? */
 public enum StageState {
     CREATED,
     LOADED,
@@ -10,3 +9,4 @@ public enum StageState {
     COMPLETED,
     CLEANED_UP
 }
+

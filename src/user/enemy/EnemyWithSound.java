@@ -5,8 +5,7 @@ import stg.util.AudioManager;
 
 /**
  * 带音效的敌人示例 - 演示如何使用AudioManager播放音效
- * @Time 2026-01-24
- */
+ * */\n\t * @since 2026-01-24
 public class EnemyWithSound extends BasicEnemy {
 	private AudioManager audioManager;
 	private boolean soundEnabled;
@@ -60,3 +59,4 @@ public class EnemyWithSound extends BasicEnemy {
 		return soundEnabled;
 	}
 }
+
