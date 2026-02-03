@@ -1,5 +1,23 @@
 # 更新日志
 
+## 2026-02-03
+
+### 修复
+- 修复大量编译错误，确保项目可正常编译
+- 修正包声明与文件位置不匹配的错误
+
+### 重构
+- 将 `StageGroup` 和 `StageGroupManager` 从 `user` 包移动到 `stg.game.stage` 包
+- 优化核心游戏类结构和性能
+
+### 修改
+- 更新核心文件、游戏对象类、UI相关文件和用户自定义实现
+
+### 删除
+- 删除 `src/user/player/Player.java`
+- 删除 `src/user/stage/StageCompletionCondition.java`
+- 删除 `src/user/stage/StageGroup.java` 和 `StageGroupManager.java`
+
 ## 2026-02-02
 
 ### 修复

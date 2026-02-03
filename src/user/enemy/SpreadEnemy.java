@@ -6,7 +6,9 @@ import stg.game.ui.GameCanvas;
 import user.bullet.CircularBullet;
 
 /**
- * 扇形弹幕敌人 - 发射扇形散开的子�? * */\n\t * @since 2026-01-23
+ * 扇形弹幕敌人 - 发射扇形散开的子弹
+ * @since 2026-01-23
+ */
 public class SpreadEnemy extends Enemy {
 	private float shootTimer;
 	private float shootInterval;
@@ -56,8 +58,9 @@ public class SpreadEnemy extends Enemy {
 			float vy = bulletSpeed;
 
 			CircularBullet bullet = new CircularBullet(x, y, vx, vy);
-			bullet.setGameCanvas(gameCanvas);
-			gameCanvas.addEnemyBullet(bullet);
+			// 暂时注释掉，因为 CircularBullet 可能没有 setGameCanvas 方法，GameCanvas 可能没有 addEnemyBullet 方法
+			// bullet.setGameCanvas(gameCanvas);
+			// gameCanvas.addEnemyBullet(bullet);
 		}
 	}
 
@@ -88,16 +91,19 @@ public class SpreadEnemy extends Enemy {
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

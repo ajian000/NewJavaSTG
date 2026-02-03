@@ -1,19 +1,22 @@
 package user.enemy;
 
 import java.awt.*;
+import stg.game.GameWorld;
 import stg.game.enemy.Enemy;
 import stg.game.ui.GameCanvas;
 import user.bullet.CircularBullet;
 
 /**
- * 快速射击敌�?- 高频率发射子�? * */\n\t * @since 2026-01-23
+ * 快速射击敌人- 高频率发射子弹
+ * @since 2026-01-23
+ */
 public class RapidFireEnemy extends Enemy {
 	private float shootTimer;
-	private float shootInterval;
-	private float moveSpeed;
-	private int burstCount;
+	private final float shootInterval;
+	private final float moveSpeed;
+	private final int burstCount;
 	private int currentBurst;
-	private float burstDelay;
+	private final float burstDelay;
 
 	public RapidFireEnemy(float x, float y, float moveSpeed, GameCanvas gameCanvas) {
 		super(x, y, moveSpeed, 0, 18, Color.YELLOW, 100, gameCanvas);
@@ -60,8 +63,13 @@ public class RapidFireEnemy extends Enemy {
 
 		float bulletSpeed = -10.0f;
 		CircularBullet bullet = new CircularBullet(x, y, 0, bulletSpeed);
-		bullet.setGameCanvas(gameCanvas);
-		gameCanvas.addEnemyBullet(bullet);
+
+		// 通过 GameWorld 添加子弹
+		Object worldObj = gameCanvas.getWorld();
+		if (worldObj instanceof GameWorld) {
+			GameWorld gameWorld = (GameWorld) worldObj;
+			gameWorld.addEnemyBullet(bullet);
+		}
 	}
 
 	@Override
@@ -80,16 +88,19 @@ public class RapidFireEnemy extends Enemy {
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

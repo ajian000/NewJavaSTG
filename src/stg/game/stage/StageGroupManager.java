@@ -1,4 +1,4 @@
-package user.stage;
+package stg.game.stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import stg.game.ui.GameCanvas;
+import user.stage.AdvancedStageGroup;
+import user.stage.BeginnerStageGroup;
+import user.stage.ExpertStageGroup;
+import user.stage.IntermediateStageGroup;
 
 /**
  * 关卡组管理器 - 负责管理所有关卡组，包括自动发现和创建实例
@@ -17,7 +21,8 @@ public class StageGroupManager {
     private List<StageGroup> stageGroups;
 
     /**
-     * 私有构造函�?     */
+     * 私有构造函数
+     */
     private StageGroupManager() {
         stageGroups = new ArrayList<>();
     }
@@ -73,19 +78,20 @@ public class StageGroupManager {
                                 String className = packageName + "." + file.getName().substring(0, file.getName().length() - 6);
                                 try {
                                     Class<?> clazz = Class.forName(className);
-                                    // 检查是否是StageGroup的子类且不是抽象�?                                    if (StageGroup.class.isAssignableFrom(clazz) && !java.lang.reflect.Modifier.isAbstract(clazz.getModifiers()) && clazz != StageGroup.class) {
+                                    // 检查是否是StageGroup的子类且不是抽象类
+                                    if (StageGroup.class.isAssignableFrom(clazz) && !java.lang.reflect.Modifier.isAbstract(clazz.getModifiers()) && clazz != StageGroup.class) {
                                         // 尝试创建实例
                                         try {
                                             StageGroup stageGroup = (StageGroup) clazz.getConstructor(GameCanvas.class).newInstance(gameCanvas);
                                             stageGroups.add(stageGroup);
-                                            System.out.println("自动发现关卡�? " + stageGroup.getDisplayName());
+                                            System.out.println("自动发现关卡组 " + stageGroup.getDisplayName());
                                         } catch (Exception e) {
-                                            System.out.println("创建关卡组实例失�? " + className);
+                                            System.out.println("创建关卡组实例失败 " + className);
                                             e.printStackTrace();
                                         }
                                     }
                                 } catch (ClassNotFoundException e) {
-                                    System.out.println("加载类失�? " + className);
+                                    System.out.println("加载类失败 " + className);
                                     e.printStackTrace();
                                 }
                             }
@@ -94,16 +100,17 @@ public class StageGroupManager {
                 }
             }
         } catch (IOException e) {
-            System.out.println("自动发现关卡组失�?");
+            System.out.println("自动发现关卡组失败");
             e.printStackTrace();
         }
     }
 
     /**
-     * 添加默认关卡�?     * @param gameCanvas 游戏画布引用
+     * 添加默认关卡组
+     * @param gameCanvas 游戏画布引用
      */
     private void addDefaultStageGroups(GameCanvas gameCanvas) {
-        System.out.println("添加默认关卡�?);
+        System.out.println("添加默认关卡组");
         stageGroups.add(new BeginnerStageGroup(gameCanvas));
         stageGroups.add(new IntermediateStageGroup(gameCanvas));
         stageGroups.add(new AdvancedStageGroup(gameCanvas));
@@ -112,13 +119,16 @@ public class StageGroupManager {
 
     /**
      * 获取所有关卡组
-     * @return 关卡组列�?     */
+     * @return 关卡组列表
+     */
     public List<StageGroup> getStageGroups() {
         return stageGroups;
     }
 
     /**
-     * 根据名称获取关卡�?     * @param name 关卡组名�?     * @return 关卡组对象，不存在则返回null
+     * 根据名称获取关卡组
+     * @param name 关卡组名称
+     * @return 关卡组对象，不存在则返回null
      */
     public StageGroup getStageGroupByName(String name) {
         for (StageGroup group : stageGroups) {
@@ -139,4 +149,3 @@ public class StageGroupManager {
         stageGroups.clear();
     }
 }
-

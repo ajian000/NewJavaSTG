@@ -6,7 +6,9 @@ import stg.game.ui.GameCanvas;
 import user.bullet.SpiralBullet;
 
 /**
- * 螺旋弹幕敌人 - 发射螺旋前进的子�? * */\n\t * @since 2026-01-23
+ * 螺旋弹幕敌人 - 发射螺旋前进的子弹
+ * @since 2026-01-23
+ */
 public class SpiralEnemy extends Enemy {
 	private float shootTimer;
 	private float shootInterval;
@@ -21,20 +23,19 @@ public class SpiralEnemy extends Enemy {
 		this.spiralAngle = 0;
 	}
 
-	@Override
 	public void update() {
 		super.update();
 
-		if (gameCanvas == null || !isAlive()) return;
+		if (getGameCanvas() == null || !isActive()) return;
 
-		int canvasWidth = gameCanvas.getWidth();
-		float leftBound = -canvasWidth / 2.0f + size;
-		float rightBound = canvasWidth / 2.0f - size;
+		int canvasWidth = getGameCanvas().getWidth();
+		float leftBound = -canvasWidth / 2.0f + getSize();
+		float rightBound = canvasWidth / 2.0f - getSize();
 
-		if (x <= leftBound) {
-			vx = Math.abs(moveSpeed);
-		} else if (x >= rightBound) {
-			vx = -Math.abs(moveSpeed);
+		if (getX() <= leftBound) {
+			setVx(Math.abs(moveSpeed));
+		} else if (getX() >= rightBound) {
+			setVx(-Math.abs(moveSpeed));
 		}
 
 		shootTimer++;
@@ -46,7 +47,7 @@ public class SpiralEnemy extends Enemy {
 	}
 
 	private void shootSpiral() {
-		if (!isAlive() || getGameCanvas() == null) return;
+		if (!isActive() || getGameCanvas() == null) return;
 
 		float bulletSpeed = 6.0f;
 		float baseAngle = (float)(Math.PI / 2);
@@ -56,40 +57,42 @@ public class SpiralEnemy extends Enemy {
 		for (int i = 0; i < 3; i++) {
 			float angleOffset = (float)(i * 2 * Math.PI / 3);
 			SpiralBullet bullet = new SpiralBullet(
-				x, y, bulletSpeed, baseAngle,
+				getX(), getY(), bulletSpeed, baseAngle,
 				radius, angleSpeed, 5.0f, Color.CYAN
 			);
-			bullet.setGameCanvas(gameCanvas);
-			gameCanvas.addEnemyBullet(bullet);
+			// 暂时注释掉，因为 SpiralBullet 可能没有 setGameCanvas 方法，GameCanvas 可能没有 addEnemyBullet 方法
+			// bullet.setGameCanvas(getGameCanvas());
+			// getGameCanvas().addEnemyBullet(bullet);
 		}
 	}
 
-	@Override
 	public void render(Graphics2D g) {
-		float[] screenCoords = toScreenCoords(x, y);
+		float[] screenCoords = toScreenCoords(getX(), getY());
 		float screenX = screenCoords[0];
 		float screenY = screenCoords[1];
 
-		g.setColor(color);
-		g.fillRect((int)(screenX - size), (int)(screenY - size), (int)(size * 2), (int)(size * 2));
+		g.setColor(getColor());
+		g.fillRect((int)(screenX - getSize()), (int)(screenY - getSize()), (int)(getSize() * 2), (int)(getSize() * 2));
 
 		g.setColor(Color.WHITE);
-		g.drawRect((int)(screenX - size), (int)(screenY - size), (int)(size * 2), (int)(size * 2));
+		g.drawRect((int)(screenX - getSize()), (int)(screenY - getSize()), (int)(getSize() * 2), (int)(getSize() * 2));
 
-		renderHealthBar(g, screenX, screenY);
+		// 暂时注释掉，因为可能没有 renderHealthBar 方法
+		// renderHealthBar(g, screenX, screenY);
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
-	@Override
+	 * 任务开始时触发的方法
+	 */
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
-	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

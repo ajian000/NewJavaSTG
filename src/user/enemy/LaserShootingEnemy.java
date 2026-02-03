@@ -3,24 +3,28 @@ package user.enemy;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import stg.game.GameWorld;
 import stg.game.enemy.Enemy;
 import stg.game.ui.GameCanvas;
 import user.laser.*;
 
 /**
- * 激光射击敌�?- 能够发射直线激光和曲线激�? * */\n\t * @since 2026-01-20
+ * 激光射击敌人- 能够发射直线激光和曲线激光
+ * @since 2026-01-20
+ */
 public class LaserShootingEnemy extends Enemy {
 	private float shootTimer;
 	private float shootInterval;
-	private float moveSpeed;
 	private float moveAngle;
+	private float moveSpeed;
 	private int pattern;
 	private int patternTimer;
 	private float patternInterval;
 	private List<EnemyLaser> firedLasers;
 
 	/**
-	 * 构造函�?	 * @param x X坐标
+	 * 构造函数
+	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param moveSpeed 移动速度
 	 * @param gameCanvas 游戏画布引用
@@ -31,7 +35,8 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 完整构造函�?	 * @param x X坐标
+	 * 完整构造函数
+	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param moveSpeed 移动速度
 	 * @param gameCanvas 游戏画布引用
@@ -39,8 +44,7 @@ public class LaserShootingEnemy extends Enemy {
 	 * @param shootInterval 射击间隔
 	 * @param patternInterval 模式切换间隔
 	 */
-	public LaserShootingEnemy(float x, float y, float moveSpeed, GameCanvas gameCanvas,
-							int pattern, float shootInterval, float patternInterval) {
+	public LaserShootingEnemy(float x, float y, float moveSpeed, GameCanvas gameCanvas, int pattern, float shootInterval, float patternInterval) {
 		super(x, y, moveSpeed, 0, 30, Color.MAGENTA, 480, gameCanvas);
 		this.moveSpeed = moveSpeed;
 		this.moveAngle = (float)Math.PI / 2;
@@ -53,12 +57,14 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 更新敌人状�?	 */
+	 * 更新敌人状态
+	 */
 	@Override
 	public void update() {
 		super.update();
 
-		// 安全检�?		if (getGameCanvas() == null || !isAlive()) {
+		// 安全检查
+		if (getGameCanvas() == null || !isAlive()) {
 			return;
 		}
 
@@ -77,9 +83,15 @@ public class LaserShootingEnemy extends Enemy {
 			moveAngle = (float)Math.PI - moveAngle;
 		}
 
-		// 更新射击计时�?		shootTimer++;
+		// 根据moveAngle和moveSpeed更新速度
+		vx = (float)Math.cos(moveAngle) * this.moveSpeed;
+		vy = (float)Math.sin(moveAngle) * this.moveSpeed;
 
-		// 更新模式切换计时�?		patternTimer++;
+		// 更新射击计时器
+		shootTimer++;
+
+		// 更新模式切换计时器
+		patternTimer++;
 
 		// 切换攻击模式
 		if (pattern == 2 && patternTimer >= patternInterval) {
@@ -96,7 +108,8 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 射击 - 根据当前模式发射激�?	 */
+	 * 射击 - 根据当前模式发射激光
+	 */
 	private void shoot() {
 		if (!isAlive() || gameCanvas == null) return;
 
@@ -118,7 +131,8 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 发射直线激�?	 */
+	 * 发射直线激光
+	 */
 	private void shootLinearLaser() {
 		float angle = (float)(Math.random() * Math.PI * 2);
 		EnemyLinearLaser laser = new EnemyLinearLaser(
@@ -126,8 +140,13 @@ public class LaserShootingEnemy extends Enemy {
 			60, 15,
 			0.01f
 		);
-		gameCanvas.addEnemyLaser(laser);
-		firedLasers.add(laser);
+		if (gameCanvas != null) {
+			Object world = gameCanvas.getWorld();
+			if (world instanceof GameWorld) {
+				((GameWorld) world).addEnemyLaser(laser);
+				firedLasers.add(laser);
+			}
+		}
 	}
 
 	private void shootCurvedLaser() {
@@ -140,19 +159,26 @@ public class LaserShootingEnemy extends Enemy {
 			(float)Math.sin(baseAngle) * speed,
 			60
 		);
-		gameCanvas.addEnemyLaser(laser);
-		firedLasers.add(laser);
+		if (gameCanvas != null) {
+			Object world = gameCanvas.getWorld();
+			if (world instanceof GameWorld) {
+				((GameWorld) world).addEnemyLaser(laser);
+				firedLasers.add(laser);
+			}
+		}
 	}
 
 	/**
-	 * 重写渲染方法,自定义外�?	 */
+	 * 重写渲染方法,自定义外观
+	 */
 	@Override
 	public void render(Graphics2D g) {
 		float[] screenCoords = toScreenCoords(x, y);
 		float screenX = screenCoords[0];
 		float screenY = screenCoords[1];
 
-		// 绘制六边�?		int[] xPoints = new int[6];
+		// 绘制六边形
+		int[] xPoints = new int[6];
 		int[] yPoints = new int[6];
 		for (int i = 0; i < 6; i++) {
 			double angle = 2 * Math.PI * i / 6;
@@ -183,26 +209,33 @@ public class LaserShootingEnemy extends Enemy {
 	}
 
 	/**
-	 * 重写死亡回调，清除所有激�?	 */
+	 * 重写死亡回调，清除所有激光
+	 */
 	@Override
 	protected void onDeath() {
-		if (getGameCanvas() != null && firedLasers != null) {
-			getGameCanvas().removeEnemyLasers(firedLasers);
-			firedLasers.clear();
+		if (getGameCanvas() != null && firedLasers != null && !firedLasers.isEmpty()) {
+			Object world = getGameCanvas().getWorld();
+			if (world instanceof GameWorld) {
+				((GameWorld) world).removeEnemyLasers(firedLasers);
+				firedLasers.clear();
+			}
 		}
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

@@ -143,4 +143,116 @@ public abstract class Obj {
         this.x = x;
         this.y = y;
     }
+
+    /**
+     * 检查物体是否激活
+     * @return 是否激活
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * 设置物体激活状态
+     * @param active 是否激活
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    /**
+     * 获取X坐标
+     * @return X坐标
+     */
+    public float getX() {
+        return x;
+    }
+
+    /**
+     * 获取Y坐标
+     * @return Y坐标
+     */
+    public float getY() {
+        return y;
+    }
+
+    /**
+     * 获取物体大小
+     * @return 物体大小
+     */
+    public float getSize() {
+        return size;
+    }
+
+    /**
+     * 获取物体颜色
+     * @return 物体颜色
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * 重置物体状态
+     */
+    public void reset() {
+        this.active = true;
+        this.frame = 0;
+    }
+
+    /**
+     * 获取游戏画布引用
+     * @return 游戏画布引用
+     */
+    public GameCanvas getGameCanvas() {
+        return gameCanvas;
+    }
+
+    /**
+     * 设置X坐标
+     * @param x X坐标
+     */
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    /**
+     * 设置Y坐标
+     * @param y Y坐标
+     */
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    /**
+     * 设置X方向速度
+     * @param vx X方向速度
+     */
+    public void setVx(float vx) {
+        this.vx = vx;
+    }
+
+    /**
+     * 设置Y方向速度
+     * @param vy Y方向速度
+     */
+    public void setVy(float vy) {
+        this.vy = vy;
+    }
+
+    /**
+     * 获取X方向速度
+     * @return X方向速度
+     */
+    public float getVx() {
+        return vx;
+    }
+
+    /**
+     * 获取Y方向速度
+     * @return Y方向速度
+     */
+    public float getVy() {
+        return vy;
+    }
 }

@@ -4,138 +4,143 @@ import java.awt.*;
 
 /**
  * 敌人曲线激光类 - 继承自EnemyLaser和CurvedLaser
- * */\n\t * @since 2026-01-21
+ * @since 2026-01-21
+ */
 public class EnemyCurvedLaser extends EnemyLaser {
-	private CurvedLaser curvedLaser; // 实际的曲线激�?
-	/**
-	 * 构造函�?	 * @param x 起点X坐标
-	 * @param y 起点Y坐标
-	 * @param angle 角度(弧度)
-	 * @param length 长度
-	 * @param width 宽度
-	 * @param color 颜色
-	 * @param vx X方向速度
-	 * @param vy Y方向速度
-	 * @param maxTrailLength 最大拖尾长�?	 */
-	public EnemyCurvedLaser(float x, float y, float angle, float length, float width, Color color,
-						   float vx, float vy, int maxTrailLength) {
-		super(x, y, angle, length, width, color);
-		this.curvedLaser = new CurvedLaser(x, y, angle, length, width, color, vx, vy, maxTrailLength);
-	}
+    private final CurvedLaser curvedLaser; // 实际的曲线激光
 
-	/**
-	 * 完整构造函�?	 * @param x 起点X坐标
-	 * @param y 起点Y坐标
-	 * @param angle 角度(弧度)
-	 * @param length 长度
-	 * @param width 宽度
-	 * @param color 颜色
-	 * @param warningTime 预警时间
-	 * @param damage 伤害�?	 * @param vx X方向速度
-	 * @param vy Y方向速度
-	 * @param maxTrailLength 最大拖尾长�?	 */
-	public EnemyCurvedLaser(float x, float y, float angle, float length, float width, Color color, int warningTime, int damage, float vx, float vy, int maxTrailLength) {
-		super(x, y, angle, length, width, color, warningTime, damage);
-		this.curvedLaser = new CurvedLaser(x, y, angle, length, width, color, warningTime, damage, vx, vy, maxTrailLength);
-	}
+    /**
+     * 构造函数
+     * @param x 起点X坐标
+     * @param y 起点Y坐标
+     * @param angle 角度(弧度)
+     * @param length 长度
+     * @param width 宽度
+     * @param color 颜色
+     * @param vx X方向速度
+     * @param vy Y方向速度
+     * @param maxTrailLength 最大拖尾长度
+     */
+    public EnemyCurvedLaser(float x, float y, float angle, float length, float width, Color color,
+                           float vx, float vy, int maxTrailLength) {
+        super(x, y, angle, length, width, color);
+        this.curvedLaser = new CurvedLaser(x, y, angle, length, width, color, vx, vy, maxTrailLength);
+    }
 
-	/**
-	 * 初始化行为参�?	 */
-	@Override
-	protected void initBehavior() {
-		// 初始化行为参�?	}
+    /**
+     * 完整构造函数
+     * @param x 起点X坐标
+     * @param y 起点Y坐标
+     * @param angle 角度(弧度)
+     * @param length 长度
+     * @param width 宽度
+     * @param color 颜色
+     * @param warningTime 预警时间
+     * @param damage 伤害值
+     * @param vx X方向速度
+     * @param vy Y方向速度
+     * @param maxTrailLength 最大拖尾长度
+     */
+    public EnemyCurvedLaser(float x, float y, float angle, float length, float width, Color color, int warningTime, int damage, float vx, float vy, int maxTrailLength) {
+        super(x, y, angle, length, width, color, warningTime, damage);
+        this.curvedLaser = new CurvedLaser(x, y, angle, length, width, color, warningTime, damage, vx, vy, maxTrailLength);
+    }
 
-	/**
-	 * 实现每帧的自定义更新逻辑
-	 */
-	@Override
-	protected void onUpdate() {
-		// 激光的更新逻辑
-	}
+    /**
+     * 初始化行为参数
+     */
+    protected void initBehavior() {
+        // 初始化行为参数
+    }
 
-	/**
-	 * 实现自定义移动逻辑
-	 */
-	@Override
-	protected void onMove() {
-		// 移动逻辑由curvedLaser处理
-	}
+    /**
+     * 实现每帧的自定义更新逻辑
+     */
+    protected void onUpdate() {
+        // 激光的更新逻辑
+    }
 
-	@Override
-	public void update() {
-		super.update();
-		curvedLaser.update();
-		// 同步位置和状�?		this.x = curvedLaser.getX();
-		this.y = curvedLaser.getY();
-		this.angle = curvedLaser.getAngle();
-		this.active = curvedLaser.isActive();
-	}
+    /**
+     * 实现自定义移动逻辑
+     */
+    protected void onMove() {
+        // 移动逻辑由curvedLaser处理
+    }
 
-	public void render(java.awt.Graphics g) {
-		curvedLaser.setGameCanvas(gameCanvas);
-		curvedLaser.render(g);
-	}
+    public void update() {
+        super.update();
+        curvedLaser.update();
+        // 同步位置和状态
+        this.x = curvedLaser.getX();
+        this.y = curvedLaser.getY();
+        this.angle = curvedLaser.getAngle();
+        this.active = curvedLaser.isActive();
+    }
 
-	public boolean checkCollision(float px, float py) {
-		return curvedLaser.checkCollision(px, py);
-	}
+    public void render(Graphics2D g) {
+        curvedLaser.render(g);
+    }
 
-	public boolean isOutOfBounds(int width, int height) {
-		return curvedLaser.isOutOfBounds(width, height);
-	}
+    public boolean checkCollision(float px, float py) {
+        return curvedLaser.checkCollision(px, py);
+    }
 
-	// 委托方法到curvedLaser
-	public float getVx() {
-		return curvedLaser.getVx();
-	}
+    public boolean isOutOfBounds(int width, int height) {
+        return curvedLaser.isOutOfBounds(width, height);
+    }
 
-	public float getVy() {
-		return curvedLaser.getVy();
-	}
+    // 委托方法到curvedLaser
+    public float getVx() {
+        return curvedLaser.getVx();
+    }
 
-	public void setVx(float vx) {
-		curvedLaser.setVx(vx);
-	}
+    public float getVy() {
+        return curvedLaser.getVy();
+    }
 
-	public void setVy(float vy) {
-		curvedLaser.setVy(vy);
-	}
+    public void setVx(float vx) {
+        curvedLaser.setVx(vx);
+    }
 
-	public void setSpeed(float speed, float angle) {
-		curvedLaser.setSpeed(speed, angle);
-	}
+    public void setVy(float vy) {
+        curvedLaser.setVy(vy);
+    }
 
-	public int getMaxTrailLength() {
-		return curvedLaser.getMaxTrailLength();
-	}
+    public void setSpeed(float speed, float angle) {
+        curvedLaser.setSpeed(speed, angle);
+    }
 
-	public void setMaxTrailLength(int maxTrailLength) {
-		curvedLaser.setMaxTrailLength(maxTrailLength);
-	}
+    public int getMaxTrailLength() {
+        return curvedLaser.getMaxTrailLength();
+    }
 
-	public float getTrailWidth() {
-		return curvedLaser.getTrailWidth();
-	}
+    public void setMaxTrailLength(int maxTrailLength) {
+        curvedLaser.setMaxTrailLength(maxTrailLength);
+    }
 
-	public void setTrailWidth(float trailWidth) {
-		curvedLaser.setTrailWidth(trailWidth);
-	}
+    public float getTrailWidth() {
+        return curvedLaser.getTrailWidth();
+    }
 
-	public int getCurrentTrailLength() {
-		return curvedLaser.getCurrentTrailLength();
-	}
+    public void setTrailWidth(float trailWidth) {
+        curvedLaser.setTrailWidth(trailWidth);
+    }
 
-	/**
-	 * 任务开始时触发的方�?	 */
-	@Override
-	protected void onTaskStart() {
-		// 空实�?	}
+    public int getCurrentTrailLength() {
+        return curvedLaser.getCurrentTrailLength();
+    }
 
-	/**
-	 * 任务结束时触发的方法
-	 */
-	@Override
-	protected void onTaskEnd() {
-		// 空实�?	}
+    /**
+     * 任务开始时触发的方法
+     */
+    protected void onTaskStart() {
+        // 空实现
+    }
+
+    /**
+     * 任务结束时触发的方法
+     */
+    protected void onTaskEnd() {
+        // 空实现
+    }
 }
-

@@ -4,17 +4,21 @@ import java.awt.*;
 import user.bullet.SimpleBullet;
 import user.bullet.CircularBullet;
 import stg.game.ui.GameCanvas;
+import stg.game.player.Player;
 
 /**
- * 自定义子机示�?- 演示如何创建自定义子�? */
+ * 自定义子机示例 - 演示如何创建自定义子机
+ */
 public class CustomOption extends Option {
 	private int shootMode; // 射击模式
-	private int modeTimer; // 模式计时�?	private static final int MODE_SWITCH_INTERVAL = 120; // 模式切换间隔�?秒）
+	private int modeTimer; // 模式计时器
+	private static final int MODE_SWITCH_INTERVAL = 120; // 模式切换间隔（秒）
 
 	public CustomOption(Player player, float offsetX, float offsetY, GameCanvas gameCanvas) {
 		super(player, offsetX, offsetY, gameCanvas);
 		
-		// 自定义配�?		setSize(12.0f);
+		// 自定义配置
+		setSize(12.0f);
 		setColor(new Color(100, 255, 100));
 		setShootInterval(2);
 		setBulletDamage(2);
@@ -28,14 +32,16 @@ public class CustomOption extends Option {
 	protected void shoot() {
 		if (gameCanvas == null) return;
 
-		// 更新模式计时�?		modeTimer++;
+		// 更新模式计时器
+		modeTimer++;
 		if (modeTimer >= MODE_SWITCH_INTERVAL) {
 			modeTimer = 0;
 			shootMode = (shootMode + 1) % 3; // 循环切换模式
-			System.out.println("子机切换到模�? " + shootMode);
+			System.out.println("子机切换到模式 " + shootMode);
 		}
 
-		// 根据模式发射不同类型的子�?		switch (shootMode) {
+		// 根据模式发射不同类型的子弹
+		switch (shootMode) {
 			case 0:
 				shootMode0();
 				break;
@@ -53,9 +59,11 @@ public class CustomOption extends Option {
 	 */
 	private void shootMode0() {
 		SimpleBullet bullet = new SimpleBullet(x, y, 0, 50.0f, 4.0f, Color.GREEN);
-		bullet.setGameCanvas(gameCanvas);
 		bullet.setDamage(bulletDamage);
-		gameCanvas.addBullet(bullet);
+		stg.game.GameWorld world = (stg.game.GameWorld) gameCanvas.getWorld();
+		if (world != null) {
+			world.addPlayerBullet(bullet);
+		}
 	}
 
 	/**
@@ -65,15 +73,17 @@ public class CustomOption extends Option {
 		float bulletSpeed = 45.0f;
 		float spreadAngle = 0.2f;
 
-		for (int i = -1; i <= 1; i++) {
-			float angle = i * spreadAngle;
-			float vx = (float)Math.sin(angle) * bulletSpeed;
-			float vy = bulletSpeed;
+		stg.game.GameWorld world = (stg.game.GameWorld) gameCanvas.getWorld();
+		if (world != null) {
+			for (int i = -1; i <= 1; i++) {
+				float angle = i * spreadAngle;
+				float vx = (float)Math.sin(angle) * bulletSpeed;
+				float vy = bulletSpeed;
 
-			SimpleBullet bullet = new SimpleBullet(x, y, vx, vy, 3.5f, Color.CYAN);
-			bullet.setGameCanvas(gameCanvas);
-			bullet.setDamage(bulletDamage);
-			gameCanvas.addBullet(bullet);
+				SimpleBullet bullet = new SimpleBullet(x, y, vx, vy, 3.5f, Color.CYAN);
+				bullet.setDamage(bulletDamage);
+				world.addPlayerBullet(bullet);
+			}
 		}
 	}
 
@@ -85,14 +95,16 @@ public class CustomOption extends Option {
 		float spreadAngle = (float)(2 * Math.PI / bulletCount);
 		float bulletSpeed = 40.0f;
 
-		for (int i = 0; i < bulletCount; i++) {
-			float angle = i * spreadAngle;
-			float vx = (float)Math.sin(angle) * bulletSpeed;
-			float vy = (float)Math.cos(angle) * bulletSpeed;
+		stg.game.GameWorld world = (stg.game.GameWorld) gameCanvas.getWorld();
+		if (world != null) {
+			for (int i = 0; i < bulletCount; i++) {
+				float angle = i * spreadAngle;
+				float vx = (float)Math.sin(angle) * bulletSpeed;
+				float vy = (float)Math.cos(angle) * bulletSpeed;
 
-			CircularBullet bullet = new CircularBullet(x, y, vx, vy, 3.0f, Color.MAGENTA, Color.WHITE, bulletDamage - 1);
-			bullet.setGameCanvas(gameCanvas);
-			gameCanvas.addBullet(bullet);
+				CircularBullet bullet = new CircularBullet(x, y, vx, vy, 3.0f, Color.MAGENTA, Color.WHITE, bulletDamage - 1);
+				world.addPlayerBullet(bullet);
+			}
 		}
 	}
 
@@ -108,7 +120,8 @@ public class CustomOption extends Option {
 		g.fillOval((int)(screenX - size), (int)(screenY - size),
 		          (int)(size * 2), (int)(size * 2));
 
-		// 绘制模式指示器（根据当前模式显示不同颜色�?		Color modeColor;
+		// 绘制模式指示器（根据当前模式显示不同颜色）
+		Color modeColor;
 		switch (shootMode) {
 			case 0:
 				modeColor = Color.GREEN;
@@ -145,4 +158,3 @@ public class CustomOption extends Option {
 		shootMode = 0;
 	}
 }
-

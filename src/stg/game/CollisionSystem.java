@@ -2,10 +2,10 @@ package stg.game;
 
 import stg.game.bullet.Bullet;
 import stg.game.enemy.Enemy;
-import user.enemy.EnemyBullet;
 import stg.game.item.Item;
+import stg.game.player.Player;
+import user.enemy.EnemyBullet;
 import user.laser.EnemyLaser;
-import user.player.Player;
 
 /**
  * 碰撞检测系�?- 处理游戏中的碰撞检�? */
@@ -92,7 +92,8 @@ public class CollisionSystem {
             float dy = item.getY() - player.getY();
             float distance = (float)Math.sqrt(dx * dx + dy * dy);
             
-            if (distance < item.getHitboxRadius() + player.getSize()) {
+            // 对于 Item，使用 getSize() 作为碰撞判定半径，因为可能没有 getHitboxRadius() 方法
+            if (distance < item.getSize() + player.getSize()) {
                 item.onCollect();
                 // 注意：这里不能直接移除物品，因为我们使用的是只读列表
             }
@@ -111,12 +112,14 @@ public class CollisionSystem {
             Bullet bullet = (Bullet)obj1;
             x1 = bullet.getX();
             y1 = bullet.getY();
-            size1 = bullet.getHitboxRadius() > 0 ? bullet.getHitboxRadius() : bullet.getSize();
+            // 对于 Bullet，使用 getSize() 作为碰撞判定半径，因为可能没有 getHitboxRadius() 方法
+            size1 = bullet.getSize();
         } else if (obj1 instanceof EnemyBullet) {
             EnemyBullet bullet = (EnemyBullet)obj1;
             x1 = bullet.getX();
             y1 = bullet.getY();
-            size1 = bullet.getHitboxRadius() > 0 ? bullet.getHitboxRadius() : bullet.getSize();
+            // 对于 EnemyBullet，使用 getSize() 作为碰撞判定半径，因为可能没有 getHitboxRadius() 方法
+            size1 = bullet.getSize();
         } else {
             return false;
         }
@@ -131,7 +134,8 @@ public class CollisionSystem {
             Player player = (Player)obj2;
             x2 = player.getX();
             y2 = player.getY();
-            size2 = player.getHitboxRadius();
+            // 对于 Player，使用 getSize() 作为碰撞判定半径，因为可能没有 getHitboxRadius() 方法
+            size2 = player.getSize();
         } else {
             return false;
         }

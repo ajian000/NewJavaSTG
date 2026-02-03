@@ -6,15 +6,17 @@ import stg.game.ui.GameCanvas;
 import user.bullet.CircularBullet;
 
 /**
- * 轨道敌人 - 围绕中心点旋转移�? * */\n\t * @since 2026-01-23
+ * 轨道敌人 - 围绕中心点旋转移动
+ * @since 2026-01-23
+ */
 public class OrbitEnemy extends Enemy {
-	private float centerX;
-	private float centerY;
-	private float orbitRadius;
+	private final float centerX;
+	private final float centerY;
+	private final float orbitRadius;
 	private float orbitAngle;
-	private float orbitSpeed;
+	private final float orbitSpeed;
 	private float shootTimer;
-	private float shootInterval;
+	private final float shootInterval;
 
 	public OrbitEnemy(float centerX, float centerY, float orbitRadius, float orbitSpeed, GameCanvas gameCanvas) {
 		super(0, 0, 0, 0, 24, Color.GREEN, 160, gameCanvas);
@@ -56,8 +58,10 @@ public class OrbitEnemy extends Enemy {
 
 		float bulletSpeed = -7.0f;
 		CircularBullet bullet = new CircularBullet(x, y, 0, bulletSpeed);
-		bullet.setGameCanvas(gameCanvas);
-		gameCanvas.addEnemyBullet(bullet);
+		stg.game.GameWorld world = (stg.game.GameWorld) gameCanvas.getWorld();
+		if (world != null) {
+			world.addEnemyBullet(bullet);
+		}
 	}
 
 	@Override
@@ -76,16 +80,19 @@ public class OrbitEnemy extends Enemy {
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

@@ -2,7 +2,7 @@ package user.item;
 
 import java.awt.*;
 import stg.game.ui.GameCanvas;
-import user.player.Player;
+import stg.game.player.Player;
 import stg.game.item.Item;
 
 public class ScorePoint extends Item {
@@ -14,7 +14,8 @@ public class ScorePoint extends Item {
 	private boolean isLarge;
 
 	/**
-	 * Builder 模式 - 用于简�?ScorePoint 的创�?	 */
+	 * Builder 模式 - 用于简化ScorePoint 的创建
+	 */
 	public static class Builder {
 		private final float x;
 		private final float y;
@@ -47,7 +48,9 @@ public class ScorePoint extends Item {
 		}
 		
 		/**
-		 * 设置分数�?		 * @param scoreValue 分数�?		 * @return Builder 实例
+		 * 设置分数值
+		 * @param scoreValue 分数值
+		 * @return Builder 实例
 		 */
 		public Builder scoreValue(int scoreValue) {
 			this.scoreValue = scoreValue;
@@ -55,7 +58,9 @@ public class ScorePoint extends Item {
 		}
 		
 		/**
-		 * 设置是否为大分数�?		 * @param isLarge 是否为大分数�?		 * @return Builder 实例
+		 * 设置是否为大分数值
+		 * @param isLarge 是否为大分数值
+		 * @return Builder 实例
 		 */
 		public Builder large(boolean isLarge) {
 			this.isLarge = isLarge;
@@ -136,10 +141,12 @@ public class ScorePoint extends Item {
 	}
 
 	/**
-	 * 初始化行为参�?	 */
+	 * 初始化行为参数
+	 */
 	@Override
 	protected void initBehavior() {
-		// 初始化行为参�?	}
+		// 初始化行为参数
+	}
 
 	/**
 	 * 实现每帧的自定义更新逻辑

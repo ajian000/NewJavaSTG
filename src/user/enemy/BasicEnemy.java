@@ -1,18 +1,20 @@
  package user.enemy;
 
 import java.awt.*;
+import stg.game.GameWorld;
 import stg.game.enemy.Enemy;
 import stg.game.ui.GameCanvas;
 import user.bullet.CircularBullet;
 
 /**
- * 基础敌人�?- Enemy的子�? * 在X轴上左右来回移动,Y轴不�? * @since 2026-01-19
+ * 基础敌人类- Enemy的子类 * 在X轴上左右来回移动,Y轴不动 * @since 2026-01-19
  */
 public class BasicEnemy extends Enemy {
-	private float moveSpeed; // X轴移动速度
+	private final float moveSpeed; // X轴移动速度
 
 	/**
-	 * 构造函�?	 * @param x X坐标
+	 * 构造函数
+	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param moveSpeed X方向移动速度
 	 * @param gameCanvas 游戏画布引用
@@ -23,10 +25,12 @@ public class BasicEnemy extends Enemy {
 	}
 
 	/**
-	 * 初始化行为参�?	 */
+	 * 初始化行为参数
+	 */
 	@Override
 	protected void initBehavior() {
-		// 初始化行为参�?		vx = moveSpeed;
+		// 初始化行为参数
+		vx = moveSpeed;
 		vy = 0;
 	}
 
@@ -70,18 +74,24 @@ public class BasicEnemy extends Enemy {
 	}
 
 	/**
-	 * 射击 - 向下方发射圆形子�?	 * Y负方向表示向�?	 * @since 2026-01-19
+	 * 射击 - 向下方发射圆形子弹
+	 * Y负方向表示向上
+	 * @since 2026-01-19
 	 */
 	private void shoot() {
 		if (!isActive() || gameCanvas == null) return;
 
 		float bulletSpeed = -10.0f;
 		CircularBullet bullet = new CircularBullet(x, y, 0, bulletSpeed);
-		gameCanvas.addEnemyBullet(bullet);
+		Object world = gameCanvas.getWorld();
+		if (world instanceof GameWorld) {
+			((GameWorld) world).addEnemyBullet(bullet);
+		}
 	}
 
 	/**
-	 * 重写渲染方法,自定义外�?	 * @since 2026-01-19
+	 * 重写渲染方法,自定义外观
+	 * @since 2026-01-19
 	 */
 	@Override
 	public void render(Graphics2D g) {
@@ -127,16 +137,19 @@ public class BasicEnemy extends Enemy {
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

@@ -12,10 +12,11 @@ public class SimpleStage extends Stage {
     private int enemyCount;
     private int enemiesSpawned;
     private int spawnTimer;
-    private static final int SPAWN_INTERVAL = 120; // 2�?@ 60fps
+    private static final int SPAWN_INTERVAL = 120; // 2秒 @ 60fps
 
     /**
-     * 构造函�?     * @param stageId 关卡ID
+     * 构造函数
+     * @param stageId 关卡ID
      * @param stageName 关卡名称
      * @param gameCanvas 游戏画布引用
      */
@@ -51,7 +52,8 @@ public class SimpleStage extends Stage {
         if (isActive()) {
             spawnTimer++;
             
-            // �?秒生成一个敌�?            if (spawnTimer >= SPAWN_INTERVAL) {
+            // 每2秒生成一个敌人
+            if (spawnTimer >= SPAWN_INTERVAL) {
                 spawnTimer = 0;
                 
                 if (enemiesSpawned < enemyCount) {
@@ -68,20 +70,24 @@ public class SimpleStage extends Stage {
     private void spawnEnemy() {
         GameCanvas canvas = getGameCanvas();
         if (canvas != null) {
-            // 从屏幕上方随机位置生成敌�?            float x = (float)(Math.random() * canvas.getWidth() - canvas.getWidth() / 2);
-            float y = canvas.getHeight() / 2 + 50;
+            // 从屏幕上方随机位置生成敌人
+            float xPos = (float)(Math.random() * canvas.getWidth() - canvas.getWidth() / 2);
+            float yPos = canvas.getHeight() / 2 + 50;
             
-            BasicEnemy enemy = new BasicEnemy(x, y, 2, canvas);
+            BasicEnemy enemy = new BasicEnemy(xPos, yPos, 2, canvas);
             addEnemy(enemy);
-            System.out.println("Spawned enemy at: (" + x + ", " + y + ")");
+            System.out.println("Spawned enemy at: (" + xPos + ", " + yPos + ")");
         }
     }
 
     @Override
     protected void checkCompletion() {
-        // 检查关卡完成条�?        if (enemiesSpawned >= enemyCount && getEnemies().isEmpty()) {
+        // 检查关卡完成条件
+        if (enemiesSpawned >= enemyCount && getEnemies().isEmpty()) {
             end();
         }
+        // 调用父类的检查方法
+        super.checkCompletion();
     }
 
     @Override

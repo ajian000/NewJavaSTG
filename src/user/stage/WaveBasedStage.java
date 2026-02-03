@@ -11,7 +11,6 @@ import stg.game.stage.Stage;
  * @since 2026-01-30
  */
 public class WaveBasedStage extends Stage {
-    // 波次配置
     private static final int WAVE_DELAY = 30;
     private static final int WAVE_1_END_FRAME = 1800;
     private static final int WAVE_2_END_FRAME = 3000;
@@ -21,16 +20,10 @@ public class WaveBasedStage extends Stage {
     private static final int WAVE_6_END_FRAME = 7200;
     private static final int WAVE_COUNT = 6;
     
-    // 波次管理相关字段
     private int waveCooldown = 0;
     private int activeWaveNumber = 0;
     private boolean waveStarted[];
 
-    /**
-     * 构造函�?     * @param stageId 关卡ID
-     * @param stageName 关卡名称
-     * @param gameCanvas 游戏画布引用
-     */
     public WaveBasedStage(int stageId, String stageName, GameCanvas gameCanvas) {
         super(stageId, stageName, gameCanvas);
         this.waveStarted = new boolean[WAVE_COUNT + 1];
@@ -43,15 +36,12 @@ public class WaveBasedStage extends Stage {
 
     @Override
     public Stage nextStage() {
-        // 返回下一关，这里简单返回一个新的WaveBasedStage
         return new WaveBasedStage(getStageId() + 1, "Stage " + (getStageId() + 1), getGameCanvas());
     }
 
     @Override
     public void load() {
         System.out.println("Loading wave-based stage: " + getStageName());
-        
-        // 直接设置关卡状态为LOADED
         setLoaded();
     }
 
@@ -62,15 +52,14 @@ public class WaveBasedStage extends Stage {
                 ", 场上敌人: " + getEnemies().size() + ", 冷却: " + waveCooldown);
         }
         
-        // 如果波次冷却�?减少冷却时间
         if (waveCooldown > 0) {
             waveCooldown--;
             if (waveCooldown == 0) {
-                // 冷却结束�?切换到下一�?                if (activeWaveNumber < WAVE_COUNT) {
+                if (activeWaveNumber < WAVE_COUNT) {
                     int oldWave = activeWaveNumber;
                     activeWaveNumber++;
                     waveStarted[activeWaveNumber] = true;
-                    System.out.println("【波次切换】第" + oldWave + "波结�?-> �? + activeWaveNumber + "波开�?);
+                    System.out.println("【波次切换】第" + oldWave + "波结束 -> 第" + activeWaveNumber + "波开始");
                 } else {
                     System.out.println("【波次切换】所有波次已完成");
                 }
@@ -78,60 +67,55 @@ public class WaveBasedStage extends Stage {
             return;
         }
         
-        // 如果还没有活跃波�?开始第一�?        if (activeWaveNumber == 0) {
+        if (activeWaveNumber == 0) {
             activeWaveNumber = 1;
             waveStarted[1] = true;
-            System.out.println("【波次开始】第1波开�?);
+            System.out.println("【波次开始】第1波开始");
             return;
         }
         
-        // 尝试生成当前波次的敌�?        boolean spawned = trySpawnWaveEnemies(activeWaveNumber);
+        boolean spawned = trySpawnWaveEnemies(activeWaveNumber);
         
         if (getEnemies().isEmpty() && isWaveComplete(activeWaveNumber) && !spawned) {
-            System.out.println("【波次完成】第" + activeWaveNumber + "波完�? 开始冷�?" + WAVE_DELAY + "�?");
+            System.out.println("【波次完成】第" + activeWaveNumber + "波完成，开始冷却" + WAVE_DELAY + "帧");
             waveCooldown = WAVE_DELAY;
             return;
         }
     }
 
-    /**
-     * 检查指定波次是否完�?     */
     private boolean isWaveComplete(int wave) {
         return true;
     }
 
-    /**
-     * 尝试生成指定波次的敌�?     */
     private boolean trySpawnWaveEnemies(int wave) {
         boolean spawned = false;
-        System.out.println("【波次生成】波�? " + wave + ", 当前�? " + currentFrame);
+        System.out.println("【波次生成】波次: " + wave + ", 当前帧: " + currentFrame);
         
-        // 根据波次和当前帧直接生成敌人
         GameCanvas canvas = getGameCanvas();
         if (canvas != null) {
             switch (wave) {
                 case 1:
                     if (currentFrame == 60) {
-                        // 生成第一波敌�?                        addEnemy(new BasicEnemy(canvas.getWidth() / 2, 50, 2, canvas));
+                        addEnemy(new BasicEnemy(canvas.getWidth() / 2, 50, 2, canvas));
                         spawned = true;
                     }
                     break;
                 case 2:
                     if (currentFrame == 120) {
-                        // 生成第二波敌�?                        addEnemy(new BasicEnemy(canvas.getWidth() / 3, 50, 2, canvas));
+                        addEnemy(new BasicEnemy(canvas.getWidth() / 3, 50, 2, canvas));
                         addEnemy(new BasicEnemy(2 * canvas.getWidth() / 3, 50, 2, canvas));
                         spawned = true;
                     }
                     break;
                 case 3:
                     if (currentFrame == 180) {
-                        // 生成第三波敌�?                        addEnemy(new LaserShootingEnemy(canvas.getWidth() / 2, 50, 2, canvas, 1));
+                        addEnemy(new LaserShootingEnemy(canvas.getWidth() / 2, 50, 2, canvas, 1));
                         spawned = true;
                     }
                     break;
                 case 4:
                     if (currentFrame == 240) {
-                        // 生成第四波敌�?                        addEnemy(new SpiralEnemy(canvas.getWidth() / 2, 50, 2, canvas));
+                        addEnemy(new SpiralEnemy(canvas.getWidth() / 2, 50, 2, canvas));
                         addEnemy(new BasicEnemy(canvas.getWidth() / 4, 50, 2, canvas));
                         addEnemy(new BasicEnemy(3 * canvas.getWidth() / 4, 50, 2, canvas));
                         spawned = true;
@@ -139,7 +123,7 @@ public class WaveBasedStage extends Stage {
                     break;
                 case 5:
                     if (currentFrame == 300) {
-                        // 生成第五波敌�?                        addEnemy(new SpreadEnemy(canvas.getWidth() / 2, 50, 2, canvas));
+                        addEnemy(new SpreadEnemy(canvas.getWidth() / 2, 50, 2, canvas));
                         addEnemy(new LaserShootingEnemy(canvas.getWidth() / 3, 50, 2, canvas, 2));
                         addEnemy(new LaserShootingEnemy(2 * canvas.getWidth() / 3, 50, 2, canvas, 2));
                         spawned = true;
@@ -147,7 +131,6 @@ public class WaveBasedStage extends Stage {
                     break;
                 case 6:
                     if (currentFrame == 360) {
-                        // 生成第六波敌人（ boss 波）
                         addEnemy(new TrackingEnemy(canvas.getWidth() / 2, 50, 1.5f, canvas));
                         addEnemy(new BasicEnemy(canvas.getWidth() / 4, 100, 2, canvas));
                         addEnemy(new BasicEnemy(3 * canvas.getWidth() / 4, 100, 2, canvas));
@@ -157,13 +140,10 @@ public class WaveBasedStage extends Stage {
             }
         }
         
-        System.out.println("【波次生成结束】波�? " + wave + ", 本次生成: " + spawned);
+        System.out.println("【波次生成结束】波次: " + wave + ", 本次生成: " + spawned);
         return spawned;
     }
 
-    /**
-     * 根据帧数判断波次
-     */
     private int getWaveByFrame(int frame) {
         if (frame < WAVE_1_END_FRAME) return 1;
         if (frame < WAVE_2_END_FRAME) return 2;
@@ -174,15 +154,13 @@ public class WaveBasedStage extends Stage {
         return 0;
     }
 
-
-
     @Override
     protected void checkCompletion() {
-        // 检查是否所有波次都已完成且敌人已全部消�?        if (activeWaveNumber >= WAVE_COUNT && isWaveComplete(WAVE_COUNT) && getEnemies().isEmpty()) {
+        if (activeWaveNumber >= WAVE_COUNT && isWaveComplete(WAVE_COUNT) && getEnemies().isEmpty()) {
             end();
         }
         
-        // 调用父类的检查方法，支持自定义完成条�?        super.checkCompletion();
+        super.checkCompletion();
     }
 
     @Override
@@ -206,4 +184,3 @@ public class WaveBasedStage extends Stage {
         }
     }
 }
-

@@ -1,10 +1,12 @@
 package user.player;
 
 import java.awt.*;
+import stg.game.player.Player;
 import stg.game.ui.GameCanvas;
 
 /**
- * 灵梦自机�? * 灵符-梦想封印：高火力广域攻击
+ * 灵梦自机类
+ * 灵符-梦想封印：高火力广域攻击
  */
 public class ReimuPlayer extends Player {
 	private static final float REIMU_SPEED = 4.5f;
@@ -12,23 +14,23 @@ public class ReimuPlayer extends Player {
 	private static final float REIMU_SIZE = 18f;
 	private static final int REIMU_SHOOT_INTERVAL = 1;
 	private static final Color REIMU_COLOR = new Color(255, 200, 220);
-	private static final Color BULLET_COLOR = new Color(255, 150, 200);
-	private static final int REIMU_BULLET_DAMAGE = 1; // 灵梦子弹伤害，普通DPS = (5 × 1 × 60) / 3 = 100\n\t * @since 2026-01-23
+	private static final int REIMU_BULLET_DAMAGE = 1; // 灵梦子弹伤害
 
 	public ReimuPlayer(float spawnX, float spawnY) {
 		super(spawnX, spawnY);
 		setSpeed(REIMU_SPEED);
 		setSpeedSlow(REIMU_SPEED_SLOW);
-		setSize(REIMU_SIZE);
+		this.size = REIMU_SIZE;
 		setShootInterval(REIMU_SHOOT_INTERVAL);
-		this.bulletDamage = REIMU_BULLET_DAMAGE; // 设置灵梦子弹伤害\n\t * @since 2026-01-23
+		this.bulletDamage = REIMU_BULLET_DAMAGE; // 设置灵梦子弹伤害
 	}
 
 	/**
 	 * 初始化灵梦的子机
-	 * 参考东方正作，灵梦通常�?-4个子�?	 */
+	 * 参考东方正作，灵梦通常有2-4个子机
+	 */
 	public void initializeOptions(GameCanvas canvas) {
-		setGameCanvas(canvas);
+		this.gameCanvas = canvas;
 
 		// 添加2个子机，位于玩家左右两侧
 		ReimuOption option1 = new ReimuOption(this, -25, 10, canvas);
@@ -37,7 +39,7 @@ public class ReimuPlayer extends Player {
 		addOption(option1);
 		addOption(option2);
 
-		System.out.println("灵梦子机初始化完成，�?个子�?);
+		System.out.println("灵梦子机初始化完成，2个子机");
 	}
 
 	@Override
@@ -53,10 +55,11 @@ public class ReimuPlayer extends Player {
 
 		stg.util.RenderUtils.enableAntiAliasing(g);
 
-		// 无敌闪烁效果：每5帧闪烁一�?		boolean shouldRender = true;\n\t * @since 2026-01-23
+		// 无敌闪烁效果：每5帧闪烁一次
+		boolean shouldRender = true;
 		if (isInvincible()) {
-			// 通过反射获取父类的invincibleTimer（需要Player提供getter�?			int invincibleTimer = getInvincibleTimer();
-			int flashPhase = invincibleTimer % 10;
+			// 由于invincibleTimer是private，我们使用isInvincible()来控制闪烁
+			int flashPhase = frame % 10;
 			if (flashPhase < 5) {
 				shouldRender = false;
 			}

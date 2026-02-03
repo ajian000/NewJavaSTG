@@ -12,7 +12,8 @@ public class CircularBullet extends EnemyBullet {
 	private Color innerColor; // 内圈颜色
 
 	/**
-	 * 构造函�?	 * @param x X坐标
+	 * 构造函数
+	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param vx X方向速度
 	 * @param vy Y方向速度
@@ -23,14 +24,16 @@ public class CircularBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 完整构造函�?	 * @param x X坐标
+	 * 完整构造函数
+	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param vx X方向速度
 	 * @param vy Y方向速度
 	 * @param size 子弹大小
 	 * @param color 外圈颜色
 	 * @param innerColor 内圈颜色
-	 * @param damage 伤害�?	 */
+	 * @param damage 伤害值
+	 */
 	public CircularBullet(float x, float y, float vx, float vy, float size, Color color, Color innerColor, int damage) {
 		super(x, y, vx, vy, size, color, damage);
 		this.innerColor = innerColor;
@@ -54,16 +57,19 @@ public class CircularBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

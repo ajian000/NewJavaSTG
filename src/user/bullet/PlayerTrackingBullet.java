@@ -1,35 +1,36 @@
 package user.bullet;
 
 import java.awt.Color;
-import stg.game.enemy.Enemy;
-import stg.game.ui.GameCanvas;
+import stg.game.GameWorld;
 import stg.game.bullet.Bullet;
+import stg.game.enemy.Enemy;
 
 /**
- * 玩家追踪子弹�?- 会追踪敌人的子弹
+ * 玩家追踪子弹类- 会追踪敌人的子弹
  * 用于灵梦子机等需要自动瞄准敌人的场景
  */
 public class PlayerTrackingBullet extends Bullet {
-	private float speed;
-	private float turnSpeed;
-	private int frame;
+	private final float speed;
+	private final float turnSpeed;
+	private int trackingFrame;
 	private int delayFrames;
 
 	/**
-	 * 构造函�?	 * @param x 初始X坐标
+	 * 构造函数
+	 * @param x 初始X坐标
 	 * @param y 初始Y坐标
 	 * @param speed 子弹速度
 	 * @param initialAngle 初始角度
-	 * @param turnSpeed 转向速度（弧�?帧）
+	 * @param turnSpeed 转向速度（弧度/帧）
 	 * @param size 子弹大小
 	 * @param color 子弹颜色
 	 */
 	public PlayerTrackingBullet(float x, float y, float speed, float initialAngle,
-				float turnSpeed, float size, Color color) {
+			float turnSpeed, float size, Color color) {
 		super(x, y, (float)Math.cos(initialAngle) * speed, (float)Math.sin(initialAngle) * speed, size, color);
 		this.speed = speed;
 		this.turnSpeed = turnSpeed;
-		this.frame = 0;
+		this.trackingFrame = 0;
 		this.delayFrames = 0;
 	}
 
@@ -46,9 +47,9 @@ public class PlayerTrackingBullet extends Bullet {
 	 */
 	@Override
 	public void update() {
-		frame++;
+		trackingFrame++;
 
-		if (frame > delayFrames && gameCanvas != null) {
+		if (trackingFrame > delayFrames && gameCanvas != null) {
 			Enemy nearestEnemy = findNearestEnemy();
 			if (nearestEnemy != null) {
 				float targetX = nearestEnemy.getX();
@@ -86,11 +87,16 @@ public class PlayerTrackingBullet extends Bullet {
 	 */
 	private Enemy findNearestEnemy() {
 		if (gameCanvas == null) return null;
+		
+		Object worldObj = gameCanvas.getWorld();
+		if (!(worldObj instanceof GameWorld)) return null;
+		
+		GameWorld gameWorld = (GameWorld) worldObj;
 
 		Enemy nearest = null;
 		float minDistance = Float.MAX_VALUE;
 
-		for (Enemy enemy : gameCanvas.getEnemies()) {
+		for (Enemy enemy : gameWorld.getEnemies()) {
 			if (!enemy.isAlive()) continue;
 
 			float dx = enemy.getX() - x;
@@ -107,16 +113,19 @@ public class PlayerTrackingBullet extends Bullet {
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

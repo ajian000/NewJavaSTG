@@ -3,9 +3,10 @@ package user.player;
 import java.awt.*;
 import user.bullet.PlayerTrackingBullet;
 import stg.game.ui.GameCanvas;
+import stg.game.player.Player;
 
 /**
- * 灵梦子机�? * 特点：发射追踪弹，自动瞄准最近的敌人
+ * 灵梦子机�? * 特点：发射追踪弹，自动瞄准最近的敌人
  */
 public class ReimuOption extends Option {
 	private static final float REIMU_OPTION_SIZE = 10.0f;
@@ -29,11 +30,14 @@ public class ReimuOption extends Option {
 	protected void shoot() {
 		if (gameCanvas == null) return;
 
-		// 发射追踪弹（追踪敌人�?		float initialAngle = (float)(Math.PI / 2); // 向上
+		// 发射追踪弹（追踪敌人）
+		float initialAngle = (float)(Math.PI / 2); // 向上
 		PlayerTrackingBullet bullet = new PlayerTrackingBullet(x, y, BULLET_SPEED, initialAngle, 0.15f, BULLET_SIZE, BULLET_COLOR);
-		bullet.setGameCanvas(gameCanvas);
 		bullet.setDamage(bulletDamage);
-		gameCanvas.addBullet(bullet);
+		stg.game.GameWorld world = (stg.game.GameWorld) gameCanvas.getWorld();
+		if (world != null) {
+			world.addPlayerBullet(bullet);
+		}
 	}
 
 	@Override
@@ -43,7 +47,7 @@ public class ReimuOption extends Option {
 
 		stg.util.RenderUtils.enableAntiAliasing(g);
 
-		// 绘制灵梦子机主体（粉红色�?		g.setColor(color);
+		// 绘制灵梦子机主体（粉红色�?		g.setColor(color);
 		g.fillOval((int)(screenX - size), (int)(screenY - size),
 		          (int)(size * 2), (int)(size * 2));
 
@@ -57,7 +61,7 @@ public class ReimuOption extends Option {
 		g.fillOval((int)(screenX - size * 0.5f), (int)(screenY - size * 0.5f),
 		          (int)(size), (int)(size));
 
-		// 绘制灵梦的阴阳图案（简化版�?		g.setColor(new Color(255, 255, 255, 150));
+		// 绘制灵梦的阴阳图案（简化版�?		g.setColor(new Color(255, 255, 255, 150));
 		g.fillArc((int)(screenX - size * 0.3f), (int)(screenY - size * 0.3f),
 		          (int)(size * 0.6f), (int)(size * 0.6f), 0, 180);
 	}

@@ -2,14 +2,17 @@ package user.player;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import stg.game.player.Player;
 import stg.game.ui.GameCanvas;
 import stg.util.ResourceManager;
 
 /**
- * 带图片资源的玩家示例 - 演示如何使用ResourceManager加载和显示图�? * */\n\t * @since 2026-01-24
+ * 带图片资源的玩家示例 - 演示如何使用ResourceManager加载和显示图片
+ * @since 2026-01-24
+ */
 public class PlayerWithImage extends Player {
 	private BufferedImage playerImage;
-	private ResourceManager resourceManager;
+	private final ResourceManager resourceManager;
 	
 	public PlayerWithImage(float spawnX, float spawnY) {
 		super(spawnX, spawnY);
@@ -23,7 +26,7 @@ public class PlayerWithImage extends Player {
 		if (playerImage == null) {
 			System.out.println("【警告】玩家图片加载失败，使用默认绘制");
 		} else {
-			System.out.println("【资源】玩家图片加载成�? " + 
+			System.out.println("【资源】玩家图片加载成功: " + 
 				playerImage.getWidth() + "x" + playerImage.getHeight());
 		}
 	}
@@ -34,10 +37,10 @@ public class PlayerWithImage extends Player {
 			GameCanvas gameCanvas = getGameCanvas();
 			if (gameCanvas == null) return;
 			
-			int canvasWidth = gameCanvas.getWidth();
-			int canvasHeight = gameCanvas.getHeight();
-			float screenX = getX() + canvasWidth / 2.0f;
-			float screenY = canvasHeight / 2.0f - getY();
+			int width = gameCanvas.getWidth();
+			int height = gameCanvas.getHeight();
+			float screenX = getX() + width / 2.0f;
+			float screenY = height / 2.0f - getY();
 			
 			int drawX = (int)(screenX - playerImage.getWidth() / 2.0f);
 			int drawY = (int)(screenY - playerImage.getHeight() / 2.0f);
@@ -60,4 +63,3 @@ public class PlayerWithImage extends Player {
 		playerImage = resourceManager.loadImage(filename);
 	}
 }
-

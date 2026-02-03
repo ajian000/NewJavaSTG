@@ -4,14 +4,15 @@ import java.awt.*;
 import user.enemy.EnemyBullet;
 
 /**
- * 散射弹幕�?- EnemyBullet的子�? * 带有尾迹效果的弹�? * @since 2026-01-19
+ * 散射弹幕类- EnemyBullet的子类 * 带有尾迹效果的弹幕 * @since 2026-01-19
  */
 public class SpreadBullet extends EnemyBullet {
 	private float trailLength; // 尾迹长度
 	private Color trailColor; // 尾迹颜色
 
 	/**
-	 * 构造函�?	 * @param x X坐标
+	 * 构造函数
+	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param vx X方向速度
 	 * @param vy Y方向速度
@@ -23,14 +24,16 @@ public class SpreadBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 完整构造函�?	 * @param x X坐标
+	 * 完整构造函数
+	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param vx X方向速度
 	 * @param vy Y方向速度
 	 * @param size 子弹大小
 	 * @param color 子弹颜色
 	 * @param trailLength 尾迹长度
-	 * @param damage 伤害�?	 */
+	 * @param damage 伤害值
+	 */
 	public SpreadBullet(float x, float y, float vx, float vy, float size, Color color, float trailLength, int damage) {
 		super(x, y, vx, vy, size, color, damage);
 		this.trailLength = trailLength;
@@ -55,16 +58,19 @@ public class SpreadBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

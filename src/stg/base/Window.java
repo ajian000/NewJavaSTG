@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import stg.game.GameLoop;
+import stg.game.player.Player;
 import stg.game.ui.GameCanvas;
 import stg.game.ui.GameStatusPanel;
 import user.player.PlayerType;
@@ -23,7 +24,7 @@ public class Window extends JFrame {
     private GameStatusPanel gameStatusPanel;
     private int totalWidth = 1280;
     private int totalHeight = 960;
-    private user.player.Player player;
+    private Player player;
 
     /**
      * 构造函数

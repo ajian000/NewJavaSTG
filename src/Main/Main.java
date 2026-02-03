@@ -2,11 +2,12 @@ package Main;
 
 import java.awt.EventQueue;
 import stg.base.Window;
+import stg.game.player.Player;
+import stg.game.stage.StageGroup;
+import stg.game.stage.StageGroupManager;
 import stg.game.ui.GameCanvas;
 import stg.game.ui.TitleScreen;
 import user.player.PlayerType;
-import user.stage.StageGroup;
-import user.stage.StageGroupManager;
 
 public class Main {
 	private static Window window;
@@ -26,13 +27,13 @@ public class Main {
 		titleScreen = new TitleScreen(new TitleScreen.TitleCallback() {
 			@Override
 			public void onStageGroupSelect(PlayerType playerType) {
-				System.out.println("选择关卡�? " + playerType.getName());
+				System.out.println("选择关卡组 " + playerType.getName());
 				showStageGroupSelect(playerType);
 			}
 
 			@Override
 			public void onGameStart(StageGroup stageGroup, PlayerType playerType) {
-				System.out.println("开始游�? " + playerType.getName() + ", 关卡�? " + stageGroup.getGroupName());
+				System.out.println("开始游戏 " + playerType.getName() + ", 关卡组 " + stageGroup.getGroupName());
 				startGame(stageGroup, playerType);
 			}
 
@@ -82,7 +83,7 @@ public class Main {
 		java.util.List<StageGroup> stageGroups = stageGroupManager.getStageGroups();
 		for (StageGroup group : stageGroups) {
 			selectPanel.addStageGroup(group);
-			System.out.println("添加关卡�? " + group.getDisplayName());
+			System.out.println("添加关卡组 " + group.getGroupName() + " - " + group.getDisplayName());
 		}
 
 		window.getCenterPanel().removeAll();
@@ -109,7 +110,7 @@ public class Main {
 		gameCanvas.resetGame();
 
 		// 设置玩家位置到屏幕底部中心
-		user.player.Player player = gameCanvas.getPlayer();
+		Player player = gameCanvas.getPlayer();
 		if (player != null) {
 			int canvasHeight = gameCanvas.getHeight();
 			float actualPlayerX = 0; // 水平居中
@@ -124,8 +125,10 @@ public class Main {
 
 		gameCanvas.requestFocusInWindow();
 		new stg.game.GameLoop(gameCanvas).start();
-		System.out.println("游戏开始，自机: " + playerType.getName() + ", 关卡�? " + stageGroup.getGroupName());
+		System.out.println("游戏开始，自机: " + playerType.getName() + ", 关卡组 " + stageGroup.getGroupName());
 	}
+
+
 
 	public static Window getWindow() {
 		return window;

@@ -2,13 +2,13 @@ package stg.game.ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import stg.base.KeyStateProvider;
-import user.player.PlayerType;
-import user.stage.StageGroup;
+import stg.game.stage.StageGroup;
 import stg.util.ResourceManager;
-import java.util.List;
-import java.util.ArrayList;
+import user.player.PlayerType;
 
 /**
  * 关卡组选择界面 - 允许玩家选择要挑战的关卡组
@@ -186,28 +186,29 @@ public class StageGroupSelectPanel extends JPanel implements KeyStateProvider {
                 int nameWidth = g2d.getFontMetrics().stringWidth(groupName);
                 g2d.drawString(groupName, width / 2 - 280, y + 10);
 
-            // 绘制难度
-            g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
-            String difficulty = "难度: " + group.getDifficulty().getDisplayName();
-            g2d.drawString(difficulty, width / 2 - 280, y + 35);
+                // 绘制难度
+                g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
+                String difficulty = "难度: " + group.getDifficulty().getDisplayName();
+                g2d.drawString(difficulty, width / 2 - 280, y + 35);
 
-            // 绘制描述
-            g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
-            String description = group.getDescription();
-            if (description.length() > 30) {
-                description = description.substring(0, 30) + "...";
+                // 绘制描述
+                g2d.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
+                String description = group.getDescription();
+                if (description.length() > 30) {
+                    description = description.substring(0, 30) + "...";
+                }
+                g2d.drawString(description, width / 2, y + 10);
+
+                // 绘制关卡数量
+                int stageCount = group.getStageCount();
+                String stageInfo = "关卡数: " + stageCount;
+                g2d.drawString(stageInfo, width / 2, y + 35);
             }
-            g2d.drawString(description, width / 2, y + 10);
-
-            // 绘制关卡数量
-            int stageCount = group.getStageCount();
-            String stageInfo = "关卡数: " + stageCount;
-            g2d.drawString(stageInfo, width / 2, y + 35);
 
             // 绘制选中标记
             if (isSelected) {
                 g2d.setFont(new Font("Microsoft YaHei", Font.BOLD, 24));
-                g2d.drawString("�?", width / 2 - 310, y + 15);
+                g2d.drawString(">", width / 2 - 310, y + 15);
             }
 
 

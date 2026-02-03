@@ -1,7 +1,11 @@
 package user.player;
 
+import stg.game.player.Player;
+
 /**
- * 自机工厂�? * 负责根据类型创建不同的自机实�? */
+ * 自机工厂类
+ * 负责根据类型创建不同的自机实例
+ */
 public class PlayerFactory {
 	private static final PlayerFactory instance = new PlayerFactory();
 
@@ -42,7 +46,8 @@ public class PlayerFactory {
 	}
 
 	/**
-	 * 创建魔理沙自�?	 */
+ * 创建魔理沙自机
+ */
 	private Player createMarisaPlayer(float spawnX, float spawnY) {
 		return new MarisaPlayer(spawnX, spawnY);
 	}

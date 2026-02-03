@@ -5,7 +5,8 @@ import javax.swing.*;
 
 /**
  * 游戏状态面板 - 显示在右侧面板的游戏信息
- * */\n\t * @since 2026-01-24
+ * @since 2026-01-24
+ * */
 public class GameStatusPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
@@ -147,7 +148,7 @@ public class GameStatusPanel extends JPanel {
 	
 	private String formatLives(int lives) {
 		if (lives < 0) {
-			return "�?;
+			return "--";
 		}
 		return String.valueOf(lives);
 	}

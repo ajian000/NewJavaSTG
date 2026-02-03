@@ -2,16 +2,16 @@ package user.item;
 
 import java.awt.*;
 import stg.game.ui.GameCanvas;
-import user.player.Player;
+import stg.game.player.Player;
 import stg.game.item.Item;
 
 /**
- * 强化道具�?- 增加玩家火力
+ * 强化道具类- 增加玩家火力
  */
 public class PowerUp extends Item {
 	private static final float POWERUP_SIZE = 12.0f;
 	private static final Color POWERUP_COLOR = new Color(255, 200, 50);
-	private static final int POWER_VALUE = 1; // 增加的火力�?
+	private static final int POWER_VALUE = 1; // 增加的火力值
 	public PowerUp(float x, float y) {
 		super(x, y, POWERUP_SIZE, POWERUP_COLOR);
 		setAttractionParams(150.0f, 3.0f);
@@ -29,7 +29,8 @@ public class PowerUp extends Item {
 
 	@Override
 	protected void initBehavior() {
-		// 初始化行为参�?	}
+		// 初始化行为参数
+	}
 	
 	@Override
 	protected void onUpdate() {
@@ -76,7 +77,8 @@ public class PowerUp extends Item {
 		if (gameCanvas != null) {
 			Player player = gameCanvas.getPlayer();
 			if (player != null) {
-				// 增加玩家火力（这里可以扩展Player类来支持火力系统�?				System.out.println("PowerUp collected! Power +1");
+				// 增加玩家火力（这里可以扩展Player类来支持火力系统）
+				System.out.println("PowerUp collected! Power +1");
 			}
 		}
 	}

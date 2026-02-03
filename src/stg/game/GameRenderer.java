@@ -2,11 +2,11 @@ package stg.game;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import user.player.Player;
+import stg.game.player.Player;
 import stg.util.CoordinateSystem;
 
 /**
- * 游戏渲染�?- 处理游戏的渲染逻辑
+ * 游戏渲染�?- 处理游戏的渲染逻辑
  */
 public class GameRenderer {
     private GameWorld world;
@@ -14,7 +14,7 @@ public class GameRenderer {
     private CoordinateSystem coordinateSystem;
     
     /**
-     * 构造函�?     */
+     * 构造函�?     */
     public GameRenderer(GameWorld world, Player player, CoordinateSystem coordinateSystem) {
         this.world = world;
         this.player = player;
@@ -36,7 +36,7 @@ public class GameRenderer {
     }
     
     /**
-     * 启用抗锯�?     */
+     * 启用抗锯�?     */
     private void enableAntiAliasing(Graphics2D g) {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
@@ -60,7 +60,7 @@ public class GameRenderer {
     }
     
     /**
-     * 渲染敌方激�?     */
+     * 渲染敌方激�?     */
     private void renderEnemyLasers(Graphics2D g) {
         for (user.laser.EnemyLaser laser : world.getEnemyLasers()) {
             laser.render(g);
@@ -104,7 +104,7 @@ public class GameRenderer {
     /**
      * 设置玩家
      */
-    public void setPlayer(user.player.Player player) {
+    public void setPlayer(stg.game.player.Player player) {
         this.player = player;
     }
     

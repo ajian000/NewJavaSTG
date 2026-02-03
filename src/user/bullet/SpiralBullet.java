@@ -4,8 +4,9 @@ import java.awt.Color;
 import user.enemy.EnemyBullet;
 
 /**
- * 螺旋子弹�?- 会螺旋前进的子弹
- * */\n\t * @since 2026-01-23
+ * 螺旋子弹类- 会螺旋前进的子弹
+ * @since 2026-01-23
+ */
 public class SpiralBullet extends EnemyBullet {
 	private float angle;
 	private float radius;
@@ -16,7 +17,8 @@ public class SpiralBullet extends EnemyBullet {
 	private int frame;
 
 	/**
-	 * 构造函�?	 * @param x 初始X坐标
+	 * 构造函数
+	 * @param x 初始X坐标
 	 * @param y 初始Y坐标
 	 * @param baseSpeed 基础速度
 	 * @param baseAngle 基础方向角度
@@ -70,16 +72,19 @@ public class SpiralBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

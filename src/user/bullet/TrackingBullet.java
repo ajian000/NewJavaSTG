@@ -1,24 +1,26 @@
 package user.bullet;
 
 import java.awt.Color;
+import stg.game.player.Player;
 import user.enemy.EnemyBullet;
-import user.player.Player;
 
 /**
- * 追踪子弹�?- 会追踪玩家的子弹
- * */\n\t * @since 2026-01-23
+ * 追踪子弹类- 会追踪玩家的子弹
+ * @since 2026-01-23
+ */
 public class TrackingBullet extends EnemyBullet {
-	private float speed;
-	private float turnSpeed;
-	private int frame;
-	private int delayFrames;
+	private final float speed;
+private final float turnSpeed;
+private int trackingFrame;
+private int delayFrames;
 
 	/**
-	 * 构造函�?	 * @param x 初始X坐标
+	 * 构造函数
+	 * @param x 初始X坐标
 	 * @param y 初始Y坐标
 	 * @param speed 子弹速度
 	 * @param initialAngle 初始角度
-	 * @param turnSpeed 转向速度（弧�?帧）
+	 * @param turnSpeed 转向速度（弧度/帧）
 	 * @param size 子弹大小
 	 * @param color 子弹颜色
 	 */
@@ -27,7 +29,7 @@ public class TrackingBullet extends EnemyBullet {
 		super(x, y, (float)Math.cos(initialAngle) * speed, (float)Math.sin(initialAngle) * speed, size, color, 10);
 		this.speed = speed;
 		this.turnSpeed = turnSpeed;
-		this.frame = 0;
+		this.trackingFrame = 0;
 		this.delayFrames = 0;
 	}
 
@@ -44,9 +46,9 @@ public class TrackingBullet extends EnemyBullet {
 	 */
 	@Override
 	public void update() {
-		frame++;
+		trackingFrame++;
 
-		if (frame > delayFrames && gameCanvas != null) {
+		if (trackingFrame > delayFrames && gameCanvas != null) {
 			Player player = gameCanvas.getPlayer();
 			if (player != null) {
 				float targetX = player.getX();
@@ -79,16 +81,19 @@ public class TrackingBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

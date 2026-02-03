@@ -6,11 +6,13 @@ import stg.game.ui.GameCanvas;
 import user.bullet.TrackingBullet;
 
 /**
- * 追踪弹幕敌人 - 发射追踪玩家的子�? * */\n\t * @since 2026-01-23
+ * 追踪弹幕敌人 - 发射追踪玩家的子弹
+ * @since 2026-01-23
+ */
 public class TrackingEnemy extends Enemy {
 	private float shootTimer;
-	private float shootInterval;
-	private float moveSpeed;
+	private final float shootInterval;
+	private final float moveSpeed;
 
 	public TrackingEnemy(float x, float y, float moveSpeed, GameCanvas gameCanvas) {
 		super(x, y, moveSpeed, 0, 20, Color.PINK, 200, gameCanvas);
@@ -53,8 +55,10 @@ public class TrackingEnemy extends Enemy {
 		TrackingBullet bullet = new TrackingBullet(
 			getX(), getY(), bulletSpeed, initialAngle, turnSpeed, 6.0f, Color.PINK
 		);
-		bullet.setGameCanvas(getGameCanvas());
-		getGameCanvas().addEnemyBullet(bullet);
+		stg.game.GameWorld world = (stg.game.GameWorld) getGameCanvas().getWorld();
+		if (world != null) {
+			world.addEnemyBullet(bullet);
+		}
 	}
 
 	@Override
@@ -73,16 +77,19 @@ public class TrackingEnemy extends Enemy {
 	}
 
 	/**
-	 * 任务开始时触发的方�?	 */
+	 * 任务开始时触发的方法
+	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?	}
+		// 空实现
+	}
 
 	/**
 	 * 任务结束时触发的方法
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?	}
+		// 空实现
+	}
 }
 

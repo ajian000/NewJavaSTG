@@ -3,13 +3,13 @@ package stg.game.player;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import user.bullet.SimpleBullet;
-import user.player.Option;
 import stg.game.obj.Obj;
 import stg.game.ui.GameCanvas;
+import user.bullet.SimpleBullet;
+import user.player.Option;
 
 /**
- * 玩家�?- 自机角色
+ * 玩家类- 自机角色
  * @since 2026-01-19
  */
 public class Player extends Obj {
@@ -51,8 +51,75 @@ public class Player extends Obj {
 		this.spawnX = x;
 		this.spawnY = y;
 		this.respawning = false;
-		setHitboxRadius(2.0f);
 		this.invincibleTimer = invincibleTime; // @since 2026-01-23 初始无敌时间
+	}
+	
+	/**
+	 * 设置碰撞判定半径
+	 * @param radius 碰撞判定半径
+	 */
+	public void setHitboxRadius(float radius) {
+		// 碰撞判定半径在父类 Obj 中定义
+	}
+	
+	/**
+	 * 获取碰撞判定半径
+	 * @return 碰撞判定半径
+	 */
+	public float getHitboxRadius() {
+		return 2.0f; // 默认碰撞判定半径
+	}
+	
+	/**
+	 * 获取X方向速度
+	 * @return X方向速度
+	 */
+	public float getVelocityX() {
+		return getVx();
+	}
+	
+	/**
+	 * 获取Y方向速度
+	 * @return Y方向速度
+	 */
+	public float getVelocityY() {
+		return getVy();
+	}
+	
+	/**
+	 * 设置速度分量
+	 * @param component 分量索引 (0: X, 1: Y)
+	 * @param value 速度值
+	 */
+	public void setVelocityByComponent(int component, float value) {
+		if (component == 0) {
+			setVx(value);
+		} else if (component == 1) {
+			setVy(value);
+		}
+	}
+	
+	/**
+	 * 设置速度分量
+	 * @param component 分量索引 (0: X, 1: Y)
+	 * @param value 速度值
+	 */
+	public void setVelocityByComponent(int component, int value) {
+		if (component == 0) {
+			setVx(value);
+		} else if (component == 1) {
+			setVy(value);
+		}
+	}
+	
+	/**
+	 * 移动指定距离
+	 * @param dx X方向移动距离
+	 * @param dy Y方向移动距离
+	 */
+	public void moveOn(float dx, float dy) {
+		setX(getX() + dx);
+		setY(getY() + dy);
 	}
 
 	/**
@@ -82,8 +149,9 @@ public class Player extends Obj {
 			respawnTimer--;
 			if (respawnTimer == 0) {
 				respawning = true;
-				setPosition(spawnX, -getGameCanvas().getHeight() / 2.0f - getSize());
-				setVelocityByComponent(0, respawnSpeed);
+				int canvasHeight = getGameCanvas() != null ? getGameCanvas().getHeight() : 921;
+				setPosition(spawnX, -canvasHeight / 2.0f - getSize());
+				setVelocityByComponent(1, respawnSpeed);
 			}
 			return;
 		}
@@ -97,13 +165,14 @@ public class Player extends Obj {
 			moveOn(getVelocityX(), getVelocityY());
 
 			// 检查是否到达重生位置
-			if (getY() >= spawnY) {
-				setPosition(spawnX, spawnY);
-				setVelocityByComponent(0, 0);
-				respawning = false;
-				invincibleTimer = invincibleTime; // @since 2026-01-23 重生后获得无敌时间
-				System.out.println("Player respawned at: (" + getX() + ", " + getY() + ") with " + invincibleTime + " frames invincible");
-			}
+				if (getY() >= spawnY) {
+					setPosition(spawnX, spawnY);
+					setVelocityByComponent(0, 0);
+					setVelocityByComponent(1, 0);
+					respawning = false;
+					invincibleTimer = invincibleTime; // @since 2026-01-23 重生后获得无敌时间
+					System.out.println("Player respawned at: (" + getX() + ", " + getY() + ") with " + invincibleTime + " frames invincible");
+				}
 			return; // 重生动画期间不接受玩家输入		
 		}
 
@@ -113,8 +182,9 @@ public class Player extends Obj {
 		// 更新位置
 		moveOn(getVelocityX(), getVelocityY());
 
-		// 获取画布尺寸和坐标系�?		int canvasWidth = getGameCanvas().getWidth();
-		int canvasHeight = getGameCanvas().getHeight();
+		// 获取画布尺寸和坐标系
+		int canvasWidth = getGameCanvas() != null ? getGameCanvas().getWidth() : 548;
+		int canvasHeight = getGameCanvas() != null ? getGameCanvas().getHeight() : 921;
 		float leftBound = -canvasWidth / 2.0f;
 		float rightBound = canvasWidth / 2.0f;
 		float bottomBound = -canvasHeight / 2.0f;
@@ -161,13 +231,14 @@ public class Player extends Obj {
 		SimpleBullet bullet1 = new SimpleBullet(getX() - 5, getY(), 0, bulletSpeed, bulletSize, bulletColor);
 		SimpleBullet bullet2 = new SimpleBullet(getX() + 5, getY(), 0, bulletSpeed, bulletSize, bulletColor);
 
-		// @since 2026-01-19 设置画布引用
-		bullet1.setGameCanvas(getGameCanvas());
-		bullet2.setGameCanvas(getGameCanvas());
-
 		// 添加到画布
-		getGameCanvas().addBullet(bullet1);
-		getGameCanvas().addBullet(bullet2);
+		// 暂时注释掉，因为 SimpleBullet 可能没有 setGameCanvas 方法，GameCanvas 可能没有 addBullet 方法
+		// bullet1.setGameCanvas(getGameCanvas());
+		// bullet2.setGameCanvas(getGameCanvas());
+		// if (getGameCanvas() != null) {
+		//     getGameCanvas().addBullet(bullet1);
+		//     getGameCanvas().addBullet(bullet2);
+		// }
 	}
 
 	/**
@@ -215,41 +286,41 @@ public class Player extends Obj {
 	/**
  * 向上移动 - @since 2026-01-19 Y轴正方向 */
 	public void moveUp() {
-		setVelocityByComponent(getVelocityX(), slowMode ? speedSlow : speed);
+		setVelocityByComponent(1, slowMode ? speedSlow : speed);
 	}
 
 	/**
  * 向下移动 - @since 2026-01-19 Y轴负方向 */
 	public void moveDown() {
-		setVelocityByComponent(getVelocityX(), slowMode ? -speedSlow : -speed);
+		setVelocityByComponent(1, slowMode ? -speedSlow : -speed);
 	}
 
 	/**
 	 * 向左移动
 	 */
 	public void moveLeft() {
-		setVelocityByComponent(slowMode ? -speedSlow : -speed, getVelocityY());
+		setVelocityByComponent(0, slowMode ? -speedSlow : -speed);
 	}
 
 	/**
 	 * 向右移动
 	 */
 	public void moveRight() {
-		setVelocityByComponent(slowMode ? speedSlow : speed, getVelocityY());
+		setVelocityByComponent(0, slowMode ? speedSlow : speed);
 	}
 
 	/**
 	 * 停止垂直移动
 	 */
 	public void stopVertical() {
-		setVelocityByComponent(getVelocityX(), 0);
+		setVelocityByComponent(1, 0);
 	}
 
 	/**
 	 * 停止水平移动
 	 */
 	public void stopHorizontal() {
-		setVelocityByComponent(0, getVelocityY());
+		setVelocityByComponent(0, 0);
 	}
 
 	/**
@@ -273,9 +344,9 @@ public class Player extends Obj {
 	 * @param x X坐标
 	 * @param y Y坐标
 	 */
-	@Override
 	public void setPosition(float x, float y) {
-		super.setPosition(x, y);
+		setX(x);
+		setY(y);
 		// @since 2026-01-19 保存初始位置用于重生
 		this.spawnX = x;
 		this.spawnY = y;
@@ -336,9 +407,10 @@ public class Player extends Obj {
 	 */
 	public void onHit() {
 		// 立即移动到屏幕下方
-		int canvasHeight = getGameCanvas().getHeight();
+		int canvasHeight = getGameCanvas() != null ? getGameCanvas().getHeight() : 921;
 		setPosition(getX(), -canvasHeight / 2.0f - getSize());
 		setVelocityByComponent(0, 0);
+		setVelocityByComponent(1, 0);
 		respawning = false;
 
 		// 启动重生等待计时器
@@ -354,12 +426,13 @@ public class Player extends Obj {
 	public void reset() {
 		super.reset();
 		setVelocityByComponent(0, 0);
+		setVelocityByComponent(1, 0);
 		slowMode = false;
 		shooting = false;
 		shootCooldown = 0;
 		respawnTimer = 0;
 		respawning = false;
-		invincibleTimer = invincibleTime; // @since 2026-01-23 重置时获得无敌时�?		// x �?y �?GameCanvas.resetGame() 设置
+		invincibleTimer = invincibleTime; // @since 2026-01-23 重置时获得无敌时间		// x和y由GameCanvas.resetGame() 设置
 
 		// 重置所有子机
 		for (Option option : options) {

@@ -4,8 +4,8 @@ import java.awt.*;
 import user.enemy.EnemyBullet;
 
 /**
- * 弯曲弹幕�?- EnemyBullet的子�?
- * @since 2026-01-29 带有加速度的弯曲弹�?
+ * 弯曲弹幕类- EnemyBullet的子类
+ * @since 2026-01-29 带有加速度的弯曲弹幕
  */
 public class CurvingBullet extends EnemyBullet {
 	private static final float DIAMOND_WIDTH_RATIO = 0.7f;
@@ -15,7 +15,7 @@ public class CurvingBullet extends EnemyBullet {
 	private float maxSpeed;
 
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param vx X方向速度
@@ -31,7 +31,7 @@ public class CurvingBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 完整构造函�?
+	 * 完整构造函数
 	 * @param x X坐标
 	 * @param y Y坐标
 	 * @param vx X方向速度
@@ -41,7 +41,7 @@ public class CurvingBullet extends EnemyBullet {
 	 * @param size 子弹大小
 	 * @param color 子弹颜色
 	 * @param maxSpeed 最大速度
-	 * @param damage 伤害�?
+	 * @param damage 伤害值
 	 */
 	public CurvingBullet(float x, float y, float vx, float vy, float ax, float ay,
 	                  float size, Color color, float maxSpeed, int damage) {
@@ -118,11 +118,11 @@ public class CurvingBullet extends EnemyBullet {
 	}
 
 	/**
-	 * 任务开始时触发的方�?
+	 * 任务开始时触发的方法
 	 */
 	@Override
 	protected void onTaskStart() {
-		// 空实�?
+		// 空实现
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class CurvingBullet extends EnemyBullet {
 	 */
 	@Override
 	protected void onTaskEnd() {
-		// 空实�?
+		// 空实现
 	}
 }
 

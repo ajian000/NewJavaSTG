@@ -52,7 +52,7 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 
 	public interface TitleCallback {
 		void onStageGroupSelect(PlayerType playerType);
-	void onGameStart(user.stage.StageGroup stageGroup, PlayerType playerType);
+	void onGameStart(stg.game.stage.StageGroup stageGroup, PlayerType playerType);
 		void onExit();
 	}
 
@@ -226,7 +226,7 @@ public class TitleScreen extends JPanel implements KeyStateProvider {
 			if (i == selectedIndex) {
 				g2d.setColor(SELECTED_COLOR);
 				// 绘制选中效果
-				g2d.drawString("�?, x - 30, y);
+				g2d.drawString(">", x - 30, y);
 			} else {
 				g2d.setColor(UNSELECTED_COLOR);
 			}

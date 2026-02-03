@@ -1,7 +1,7 @@
 package user.item;
 
 import java.awt.*;
-import user.player.Player;
+import stg.game.player.Player;
 import stg.game.ui.GameCanvas;
 import stg.game.item.Item;
 
@@ -11,7 +11,7 @@ import stg.game.item.Item;
 public class LifeUp extends Item {
 	private static final float LIFEUP_SIZE = 12.0f;
 	private static final Color LIFEUP_COLOR = new Color(50, 255, 100);
-	private static final int LIFE_VALUE = 1; // 恢复的生命�?
+	private static final int LIFE_VALUE = 1; // 恢复的生命值
 	public LifeUp(float x, float y) {
 		super(x, y, LIFEUP_SIZE, LIFEUP_COLOR);
 		setAttractionParams(150.0f, 3.0f);
@@ -28,10 +28,12 @@ public class LifeUp extends Item {
 	}
 
 	/**
-	 * 初始化行为参�?	 */
+	 * 初始化行为参数
+	 */
 	@Override
 	protected void initBehavior() {
-		// 初始化行为参�?	}
+		// 初始化行为参数
+	}
 
 	/**
 	 * 实现每帧的自定义更新逻辑
@@ -85,7 +87,8 @@ public class LifeUp extends Item {
 		if (gameCanvas != null) {
 			Player player = gameCanvas.getPlayer();
 			if (player != null) {
-				// 恢复玩家生命（这里可以扩展Player类来支持生命系统�?				System.out.println("LifeUp collected! Life +1");
+				// 恢复玩家生命（这里可以扩展Player类来支持生命系统）
+				System.out.println("LifeUp collected! Life +1");
 			}
 		}
 	}
