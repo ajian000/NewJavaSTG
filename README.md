@@ -55,44 +55,112 @@ JavaSTG/
 ├── src/
 │   ├── Main/
 │   │   └── Main.java              # 程序入口
-│   └── stg/
-│       ├── base/                   # 基础组件
-│       │   ├── Window.java          # 主窗口类
-│       │   └── VirtualKeyboardPanel.java  # 虚拟键盘面板
-│       ├── game/                  # 游戏核心
-│       │   ├── GameLoop.java       # 游戏循环
-│       │   ├── ui/               # 用户界面
-│       │   │   ├── GameCanvas.java     # 游戏画布
-│       │   │   └── TitleScreen.java    # 标题界面
-│       │   ├── player/            # 玩家系统
-│       │   │   ├── Player.java         # 玩家基类
-│       │   │   ├── PlayerFactory.java   # 玩家工厂
-│       │   │   ├── PlayerType.java     # 玩家类型枚举
-│       │   │   ├── ReimuPlayer.java    # 灵梦玩家
-│       │   │   └── MarisaPlayer.java   # 魔理沙玩家
-│       │   ├── bullet/            # 子弹系统
-│       │   │   ├── Bullet.java         # 子弹基类
-│       │   │   ├── CircularBullet.java  # 圆形弹
-│       │   │   ├── CurvingBullet.java   # 曲线弹
-│       │   │   └── SpreadBullet.java    # 扇形弹
-│       │   └── enemy/             # 敌人系统
-│       │       ├── Enemy.java         # 敌人基类
-│       │       ├── EnemyBullet.java   # 敌方子弹
-│       │       └── BasicEnemy.java    # 基础敌人
-│       └── util/                   # 工具类
-│           ├── CoordinateSystem.java # 坐标系统
-│           ├── LevelData.java      # 关卡数据
-│           ├── LevelManager.java   # 关卡管理器
-│           ├── EnemySpawnData.java # 敌人生成数据
-│           ├── LevelLoader.java    # 关卡加载器接口
-│           ├── JsonLevelLoader.java   # JSON关卡加载
-│           ├── JavaScriptLevelLoader.java # JS关卡加载
-│           ├── PythonLevelLoader.java   # Python关卡加载
-│           ├── SimpleJsonLoader.java   # 简易JSON加载
-│           └── math/             # 数学工具
-│               ├── Vector2.java         # 2D向量类
-│               ├── MathUtils.java       # 数学工具类
-│               └── RandomGenerator.java # 随机数生成器
+│   ├── stg/                        # 游戏引擎核心
+│   │   ├── base/                   # 基础组件
+│   │   │   ├── Window.java          # 主窗口类
+│   │   │   ├── VirtualKeyboardPanel.java  # 虚拟键盘面板
+│   │   │   └── KeyStateProvider.java      # 键盘状态提供者
+│   │   ├── game/                  # 游戏核心
+│   │   │   ├── GameLoop.java       # 游戏循环
+│   │   │   ├── GameWorld.java      # 游戏世界
+│   │   │   ├── GameRenderer.java   # 游戏渲染器
+│   │   │   ├── InputHandler.java   # 输入处理器
+│   │   │   ├── CollisionSystem.java # 碰撞系统
+│   │   │   ├── GameStateManager.java # 游戏状态管理器
+│   │   │   ├── PauseMenu.java      # 暂停菜单
+│   │   │   ├── IGameObject.java    # 游戏对象接口
+│   │   │   ├── IGameWorld.java     # 游戏世界接口
+│   │   ├── game/ui/               # 用户界面
+│   │   │   ├── GameCanvas.java     # 游戏画布
+│   │   │   ├── TitleScreen.java    # 标题界面
+│   │   │   ├── GameStatusPanel.java # 游戏状态面板
+│   │   │   └── StageGroupSelectPanel.java # 关卡组选择面板
+│   │   ├── game/player/            # 玩家系统
+│   │   │   ├── Player.java         # 玩家基类
+│   │   │   └── IPlayer.java        # 玩家接口
+│   │   ├── game/bullet/            # 子弹系统
+│   │   │   ├── Bullet.java         # 子弹基类
+│   │   │   └── IBullet.java        # 子弹接口
+│   │   ├── game/enemy/             # 敌人系统
+│   │   │   ├── Enemy.java         # 敌人基类
+│   │   │   └── IEnemy.java        # 敌人接口
+│   │   ├── game/item/              # 物品系统
+│   │   │   ├── Item.java           # 物品基类
+│   │   │   └── IItem.java          # 物品接口
+│   │   ├── game/laser/             # 激光系统
+│   │   │   └── Laser.java          # 激光基类
+│   │   ├── game/obj/               # 游戏对象
+│   │   │   └── Obj.java            # 游戏对象基类
+│   │   ├── game/stage/             # 关卡系统
+│   │   │   ├── Stage.java          # 关卡基类
+│   │   │   ├── StageGroup.java     # 关卡组
+│   │   │   ├── StageGroupManager.java # 关卡组管理器
+│   │   │   └── StageCompletionCondition.java # 关卡完成条件
+│   │   ├── game/event/             # 事件系统
+│   │   │   ├── BulletFiredEvent.java # 子弹发射事件
+│   │   │   ├── EnemyDestroyedEvent.java # 敌人销毁事件
+│   │   │   └── ItemCollectedEvent.java # 物品收集事件
+│   │   └── util/                   # 工具类
+│   │       ├── math/             # 数学工具
+│   │       │   ├── Vector2.java         # 2D向量类
+│   │       │   ├── MathUtils.java       # 数学工具类
+│   │       │   └── RandomGenerator.java # 随机数生成器
+│   │       ├── script/            # 脚本工具
+│   │       ├── ResourceManager.java # 资源管理器
+│   │       ├── CoordinateSystem.java # 坐标系统
+│   │       ├── EventBus.java      # 事件总线
+│   │       ├── RenderUtils.java   # 渲染工具
+│   │       └── AudioManager.java  # 音频管理器
+│   └── user/                       # 用户自定义内容
+│       ├── bullet/                # 用户子弹
+│       │   ├── CircularBullet.java  # 圆形弹
+│       │   ├── CurvingBullet.java   # 曲线弹
+│       │   ├── PlayerTrackingBullet.java # 追踪玩家弹
+│       │   ├── SimpleBullet.java    # 简单弹
+│       │   ├── SpiralBullet.java    # 螺旋弹
+│       │   ├── SpreadBullet.java    # 扇形弹
+│       │   └── TrackingBullet.java  # 追踪弹
+│       ├── enemy/                 # 用户敌人
+│       │   ├── BasicEnemy.java     # 基础敌人
+│       │   ├── EnemyBullet.java    # 敌方子弹
+│       │   ├── EnemyWithSound.java # 带声音的敌人
+│       │   ├── LaserShootingEnemy.java # 激光敌人
+│       │   ├── OrbitEnemy.java     # 轨道敌人
+│       │   ├── RapidFireEnemy.java # 速射敌人
+│       │   ├── SpiralEnemy.java    # 螺旋敌人
+│       │   ├── SpreadEnemy.java    # 扇形敌人
+│       │   └── TrackingEnemy.java  # 追踪敌人
+│       ├── item/                  # 用户物品
+│       │   ├── BombUp.java         # 炸弹增加
+│       │   ├── LifeUp.java         # 生命增加
+│       │   ├── PowerUp.java        # 威力增加
+│       │   └── ScorePoint.java     # 分数点
+│       ├── laser/                 # 用户激光
+│       │   ├── CurvedLaser.java    # 曲线激光
+│       │   ├── EnemyCurvedLaser.java # 敌人曲线激光
+│       │   ├── EnemyLaser.java     # 敌人激光
+│       │   ├── EnemyLinearLaser.java # 敌人线性激光
+│       │   ├── LinearLaser.java    # 线性激光
+│       │   └── SimpleLaser.java    # 简单激光
+│       ├── player/                # 用户玩家
+│       │   ├── CustomOption.java   # 自定义选项
+│       │   ├── CustomPlayer.java   # 自定义玩家
+│       │   ├── MarisaOption.java   # 魔理沙选项
+│       │   ├── MarisaPlayer.java   # 魔理沙玩家
+│       │   ├── Option.java         # 选项基类
+│       │   ├── PlayerFactory.java  # 玩家工厂
+│       │   ├── PlayerType.java     # 玩家类型枚举
+│       │   ├── PlayerWithImage.java # 带图像的玩家
+│       │   ├── ReimuOption.java    # 灵梦选项
+│       │   └── ReimuPlayer.java    # 灵梦玩家
+│       └── stage/                 # 用户关卡
+│           ├── AdvancedStageGroup.java # 高级关卡组
+│           ├── BeginnerStageGroup.java # 初级关卡组
+│           ├── ExpertStageGroup.java # 专家关卡组
+│           ├── IntermediateStageGroup.java # 中级关卡组
+│           ├── SimpleStage.java    # 简单关卡
+│           ├── StageState.java     # 关卡状态
+│           └── WaveBasedStage.java # 波次关卡
 ├── bin/                           # 编译输出目录
 └── README.md
 ```
