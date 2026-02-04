@@ -1,6 +1,6 @@
 # JavaSTG
 
-基于Java开发的弹幕射击游戏引擎,项目更新已移动到https://github.com/JavaStgTeam/JavaStg(https://github.com/JavaStgTeam/JavaStg)
+基于Java开发的弹幕射击游戏引擎,项目更新已移动到github.com/JavaStgTeam/JavaStg(https://github.com/JavaStgTeam/JavaStg)
 
 ## 项目简介
 
